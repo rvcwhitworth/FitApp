@@ -21,6 +21,8 @@
   "dependencies": {
     "bookshelf": "^0.12.1",
     "expo": "^25.0.0",
+    "firebase": "^4.9.0",
+    "firebase-admin": "^5.8.1",
     "knex": "^0.14.2",
     "mysql": "^2.15.0",
     "react": "16.2.0",
