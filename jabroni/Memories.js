@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, TextInput, StyleSheet } from 'react-native'
 
-class Memories extends React.Component {
+class Diet extends React.Component {
   constructor(props) {
     super(props)
 
@@ -65,4 +65,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Memories
+export default Diet

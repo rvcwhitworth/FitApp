@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, TextInput, StyleSheet } from 'react-native'
 
-class Stories extends React.Component {
+class DailyInputs extends React.Component {
   constructor(props) {
     super(props)
 
@@ -48,7 +48,7 @@ class Stories extends React.Component {
     return (
       <View style={[styles.container, { backgroundColor: this.state.color }]}>
         <View style={styles.list}>
-          <TextInput style={{margin: 10, height: 50, paddingLeft: 5}} placeholder="Stories here"/>
+          <Text style={{margin: 10, height: 50, paddingLeft: 5, paddingTop: 20}}> This is where our users enter their daily stuff </Text>
         </View>
       </View>
     );
@@ -64,9 +64,8 @@ const styles = StyleSheet.create({
   list: {
     backgroundColor: 'white',
     flex: 1,
-    marginTop: 80,
     borderRadius: 5,
   }
 })
 
-export default Stories
+export default DailyInputs

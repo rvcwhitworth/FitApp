@@ -50,7 +50,7 @@ class Messages extends React.Component {
     return (
       <Animated.View style={[styles.container, { backgroundColor: this.state.color }]}>
         <View style={styles.list}>
-          <TextInput style={{margin: 10, height: 50, paddingLeft: 5}} placeholder="Message here"/>
+          <Text style={{margin: 10, height: 50, paddingLeft: 5, paddingTop: 20}}>This is where our diet for the day would be </Text>
         </View>
       </Animated.View>
     )
@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
   list: {
     backgroundColor: 'white',
     flex: 1,
-    marginTop: 80,
     borderRadius: 5,
   }
 })
