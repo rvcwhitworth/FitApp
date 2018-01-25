@@ -1,39 +1,33 @@
 import SwipeNavigator from 'react-native-swipe-navigation'
-import Messages from './Messages'
-import Stories from './Stories'
-import Memories from './Memories'
-import Camera from './camera'
+import DailyInputs from './DailyInputs'
+import Diet from './Diet'
+import Profile from './profile'
 import Discover from './Discover'
 
 const Navigator = SwipeNavigator({
   Camera: {
-    screen: Camera,
-    left: 'Messages',
-    right: 'Stories',
-    bottom: 'Memories',
-  },
-
-  Messages: {
-    screen: Messages,
-    color: '#64B5F6',
-    type: 'over',
+    screen: Profile,
+    left: 'Diet',
+    right: 'DailyInputs',
+    type: 'place'
   },
 
   Discover: {
     screen: Discover,
+    color: '#FFFFFF',
     type: 'over',
   },
 
-  Stories: {
-    screen: Stories,
+  DailyInputs: {
+    screen: DailyInputs,
     right: 'Discover',
-    color: '#9575CD',
+    color: '#FFFFFF',
     type: 'over',
   },
 
-  'Memories': {
-    screen: Memories,
-    color: '#E53935',
+  Diet: {
+    screen: Diet,
+    color: '#000000',
     type: 'over',
   },
 

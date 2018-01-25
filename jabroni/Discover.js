@@ -15,7 +15,7 @@ class Discover extends React.Component {
     return (
       <View style={styles.container}>
         <View style={{marginTop: 50}}>
-          <TextInput style={{margin: 10, height: 50, paddingLeft: 5}} placeholder="Discover here"/>
+          <Text> Maybe this could be our chat? </Text>
         </View>
       </View>
     )
