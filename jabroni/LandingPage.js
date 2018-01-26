@@ -17,7 +17,7 @@ class landingScreen extends React.Component {
       <Button title="log in" onPress={() => {
         navigate('logIn');
       }}/>
-      <Text style={{"color": "red", "fontWeight": "bold", "fontSize": 32, "fontFamily": "Cochin"}}>Fitness App</Text>
+      <Text style={{"color": "red", "fontWeight": "bold", "fontSize": 32}}>Fitness App</Text>
     </View>);
   }
 }

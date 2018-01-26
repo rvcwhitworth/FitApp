@@ -1,6 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
-import { StackNavigator, TabNavigator } from 'react-navigation';
+import { StackNavigator, TabNavigator, NavigationActions } from 'react-navigation';
+
+const resetAction = NavigationActions.reset({
+  index: 0,
+  actions: [
+    NavigationActions.navigate({ routeName: 'clientHome'})
+  ]
+})
 
 class SignUpScreen extends React.Component {
   constructor(props) {
@@ -14,15 +21,15 @@ class SignUpScreen extends React.Component {
     // axios.get('/users', {u: e.target..., p: e.target....}).then...
     console.log('LOG IN');
     // navigate to clientHomeScreen
-    this.props.navigation.navigate('clientHome');
+    this.props.navigation.dispatch(resetAction);
   }
 
   render(){
     console.log('SignUpScreen props: ', this.props.navigation);
     return (
     <View>
-      <Text>Signup form...</Text>
-      <Button title="log in" onPress={this.signUp} />
+      <Text>Signup form... CHANGE</Text>
+      <Button title="sign up" onPress={this.signUp} />
     </View>);
   }
 }

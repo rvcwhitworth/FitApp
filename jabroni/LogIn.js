@@ -1,6 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
-import { StackNavigator, TabNavigator } from 'react-navigation';
+import { StackNavigator, TabNavigator, NavigationActions } from 'react-navigation';
+
+const resetAction = NavigationActions.reset({
+  index: 0,
+  actions: [
+    NavigationActions.navigate({ routeName: 'clientHome'})
+  ]
+})
 
 class logInScreen extends React.Component {
   constructor(props) {
@@ -14,7 +21,7 @@ class logInScreen extends React.Component {
     // axios.get('/users', {u: e.target..., p: e.target....}).then...
     console.log('LOG IN');
     // navigate to clientHomeScreen
-    this.props.navigation.navigate('clientHome');
+    this.props.navigation.dispatch(resetAction);
   }
 
   render(){
