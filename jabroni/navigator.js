@@ -27,7 +27,7 @@ const Navigator = SwipeNavigator({
 
   Diet: {
     screen: Diet,
-    color: '#000000',
+    color: '#FFFFFF',
     type: 'over',
   },
 
