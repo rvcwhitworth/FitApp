@@ -1,5 +1,5 @@
 import React from 'react';
-import App from './jabroni/App';
+import App from './entryContainer';
 
 import renderer from 'react-test-renderer';
 

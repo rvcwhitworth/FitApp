@@ -11,9 +11,35 @@ class Camera extends React.Component {
   constructor(props) {
     super(props)
   }
+
+
   componentDidMount() {
     const { nav } = this.props;
-    console.log('props', this.props)
+
+    nav.onNavigateShouldAllow(() => {
+       return true;
+    });
+
+    nav.onNavigateDownStartedListener(({interpolation, start, end, isBack, isMain}) => {
+      this.setState({color: 'transparent'})
+    })
+
+    nav.onNavigateDownCompletedListener(({completed, isBack}) => {
+      if(completed) {
+        this.setState({color: '#E53935'})
+      }
+    })
+
+    nav.onNavigateUpStartedListener(({isBack, isMain}) => {
+      this.setState({color: 'transparent'})
+    })
+
+    nav.onNavigateUpCompletedListener(({completed, isBack}) => {
+      if(completed || isBack && !completed) {
+        this.setState({color: '#E53935'})
+      }
+    })
+
   }
 
   componentWillUnmount() {
@@ -26,7 +52,7 @@ class Camera extends React.Component {
     return (
       <View style={styles.container}>
         <View >
-          <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center'}}>PROFILE</Text>
+          <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center', color:'white'}}>PROFILE</Text>
           <Text style={{padding: 5, textAlign:'center'}}>This is your personal profile, display todays workout on this screen</Text>
           <Text style={{padding: 5, textAlign:'center'}}>Swipe left for your diet!</Text>
           <Text style={{padding: 5, textAlign:'center'}}>Swipe right for your daily inputs and progress stuff!</Text>
@@ -40,7 +66,7 @@ class Camera extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'grey',
+    backgroundColor: 'black',
     flex: 1,
     paddingTop: 80,
     alignItems: 'center',

@@ -1,13 +1,9 @@
 import React from 'react'
-import { View, Text, TextInput, StyleSheet, Animated } from 'react-native'
+import { StyleSheet, Text, View, Button, Animated } from 'react-native';
 
-class Messages extends React.Component {
+class LogOut extends React.Component {
   constructor(props) {
-    super(props)
-
-    this.state = {
-      color: 'transparent',
-    }
+    super(props);
   }
 
   componentDidMount() {
@@ -38,34 +34,31 @@ class Messages extends React.Component {
     })
 
   }
-
-  componentWillUnmount() {
-    this.props.nav.cleanUp()
-  }
-
-  render() {
+  
+  render(){
     return (
-      <Animated.View style={[styles.container, { backgroundColor: this.state.color }]}>
-        <View style={styles.list}>
-          <Text style={{margin: 10, height: 50, paddingLeft: 5, paddingTop: 20}}>This is where our diet for the day would be </Text>
-        </View>
-      </Animated.View>
-    )
-
+    <View style={styles.container} >
+      <Button title="Switch to Trainer Profile" onPress={() => {
+      console.log('hi1')
+      }} />
+      <Button title="Logout" style={styles.button} onPress={() => {
+       console.log("hi2")
+      }} />
+    </View>);
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-  //  backgroundColor: 'transparent',
+    paddingTop: 100,
+    backgroundColor: 'black',
+    opacity: 0.7,
     flex: 1,
   },
-
-  list: {
-    backgroundColor: 'white',
-    flex: 1,
-    borderRadius: 5,
+  button: {
+    padding: 20,
+    backgroundColor: 'black'
   }
 })
 
-export default Messages
+export default LogOut
