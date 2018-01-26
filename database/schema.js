@@ -83,6 +83,7 @@ bookshelf.knex.schema.hasTable('Daily_Records').then((exists) => {
 			record.increments('id').primary();
 			record.integer('user_id').notNullable().unsigned(); // foreign key
 			record.text('data', 'longtext').notNullable(); // all user inputs
+			record.timestamps('timestamp').notNullable();
 			record.foreign('user_id').references('Users.id');
     }).then(function(a) {
 			console.log('created the daily_records table!');
