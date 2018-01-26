@@ -1,6 +1,12 @@
 import React from 'react'
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
 
+  // async componentDidMount() {
+  //   await AsyncStorage.setItem('key' : 'I like to save it.')
+  //   //JSON stringify the data into storage and JSON parse it out, THIS IS SO AMAZING
+  // }
+
+
 class Camera extends React.Component {
   constructor(props) {
     super(props)

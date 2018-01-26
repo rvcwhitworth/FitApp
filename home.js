@@ -14,7 +14,7 @@ const firebaseConfig = {
 };
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
-class App extends React.Component {
+class Home extends React.Component {
   render() {
     return (
       <View style={styles.container}>
@@ -30,5 +30,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App
+export default Home
 // 
