@@ -18,3 +18,5 @@ yarn-error.log*
 
 ./database/config.js
 TOKENS.js
+
+serviceAccount.json

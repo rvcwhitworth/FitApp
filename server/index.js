@@ -1,25 +1,36 @@
+
+
+
 const express = require('express');
 const db = require('../database/schema.js');
 const models = require('../database/models.js')
-var admin = require('firebase-admin');
+const admin = require('firebase-admin');
+
+// const firebase = require('firebase');
 
 const app = express();
 const port = 4000;
-var TOKEN = require('./../TOKENS.js');
+const TOKEN = require('./../TOKENS.js');
+var serviceAccount = require("./../serviceAccount.json");
 
 
-admin.initializeApp({
-  credential: admin.credential.cert(TOKEN.firebaseConfig.serviceAccount),
+
+var firebaseDb = admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
   databaseURL: TOKEN.firebaseConfig.databaseURL
 });
 
-app.get('/', function (req,res) {
-    res.send('Hello');
- });
-// new models.User({username: 'ethan', password: 'password', profile: 'testing'}).save().then((model) => {
-// 	console.log('saved: ', model);
-// });
-
-
+var database = firebaseDb.database();
 
 app.listen(port, () => console.log('Listening on port', port));
+
+
+
+
+
+// new models.User({username: 'ethan', password: 'password', profile: 'testing'}).save().then((model) => {
+    // 	console.log('saved: ', model);
+// });
+
+// database.ref('/test').push({test: 'heyhey'});
+// console.log(firebaseDb.database().ref().child('test'))
