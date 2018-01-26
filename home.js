@@ -1,6 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import Navigator from './jabroni/navigator'
+import landingScreen from './jabroni/LandingPage';
+import logInScreen from './jabroni/LogIn';
+import signUpScreen from './jabroni/SignUp';
+import clientHome from './jabroni/ClientHome';
+import { StackNavigator } from 'react-navigation';
 import * as firebase from 'firebase';
 import TOKENS from './TOKENS.js';
 
