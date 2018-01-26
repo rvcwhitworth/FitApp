@@ -7,8 +7,8 @@ import Discover from './Discover'
 const Navigator = SwipeNavigator({
   Camera: {
     screen: Profile,
-    left: 'Diet',
-    right: 'DailyInputs',
+    top: 'Diet',
+    bottom: 'DailyInputs',
     type: 'place'
   },
 
