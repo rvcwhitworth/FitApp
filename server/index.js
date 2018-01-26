@@ -1,6 +1,3 @@
-
-
-
 const express = require('express');
 const db = require('../database/schema.js');
 const models = require('../database/models.js')
@@ -13,24 +10,30 @@ const port = 4000;
 const TOKEN = require('./../TOKENS.js');
 var serviceAccount = require("./../serviceAccount.json");
 
-
-
 var firebaseDb = admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: TOKEN.firebaseConfig.databaseURL
 });
 
 var database = firebaseDb.database();
+const body_parser = require('body-parser');
+const collections = require('../database/collections.js'); // db functions live in here
+const graphQLSchema = require('./graphQLSchema.js');
 
-app.listen(port, () => console.log('Listening on port', port));
+// app.use('/graphql', body_parser.json(), graphqlExpress({schema: graphQLSchema}));
 
-
-
-
-
-// new models.User({username: 'ethan', password: 'password', profile: 'testing'}).save().then((model) => {
-    // 	console.log('saved: ', model);
+// app.post('/users', (req, res) => {
+// 	// use params in axios requests to pass in data.
+// 	collections.usernameTaken(req.query.username, (bool) => {
+// 		if (bool) {
+// 			res.send('username taken.');
+// 		} else {
+// 			collections.createUser(req.query).then((response) => {
+// 				res.status(201).send(response)
+// 			});
+// 		}
+// 	});
 // });
 
-// database.ref('/test').push({test: 'heyhey'});
-// console.log(firebaseDb.database().ref().child('test'))
+
+app.listen(port, () => console.log('Listening on port', port));
