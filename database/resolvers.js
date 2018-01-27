@@ -18,12 +18,32 @@ module.exports = {
 		getPersonalRecord: (parent, {id}, db) => {
 			return db.getPersonalRecord(id);
 		},
-
+		getChatRooms: (parent, {id}, db) => {
+			return db.getChatRooms(id);
+		}
 	},
 
 	Mutation: {
 		setUser: (parent, obj, db) => {
 			return db.setUser(obj);
+		},
+		setExercisePlan: (parent, obj, db) => {
+			return db.setExercisePlan(obj);
+		},
+		setDietPlan: (parent, obj, db) => {
+			return db.setDietPlan(obj);
+		},
+		setSpotter: (parent, obj, db) => {
+			return db.setSpotter(obj);
+		},
+		setDailyRecord: (parent, obj, db) => {
+			return db.setDailyRecord(obj);
+		},
+		setPersonalRecord: (parent, obj, db) => {
+			return db.setPersonalRecord(obj);
+		},
+		setChatRoom: (parent, obj, db) => {
+			return db.setChatRoom(obj);
 		}
 	},
 
@@ -65,6 +85,12 @@ module.exports = {
 
 	Personal_Record:{
 		user: (parent, args, db)=> {
+			return db.getUserByID(parent.user_id);
+		}
+	},
+
+	Chat_Room:{
+		user: (parent, args, db) => {
 			return db.getUserByID(parent.user_id);
 		}
 	}
