@@ -7,31 +7,31 @@ class LogOut extends React.Component {
   }
 
   componentDidMount() {
-    const { nav } = this.props;
+    // const { nav } = this.props;
 
-    nav.onNavigateShouldAllow(() => {
-       return true;
-    });
+    // nav.onNavigateShouldAllow(() => {
+    //    return true;
+    // });
 
-    nav.onNavigateDownStartedListener(({interpolation, start, end, isBack, isMain}) => {
-      this.setState({color: 'transparent'})
-    })
+    // nav.onNavigateDownStartedListener(({interpolation, start, end, isBack, isMain}) => {
+    //   this.setState({color: 'transparent'})
+    // })
 
-    nav.onNavigateDownCompletedListener(({completed, isBack}) => {
-      if(completed) {
-        this.setState({color: '#E53935'})
-      }
-    })
+    // nav.onNavigateDownCompletedListener(({completed, isBack}) => {
+    //   if(completed) {
+    //     this.setState({color: '#E53935'})
+    //   }
+    // })
 
-    nav.onNavigateUpStartedListener(({isBack, isMain}) => {
-      this.setState({color: 'transparent'})
-    })
+    // nav.onNavigateUpStartedListener(({isBack, isMain}) => {
+    //   this.setState({color: 'transparent'})
+    // })
 
-    nav.onNavigateUpCompletedListener(({completed, isBack}) => {
-      if(completed || isBack && !completed) {
-        this.setState({color: '#E53935'})
-      }
-    })
+    // nav.onNavigateUpCompletedListener(({completed, isBack}) => {
+    //   if(completed || isBack && !completed) {
+    //     this.setState({color: '#E53935'})
+    //   }
+    // })
 
   }
   

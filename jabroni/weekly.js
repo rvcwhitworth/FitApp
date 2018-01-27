@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, TextInput, StyleSheet } from 'react-native'
 
-class Discover extends React.Component {
+class Weekly extends React.Component {
   componentDidMount() {
     const { nav } = this.props;
 
@@ -15,7 +15,7 @@ class Discover extends React.Component {
     return (
       <View style={styles.container}>
         <View style={{marginTop: 50}}>
-          <Text> Maybe this could be our chat? </Text>
+          <Text> This will be our weekly view of workout plan??? </Text>
         </View>
       </View>
     )
@@ -30,4 +30,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Discover
+export default Weekly
