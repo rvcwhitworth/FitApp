@@ -59,4 +59,8 @@ module.exports = `
 		getDailyRecords(id: Int!, timestamp: String): [Daily_Record]
 		getPersonalRecord(id: Int!): [Personal_Record]
 	}
+
+	type Mutation {
+		setUser(username: String!, password: String!, fullName: String!, email: String, type: String!, profile_data: String): User
+	}
 `

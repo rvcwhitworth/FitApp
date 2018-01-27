@@ -45,6 +45,8 @@ module.exports.setUser = (obj) => {
 		email: obj.email,
 		type: obj.type,
 		profile_data: obj.profile_data
+	}).then((result) => {
+		return result.attributes;
 	});
 }
 
@@ -154,24 +156,9 @@ module.exports.setDailyRecord = (obj) => {
 	return Daily_Records.create({
 		user_id: obj.user_id,
 		data: obj.data,
-		created_at: CURRENT_TIMESTAMP
+		created_at: 'CURRENT_TIMESTAMP'
 	});
 }
-
-// module.exports.getDailyRecords = (id, timestamp) => {
-// 	if ( timestamp ) {
-// 		return models.Daily_Record.where({user_id: id, timestamp: timestamp}).fetchAll().then((obj) => {
-// 			console.log("daily_record", obj.attributes)
-// 			return obj.attributes;
-// 		});
-// 	} else {
-// 		return models.Daily_Record.where({user_id: id}).fetchAll().then((obj) => {
-// 			console.log("daily_record", obj.attributes)
-			
-// 			return obj.attributes;
-// 		});
-// 	}
-// }
 
 module.exports.getDailyRecords = (id) => {
 	let result = [];
