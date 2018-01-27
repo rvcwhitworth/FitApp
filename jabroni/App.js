@@ -1,72 +1,23 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, StatusBar } from 'react-native';
 import { StackNavigator, TabNavigator } from 'react-navigation';
-import Home from '../home'
-import SwipeNavigator from './navigator'
+import Home from './navigator'
 import landingScreen from './LandingPage';
 import logInScreen from './LogIn';
 import signUpScreen from './SignUp';
-
-class ClientHomeScreen extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  
-  render(){
-    return (
-    <View>
-      <SwipeNavigator />
-    </View>);
-  }
-}
-
-class PlanScreen extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  
-  render(){
-    return (
-    <View>
-      <Text>Client plan screen goes here!</Text>
-    </View>);
-  }
-}
-
-class DataScreen extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  
-  render(){
-    return (
-    <View>
-      <Text>Client data screen goes here!</Text>
-    </View>);
-  }
-}
-
-class TeamScreen extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  
-  render(){
-    return (
-    <View>
-      <Text>Client team screen goes here!</Text>
-    </View>);
-  }
-}
+import Plan from './PlanScreen';
+import TeamScreen from './TeamScreen';
+import DataScreen from './DataScreen';
+import Chat from './Chat'
 
 const clientHome = TabNavigator({
   Home: {
-    screen: SwipeNavigator,
+    screen: Home,
     title: 'Home'
   },
 
   Plan: {
-    screen: PlanScreen,
+    screen: Plan,
     title: 'Plan'
   },
 
@@ -96,6 +47,9 @@ const App = StackNavigator({
 
   clientHome: {
     screen: clientHome
+  },
+  chat:{
+    screen: Chat
   }
 },  
 {
