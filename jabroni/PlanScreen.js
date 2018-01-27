@@ -1,7 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { FloatingAction } from 'react-native-floating-action';
-import Chat from './chatIcon'
+import Chat from './chatIcon';
+import { graphql, ApolloProvider } from 'react-apollo';
+import gql from 'graphql-tag';
 
   const actions = [{
     text: 'Messages',
@@ -20,16 +22,20 @@ import Chat from './chatIcon'
     position: 3
   }];
 
-export default class PlanScreen extends React.Component {
+class PlanScreen extends React.Component {
   constructor(props) {
     super(props);
   }
   
   render(){
+    const data = this.props.data;
+    if (this.props.data.loading) return (<View><Text>Loading</Text></View>);
+    console.log('DATA FROM GRAPHQL', this.props);
     return (
     <View style={styles.container}>
       <Text>
-        Plan example
+        Your diet:
+        {data.getDietPlans[0].diet}
       </Text>
       <Chat />
     </View>
@@ -44,3 +50,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   }
 });
+
+export default graphql(gql`
+  {
+    getDietPlans(id: 1, type: "client") {
+      diet
+      trainer {
+        fullName
+      }
+    }
+  }
+`)(PlanScreen);

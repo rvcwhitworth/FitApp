@@ -1,82 +1,23 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, StatusBar } from 'react-native';
 import { StackNavigator, TabNavigator } from 'react-navigation';
-<<<<<<< HEAD
+import { ApolloProvider } from 'react-apollo'
+import { ApolloClient } from 'apollo-client';
+import { HttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+
 import Home from './navigator'
-import landingScreen from './LandingPage';
-import logInScreen from './LogIn';
-import signUpScreen from './SignUp';
+import LandingScreen from './LandingPage';
+import LogInScreen from './LogIn';
+import SignUpScreen from './SignUp';
 import Plan from './PlanScreen';
 import TeamScreen from './TeamScreen';
 import DataScreen from './DataScreen';
 import Chat from './Chat'
-=======
-import Home from '../home'
-import HomeNavigator from './navigator';
-import LandingScreen from './LandingPage';
-import LogInScreen from './LogIn';
-import signUpScreen from './SignUp';
-
-class HomeScreen extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  
-  render() {
-    console.log('HERE');
-    return (
-      <HomeNavigator />
-    );
-  }
-}
-
-class PlanScreen extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  
-  render(){
-    return (
-    <View>
-      <Text>Client plan screen goes here!</Text>
-    </View>);
-  }
-}
-
-class DataScreen extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  
-  render(){
-    return (
-    <View>
-      <Text>Client data screen goes here!</Text>
-    </View>);
-  }
-}
-
-class TeamScreen extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  
-  render(){
-    return (
-    <View>
-      <Text>Client team screen goes here!</Text>
-    </View>);
-  }
-}
->>>>>>> Add working swiping and integrated views
 
 const ClientHome = TabNavigator({
   Home: {
-<<<<<<< HEAD
     screen: Home,
-=======
-    screen: HomeScreen,
->>>>>>> Add working swiping and integrated views
     title: 'Home'
   },
 
@@ -102,7 +43,7 @@ const App = StackNavigator({
   },
 
   signUp: {
-    screen: signUpScreen,
+    screen: SignUpScreen,
   },
 
   logIn: {
@@ -110,7 +51,7 @@ const App = StackNavigator({
   },
 
   clientHome: {
-    screen: clientHome
+    screen: ClientHome
   },
   chat:{
     screen: Chat
@@ -125,6 +66,12 @@ App.router = ClientHome.router;
 class AppView extends React.Component {
   constructor (props) {
     super(props)
+
+    /** GraphQL Client */
+    this.client = new ApolloClient({
+      link: new HttpLink({ uri:'http://ec2-18-219-7-36.us-east-2.compute.amazonaws.com:4000/graphql'}),
+      cache: new InMemoryCache()
+    });
   } 
 
   componentWillMount () {
@@ -133,7 +80,9 @@ class AppView extends React.Component {
 
   render () {
     return (
-      <App />
+      <ApolloProvider client={this.client}>
+        <App />
+      </ApolloProvider>
     )
   }
 };

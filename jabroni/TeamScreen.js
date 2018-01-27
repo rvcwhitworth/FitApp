@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import { graphql, ApolloProvider } from 'react-apollo';
+import gql from 'graphql-tag';
 
 export default class TeamScreen extends React.Component {
   constructor(props) {
@@ -13,3 +15,4 @@ export default class TeamScreen extends React.Component {
     </View>);
   }
 }
+

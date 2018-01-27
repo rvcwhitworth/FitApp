@@ -1,7 +1,9 @@
 import React from 'react'
 import { View, Text, TextInput, StyleSheet, Animated } from 'react-native'
+import { graphql, ApolloProvider } from 'react-apollo';
+import gql from 'graphql-tag';
 
-class Messages extends React.Component {
+class DietScreen extends React.Component {
   constructor(props) {
     super(props)
 
@@ -68,4 +70,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Messages
+export default DietScreen

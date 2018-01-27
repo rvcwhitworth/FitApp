@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { StackNavigator, TabNavigator } from 'react-navigation';
 
-class landingScreen extends React.Component {
+class LandingScreen extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -22,4 +22,4 @@ class landingScreen extends React.Component {
   }
 }
 
-export default landingScreen;
+export default LandingScreen;

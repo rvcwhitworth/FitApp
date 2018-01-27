@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { StackNavigator, TabNavigator, NavigationActions } from 'react-navigation';
+import { graphql, ApolloProvider } from 'react-apollo';
+import gql from 'graphql-tag';
 
 const resetAction = NavigationActions.reset({
   index: 0,
