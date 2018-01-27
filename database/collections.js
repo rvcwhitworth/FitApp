@@ -66,7 +66,7 @@ module.exports.setExercisePlan = (obj) => {
 module.exports.getExercisePlans = (id, type) => {
 	if ( type === "trainer" ) {
 		// lookup plan using trainer_id
-		return new models.Exercise_Plan({trainer_id: id}).fetchAll().then((obj) => {
+		return models.Exercise_Plan.where({trainer_id: id}).fetchAll().then((obj) => {
 			let result = [];
 			obj.models.forEach(model => {
 				result.push(model.attributes);
@@ -75,7 +75,7 @@ module.exports.getExercisePlans = (id, type) => {
 		});
 	} else if ( type === "client" ) {
 		// lookup plan using client_id
-		return new models.Exercise_Plan({client_id: id}).fetchAll().then((obj) => {
+		return models.Exercise_Plan.where({client_id: id}).fetchAll().then((obj) => {
 			let result = [];
 			obj.models.forEach(model => {
 				result.push(model.attributes);
@@ -97,7 +97,7 @@ module.exports.setDietPlan = (obj) => {
 module.exports.getDietPlans = (id, type) => {
 	if ( type === "trainer" ) {
 		// lookup plan using trainer_id
-		return new models.Diet_Plan({trainer_id: id}).fetchAll().then((obj) => {
+		return models.Diet_Plan.where({trainer_id: id}).fetchAll().then((obj) => {
 			let result = [];
 			obj.forEach(model => {
 				result.push(model.attributes);
@@ -106,7 +106,7 @@ module.exports.getDietPlans = (id, type) => {
 		});
 	} else if ( type === "client" ) {
 		// lookup plan using client_id
-		return new models.Diet_Plan({client_id: id}).fetchAll().then((obj) => {
+		return models.Diet_Plan.where({client_id: id}).fetchAll().then((obj) => {
 			let result = [];
 			obj.forEach(model => {
 				result.push(model.attributes);
@@ -125,13 +125,20 @@ module.exports.setSpotter = (obj) => {
 }
 
 module.exports.getSpotters = (id, type) => {
+	let result = [];
 	if ( type === "trainer" ) {
-		return models.Spotter({trainer_id: id}).fetchAll().then((obj) => {
-			return obj.attributes;
+		return models.Spotter.where({trainer_id: id}).fetchAll().then((obj) => {
+			obj.forEach(model => {
+				result.push(model.attributes);
+			});
+			return result;
 		});
 	} else if ( type === "client" ) {
-		return models.Spotter({client_id: id}).fetchAll().then((obj) => {
-			return obj.attributes;
+		return models.Spotter.where({client_id: id}).fetchAll().then((obj) => {
+			obj.forEach(model => {
+				result.push(model.attributes);
+			});
+			return result;
 		});
 	}
 }
@@ -146,20 +153,35 @@ module.exports.getSpotters = (id, type) => {
 module.exports.setDailyRecord = (obj) => {
 	return Daily_Records.create({
 		user_id: obj.user_id,
-		data: obj.data
+		data: obj.data,
+		created_at: CURRENT_TIMESTAMP
 	});
 }
 
-module.exports.getDailyRecords = (id, timestamp) => {
-	if ( timestamp ) {
-		return models.Daily_Record({user_id: id, timestamp: timestamp}).fetchAll().then((obj) => {
-			return obj.attributes;
+// module.exports.getDailyRecords = (id, timestamp) => {
+// 	if ( timestamp ) {
+// 		return models.Daily_Record.where({user_id: id, timestamp: timestamp}).fetchAll().then((obj) => {
+// 			console.log("daily_record", obj.attributes)
+// 			return obj.attributes;
+// 		});
+// 	} else {
+// 		return models.Daily_Record.where({user_id: id}).fetchAll().then((obj) => {
+// 			console.log("daily_record", obj.attributes)
+			
+// 			return obj.attributes;
+// 		});
+// 	}
+// }
+
+module.exports.getDailyRecords = (id) => {
+	let result = [];
+	return models.Daily_Record.where({user_id: id}).fetchAll().then((obj) => {
+		obj.forEach(model => {
+			result.push(model.attributes);
 		});
-	} else {
-		return models.Daily_Record({user_id: id}).fetchAll().then((obj) => {
-			return obj.attributes;
-		});
-	}
+		console.log('result: ', result);
+		return result;
+	});
 }
 
 module.exports.setPersonalRecord = (obj) => {
@@ -170,7 +192,15 @@ module.exports.setPersonalRecord = (obj) => {
 }
 
 module.exports.getPersonalRecord = (id) => {
-	return models.Personal_Record({user_id: id}).fetchAll().then((obj) => {
-		return obj.attributes;
+	let result = [];
+	console.log('id: ', id);
+	return models.Personal_Record.where({user_id: id}).fetchAll().then((obj) => {
+		console.log('obj: ', obj);
+		obj.forEach(model => {
+			console.log('model: ', model);
+			result.push(model.attributes);
+		});
+		console.log('result: ', result);
+		return result;
 	});
 }
