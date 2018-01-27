@@ -1,7 +1,7 @@
 module.exports = {
 	Query: {
-		getUser: (parent, { id }, db) => {
-			return db.getUserByID(id);
+		loginUser: (parent, { username, password }, db) => {
+			return db.loginUser(username, password);
 		},
 		getExercisePlans: (parent, { id, type }, db) => {
 			return db.getExercisePlans(id, type);

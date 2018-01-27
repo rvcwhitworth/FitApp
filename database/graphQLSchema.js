@@ -52,7 +52,7 @@ module.exports = `
 	}
 
 	type Query {
-		getUser(id: Int!): User
+		loginUser(username: String!, password: String!): User
 		getExercisePlans(id: Int!, type: String!): [Exercise_Plan]
 		getDietPlans(id: Int!, type: String!): [Diet_Plan]
 		getSpotters(id: Int!, type: String!): [Spotter]
