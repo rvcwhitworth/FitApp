@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
+import Chat from './chatIcon'
 
   // async componentDidMount() {
   //   await AsyncStorage.setItem('key' : 'I like to save it.')
@@ -56,7 +57,7 @@ class Camera extends React.Component {
           <Text style={{padding: 5, textAlign:'center'}}>This is your personal profile, display todays workout on this screen</Text>
           <Text style={{padding: 5, textAlign:'center'}}>Swipe left for your diet!</Text>
           <Text style={{padding: 5, textAlign:'center'}}>Swipe right for your daily inputs and progress stuff!</Text>
-
+          <Chat />
         </View>
       </View>
     )
