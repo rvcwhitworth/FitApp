@@ -21,7 +21,8 @@ module.exports.Chat_Room = bookshelf.Model.extend({
 });
 
 module.exports.Daily_Record = bookshelf.Model.extend({
-	tableName: 'Daily_Records'
+	tableName: 'Daily_Records',
+	hasTimestamps: true
 });
 
 module.exports.Personal_Record = bookshelf.Model.extend({
