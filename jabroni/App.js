@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, StatusBar } from 'react-native';
 import { StackNavigator, TabNavigator } from 'react-navigation';
+<<<<<<< HEAD
 import Home from './navigator'
 import landingScreen from './LandingPage';
 import logInScreen from './LogIn';
@@ -9,10 +10,73 @@ import Plan from './PlanScreen';
 import TeamScreen from './TeamScreen';
 import DataScreen from './DataScreen';
 import Chat from './Chat'
+=======
+import Home from '../home'
+import HomeNavigator from './navigator';
+import LandingScreen from './LandingPage';
+import LogInScreen from './LogIn';
+import signUpScreen from './SignUp';
 
-const clientHome = TabNavigator({
+class HomeScreen extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  
+  render() {
+    console.log('HERE');
+    return (
+      <HomeNavigator />
+    );
+  }
+}
+
+class PlanScreen extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  
+  render(){
+    return (
+    <View>
+      <Text>Client plan screen goes here!</Text>
+    </View>);
+  }
+}
+
+class DataScreen extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  
+  render(){
+    return (
+    <View>
+      <Text>Client data screen goes here!</Text>
+    </View>);
+  }
+}
+
+class TeamScreen extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  
+  render(){
+    return (
+    <View>
+      <Text>Client team screen goes here!</Text>
+    </View>);
+  }
+}
+>>>>>>> Add working swiping and integrated views
+
+const ClientHome = TabNavigator({
   Home: {
+<<<<<<< HEAD
     screen: Home,
+=======
+    screen: HomeScreen,
+>>>>>>> Add working swiping and integrated views
     title: 'Home'
   },
 
@@ -34,7 +98,7 @@ const clientHome = TabNavigator({
 
 const App = StackNavigator({
   landing: {
-    screen: landingScreen,
+    screen: LandingScreen,
   },
 
   signUp: {
@@ -42,7 +106,7 @@ const App = StackNavigator({
   },
 
   logIn: {
-    screen: logInScreen,
+    screen: LogInScreen,
   },
 
   clientHome: {
@@ -56,7 +120,8 @@ const App = StackNavigator({
   headerMode: 'none'
 });
 
-App.router = clientHome.router;
+App.router = ClientHome.router;
+
 class AppView extends React.Component {
   constructor (props) {
     super(props)

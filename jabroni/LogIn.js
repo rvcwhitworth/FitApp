@@ -5,7 +5,7 @@ import { StackNavigator, TabNavigator, NavigationActions } from 'react-navigatio
 const resetAction = NavigationActions.reset({
   index: 0,
   actions: [
-    NavigationActions.navigate({ routeName: 'clientHome'})
+    NavigationActions.navigate({ routeName: 'clientHome'})    
   ]
 })
 
@@ -20,6 +20,7 @@ class logInScreen extends React.Component {
     // make axios request to server to get userID
     // axios.get('/users', {u: e.target..., p: e.target....}).then...
     console.log('LOG IN');
+    console.log('NAV STATE', this.props.navigation.state)
     // navigate to clientHomeScreen
     this.props.navigation.dispatch(resetAction);
   }

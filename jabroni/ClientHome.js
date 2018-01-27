@@ -17,6 +17,4 @@ class HomeScreen extends React.Component {
   }
 }
 
-HomeScreen.router = Navigator.router;
-
 export default HomeScreen;
