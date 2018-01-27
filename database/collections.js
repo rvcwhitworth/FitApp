@@ -1,5 +1,7 @@
+var knex = require('./config.js').knex;
 var bookshelf = require('./schema.js').bookshelf;
 var models = require('./models.js');
+
 ////////////////////////////////////////////////
 // create collections:
 var Users = new bookshelf.Collection();
@@ -15,7 +17,7 @@ var Spotters = new bookshelf.Collection();
 Spotters.model = models.Spotter;
 
 var Daily_Records = new bookshelf.Collection();
-Daily_Records.model = models.Daily_Records;
+Daily_Records.model = models.Daily_Record;
 
 var Personal_Records = new bookshelf.Collection();
 Personal_Records.model = models.Personal_Record;
@@ -28,11 +30,12 @@ Chat_Rooms.model = models.Chat_Room;
 // most database functions below return promises:
 
 module.exports.usernameTaken = (username, cb) => {
-	console.log('checking if username', username, 'is taken...');
+	// check if a username is already taken
 	return new models.User({username: username}).fetch()
 }
 
 module.exports.setUser = (obj) => {
+	// create a new user
 	return module.exports.usernameTaken(obj.username).then((found) => {
 		if (!found) {
 			return Users.create({
@@ -53,16 +56,21 @@ module.exports.setUser = (obj) => {
 }
 
 module.exports.getUserByID = (id) => {
+	// lookup a user by their user_id
 	return new models.User({id: id}).fetch().then((obj) => {
 		return obj.attributes;
 	});
 }
 
 module.exports.loginUser = (username, password) => {
+	// validate a username/password combo
 	return new models.User({username: username, password: password}).fetch().then((obj) => {
-		console.log(obj);
-		return obj.attributes;
-	})
+		if ( obj ) {
+			return obj.attributes;
+		} else {
+			return null;
+		}
+	});
 }
 
 module.exports.setExercisePlan = (obj) => {
@@ -71,6 +79,8 @@ module.exports.setExercisePlan = (obj) => {
 		regimen: obj.regimen,
 		trainer_id: obj.trainer_id,
 		client_id: obj.client_id
+	}).then((result) => {
+		return result.attributes;
 	});
 }
 
@@ -102,6 +112,8 @@ module.exports.setDietPlan = (obj) => {
 		diet: obj.diet,
 		trainer_id: obj.trainer_id,
 		client_id: obj.client_id
+	}).then((result) => {
+		return result.attributes;
 	});
 }
 
@@ -132,6 +144,8 @@ module.exports.setSpotter = (obj) => {
 		trainer_id: obj.trainer_id,
 		client_id: obj.client_id,
 		type: obj.type
+	}).then((result) => {
+		return result.attributes;
 	});
 }
 
@@ -154,18 +168,31 @@ module.exports.getSpotters = (id, type) => {
 	}
 }
 
-// module.exports.createChatRoom = (obj) => {
-// 	// deal with firebase...?
-// 	return Chat_Rooms.create({
+module.exports.setChatRoom = (obj) => {
+	return Chat_Rooms.create({
+		user_id: obj.user_id,
+		room_id: obj.room_id
+	}).then((result) => {
+		return result.attributes;
+	});
+}
 
-// 	});
-// }
+module.exports.getChatRooms = (id) => {
+	let result = [];
+	return models.Chat_Room.where({user_id: id}).fetchAll().then((obj) => {
+		obj.forEach(model => {
+			result.push(model.attributes);
+		});
+		return result;
+	});
+}
 
 module.exports.setDailyRecord = (obj) => {
 	return Daily_Records.create({
 		user_id: obj.user_id,
-		data: obj.data,
-		created_at: 'CURRENT_TIMESTAMP'
+		data: obj.data
+	}).then((result) => {
+		return result.attributes;
 	});
 }
 
@@ -175,28 +202,34 @@ module.exports.getDailyRecords = (id) => {
 		obj.forEach(model => {
 			result.push(model.attributes);
 		});
-		console.log('result: ', result);
 		return result;
 	});
 }
 
 module.exports.setPersonalRecord = (obj) => {
-	return Personal_Records.create({
-		user_id: obj.user_id,
-		data: obj.data
-	});
+	// update the row if it exists, otherwise just create it
+	return module.exports.getPersonalRecord(obj.user_id).then((result) => {
+		if (result) {
+			return new models.Personal_Record({id: result.id, user_id: obj.user_id, data: obj.data}).save().then((result) => {
+				return result.attributes;
+			});
+		} else {
+			return Personal_Records.create({
+				user_id: obj.user_id,
+				data: obj.data
+			}).then((result) => {
+				return result.attributes;
+			});
+		}
+	})
 }
 
 module.exports.getPersonalRecord = (id) => {
-	let result = [];
-	console.log('id: ', id);
-	return models.Personal_Record.where({user_id: id}).fetchAll().then((obj) => {
-		console.log('obj: ', obj);
-		obj.forEach(model => {
-			console.log('model: ', model);
-			result.push(model.attributes);
-		});
-		console.log('result: ', result);
-		return result;
+	return models.Personal_Record.where({user_id: id}).fetch().then((obj) => {
+		if ( obj ) {
+			return obj.attributes;
+		} else {
+			return null;
+		}
 	});
 }

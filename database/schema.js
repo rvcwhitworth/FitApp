@@ -64,11 +64,11 @@ bookshelf.knex.schema.hasTable('Spotters').then((exists) => {
 	}
 });
 
-bookshelf.knex.schema.hasTable('Chatrooms').then((exists) => {
+bookshelf.knex.schema.hasTable('Chat_Rooms').then((exists) => {
 	if ( !exists ) {
-		bookshelf.knex.schema.createTable('Chatrooms', (chatrooms) => {
+		bookshelf.knex.schema.createTable('Chat_Rooms', (chatrooms) => {
 			chatrooms.increments('id').primary();
-			chatrooms.integer('room_id').notNullable().unsigned(); // Firebase room id
+			chatrooms.text('room_id').notNullable(); // Firebase room id
 			chatrooms.integer('user_id').notNullable().unsigned(); // foreign key
 			chatrooms.foreign('user_id').references('Users.id');
     }).then(function(a) {
@@ -83,7 +83,8 @@ bookshelf.knex.schema.hasTable('Daily_Records').then((exists) => {
 			record.increments('id').primary();
 			record.integer('user_id').notNullable().unsigned(); // foreign key
 			record.text('data', 'longtext').notNullable(); // all user inputs
-			record.timestamps('timestamp');
+			record.timestamp('created_at').defaultTo(knex.fn.now());
+			record.timestamp('updated_at').defaultTo(knex.fn.now());
 			record.foreign('user_id').references('Users.id');
     }).then(function(a) {
 			console.log('created the daily_records table!');
