@@ -1,21 +1,22 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { FloatingAction } from 'react-native-floating-action';
+import Chat from './chatIcon'
 
   const actions = [{
-    text: 'Cool',
-    icon: { uri: 'https://www.svgrepo.com/show/191/cool.svg' },
+    text: 'Messages',
+    icon: { uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Circle-icons-chat.svg/2000px-Circle-icons-chat.svg.png' },
     name: 'Cool Icon',
     position: 2
   }, {
-    text: 'Language',
-    icon: {uri: 'https://image.flaticon.com/icons/svg/281/281505.svg'},
-    name: 'bt_language',
+    text: 'Video Chat',
+    icon: {uri: 'http://icons.iconarchive.com/icons/graphicpeel/balloons/512/iChat-Video-icon.png'},
+    name: 'Video',
     position: 1
   }, {
-    text: 'Location',
-    icon: {uri: 'https://image.flaticon.com/icons/svg/26/26423.svg'},
-    name: 'bt_room',
+    text: 'Dat Good Good',
+    icon: {'uri': 'http://pngimg.com/uploads/eggplant/eggplant_PNG2762.png?i=1'},
+    name: 'Eggplant',
     position: 3
   }];
 
@@ -28,15 +29,9 @@ export default class PlanScreen extends React.Component {
     return (
     <View style={styles.container}>
       <Text>
-        Floating Action example
+        Plan example
       </Text>
-      <FloatingAction
-        actions={actions}
-        onPressItem={
-          (name) => {
-            console.log(`selected button: ${name}`)
-          }
-        } />
+      <Chat />
     </View>
     )
   }
