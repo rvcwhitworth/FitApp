@@ -28,25 +28,27 @@ Chat_Rooms.model = models.Chat_Room;
 // most database functions below return promises:
 
 module.exports.usernameTaken = (username, cb) => {
-	new models.User({username: username}).fetch().then((found) => {
-		if (found) {
-			cb(true);
-		} else {
-			cb(false);
-		}
-	});
+	console.log('checking if username', username, 'is taken...');
+	return new models.User({username: username}).fetch()
 }
 
 module.exports.setUser = (obj) => {
-	return Users.create({
-		username: obj.username,
-		password: obj.password,
-		fullName: obj.fullName,
-		email: obj.email,
-		type: obj.type,
-		profile_data: obj.profile_data
-	}).then((result) => {
-		return result.attributes;
+	return module.exports.usernameTaken(obj.username).then((found) => {
+		if (!found) {
+			return Users.create({
+				username: obj.username,
+				password: obj.password,
+				fullName: obj.fullName,
+				email: obj.email,
+				type: obj.type,
+				profile_data: obj.profile_data
+			}).then((result) => {
+				console.log('result: ', result.attributes);
+				return result.attributes;
+			});
+		} else {
+			return null
+		}
 	});
 }
 
@@ -54,6 +56,13 @@ module.exports.getUserByID = (id) => {
 	return new models.User({id: id}).fetch().then((obj) => {
 		return obj.attributes;
 	});
+}
+
+module.exports.loginUser = (username, password) => {
+	return new models.User({username: username, password: password}).fetch().then((obj) => {
+		console.log(obj);
+		return obj.attributes;
+	})
 }
 
 module.exports.setExercisePlan = (obj) => {
