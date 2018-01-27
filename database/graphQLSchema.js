@@ -13,22 +13,22 @@ module.exports = `
 		id: Int!
 		name: String!
 		regimen: String!
-		trainer: User!
-		client: User!
+		trainer: User
+		client: User
 	}
 
 	type Diet_Plan {
 		id: Int!
 		name: String!
 		diet: String!
-		trainer: User!
-		client: User!
+		trainer: User
+		client: User
 	}
 
 	type Spotter {
 		id: Int!
-		trainer: [User!]
-		client: User!
+		trainer: User
+		client: User
 		type: String!
 	}
 
@@ -38,17 +38,25 @@ module.exports = `
 		user: User!
 	}
 
-	Daily_Record {
+	type Daily_Record {
+		id: Int!
+		user: User!
+		data: String!
+		timestamp: String
+	}
+
+	type Personal_Record {
 		id: Int!
 		user: User!
 		data: String!
 	}
 
-	Personal_Record {
-		id: Int!
-		user: User!
-		data: String!
+	type Query {
+		getUser(id: Int!): User
+		getExercisePlans(id: Int!, type: String!): [Exercise_Plan]
+		getDietPlans(id: Int!, type: String!): [Diet_Plan]
+		getSpotters(id: Int!, type: String!): [Spotter]
+		getDailyRecords(id: Int!, timestamp: String): [Daily_Record]
+		getPersonalRecord(id: Int!): [Personal_Record]
 	}
-
-	
 `
