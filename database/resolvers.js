@@ -21,6 +21,12 @@ module.exports = {
 
 	},
 
+	Mutation: {
+		setUser: (parent, obj, db) => {
+			return db.setUser(obj);
+		}
+	},
+
 	Diet_Plan: {
 		client: (parent, args, db) => {
 			console.log(parent)
