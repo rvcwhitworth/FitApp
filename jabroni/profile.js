@@ -48,10 +48,9 @@ class Camera extends React.Component {
   }
 
   render() {
-    const { nav } = this.props
-
     return (
       <View style={styles.container}>
+
        <Chat nav={nav} />
         <View >
           <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center', color:'white'}}>PROFILE</Text>
@@ -60,7 +59,7 @@ class Camera extends React.Component {
           <Text style={{padding: 5, textAlign:'center'}}>Swipe right for your daily inputs and progress stuff!</Text>
         </View>
       </View>
-    )
+    );
 
   }
 }

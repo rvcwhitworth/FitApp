@@ -1,18 +1,30 @@
 import React from 'react';
+import FooterNav from './FooterNav';
 import { StyleSheet, Text, View, ImageBackground, Button } from 'react-native';
 import { StackNavigator, TabNavigator } from 'react-navigation';
 import { ButtonGroup} from 'react-native-elements';
+
 class landingScreen extends React.Component {
   constructor(props) {
     super()
+    this.state = {
+      selectedIndex: 2
+    }
+    this.updateIndex = this.updateIndex.bind(this)
   }
+  updateIndex (selectedIndex) {
+    this.setState({selectedIndex})
+  }
+
   render(){
     const { navigate } = this.props.navigation;
+    const buttons = ['Home', 'Plan', 'Data', 'Team']
+
     return (
       <View style={{flex: 1}}>
         <Button title="sign up" onPress={() => {
           navigate('signUp');
-        }}/>
+        }}/> 
 
         <Button title="log in" onPress={() => {
           navigate('logIn');
@@ -21,7 +33,6 @@ class landingScreen extends React.Component {
           style={styles.backgroundImage}>
 
         </ImageBackground>
-        
       </View>
     );
   }
