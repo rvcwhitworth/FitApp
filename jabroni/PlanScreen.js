@@ -1,11 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { FloatingAction } from 'react-native-floating-action';
-<<<<<<< HEAD
 import Chat from './chatIcon';
 import { graphql, ApolloProvider } from 'react-apollo';
 import gql from 'graphql-tag';
-import Chat from './chatIcon'
 import ProgressCircle from './progressCircle'
 
   const actions = [{

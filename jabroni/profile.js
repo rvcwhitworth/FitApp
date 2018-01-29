@@ -52,7 +52,7 @@ class Camera extends React.Component {
 
     return (
       <View style={styles.container}>
-       <Chat />
+       <Chat nav={nav} />
         <View >
           <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center', color:'white'}}>PROFILE</Text>
           <Button title="Data" onPress={()=> this.props.nav.navigate('Data')} />
@@ -67,7 +67,6 @@ class Camera extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'black',
     flex: 1,
     paddingTop: 80,
     alignItems: 'center',

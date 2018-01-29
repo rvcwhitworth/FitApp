@@ -1,9 +1,7 @@
 import React from 'react'
 import { View, Text, TextInput, StyleSheet } from 'react-native'
-import Chat from './chatIcon.js'
-import Test from './daily.js'
 
-class BodyComposition extends React.Component {
+class Chat extends React.Component {
   componentDidMount() {
     const { nav } = this.props;
 
@@ -16,7 +14,9 @@ class BodyComposition extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Test />
+        <View style={{marginTop: 50}}>
+          <Text> VIDEO CHAT WHATS GOOD??? </Text>
+        </View>
       </View>
     )
 
@@ -30,4 +30,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default BodyComposition
+export default Chat

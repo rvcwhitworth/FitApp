@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, Text, View, ImageBackground, Button } from 'react-native';
 import { StackNavigator, TabNavigator } from 'react-navigation';
 import { ButtonGroup} from 'react-native-elements';
-import { Constants } from 'expo';
 class landingScreen extends React.Component {
   constructor(props) {
     super()
@@ -18,7 +17,7 @@ class landingScreen extends React.Component {
         <Button title="log in" onPress={() => {
           navigate('logIn');
         }}/>
-        <ImageBackground source={require('./fire.jpeg')}
+        <ImageBackground source={require('../images/fire.jpeg')}
           style={styles.backgroundImage}>
 
         </ImageBackground>

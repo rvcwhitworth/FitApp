@@ -5,10 +5,10 @@ import { FloatingAction } from 'react-native-floating-action';
   const actions = [{
     text: 'Messages',
     icon: { uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Circle-icons-chat.svg/2000px-Circle-icons-chat.svg.png' },
-    name: 'Cool Icon',
+    name: 'Messages',
     position: 2
   }, {
-    text: 'Video Chat',
+    text: 'VideonChat',
     icon: {uri: 'http://icons.iconarchive.com/icons/graphicpeel/balloons/512/iChat-Video-icon.png'},
     name: 'Video',
     position: 1
@@ -20,9 +20,12 @@ import { FloatingAction } from 'react-native-floating-action';
   }];
 
 class Chat extends React.Component {
-  componentDidMount() {
-    const { nav } = this.props;
+  constructor(props){
+    super(props)
+  }
 
+  componentDidMount() {
+    console.log('what are props', this.props)
     // nav.onNavigateShouldAllow(() => {
     //    return true;
     // });
@@ -36,7 +39,7 @@ class Chat extends React.Component {
         overlayColor={'transparent'}
         onPressItem={
           (name) => {
-            console.log(`selected button: ${name}`)
+            this.props.nav.navigate(`${name}`)
           }
         } />
     )

@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, Dimensions } from 'react-native';
 import Chat from './chatIcon'
 import MacroGraph from './textD3'
+
+const { width, height } = Dimensions.get('window');
 
 export default class DataScreen extends React.Component {
   constructor(props) {
@@ -26,14 +28,9 @@ export default class DataScreen extends React.Component {
     {"number": 20, "name": 'Fats', 'Foods': ['Twinkies', 'Nuts', 'Cheese']}, 
   ]
     return (
-    
-    
-    <ImageBackground
-
-      style={styles.backgroundImage}
-      source={require('../images/weights3.png')} >
+    <ImageBackground style={styles.backgroundImage} blurRadius={2}  source={require('../images/testbackground.jpg')} >
     <View style={styles.container}>
-    <MacroGraph
+        <MacroGraph
             pieWidth={150}
             pieHeight={150}
             onItemSelected={this.showList}
@@ -58,16 +55,18 @@ const styles = StyleSheet.create({
   },
    backgroundImage: {
     flex: 1,
-    backgroundColor:'transparent',
+    backgroundColor:'white',
     justifyContent: 'center',
     alignItems: 'center',
   },
     overlay: {
     flex: 5,
     position: 'absolute',
+    backgroundColor: 'white',
+    opacity: 0.3,
     left: 0,
     top: 0,
-    width: 300,
-    height: 1000
+    width: width,
+    height: height
   }  
 })
