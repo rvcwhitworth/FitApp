@@ -29,9 +29,7 @@ class landingScreen extends React.Component {
         <Button title="log in" onPress={() => {
           navigate('logIn');
         }}/>
-        
-
-        <ImageBackground source={require('./fire.jpeg')}
+        <ImageBackground source={require('../images/fire.jpeg')}
           style={styles.backgroundImage}>
 
         </ImageBackground>

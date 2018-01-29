@@ -1,24 +1,72 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, Dimensions } from 'react-native';
 import Chat from './chatIcon'
+import MacroGraph from './textD3'
+
+const { width, height } = Dimensions.get('window');
 
 export default class DataScreen extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+    	index: 0
+    }
+    this.showList = this.showList.bind(this)
+  }
+
+  showList(foo){
+  	this.setState({
+  		index: foo
+  	})
   }
   
   render(){
+
+  	const testData = [
+    {"number":  50, "name": 'Protein', 'Foods': ['Fish', 'Eggs Benedict', 'Whey Protien' ]},
+    {"number": 30, "name": 'Carbs', 'Foods': ['Pizza', 'Challa Bread', 'Pita Bread']},
+    {"number": 20, "name": 'Fats', 'Foods': ['Twinkies', 'Nuts', 'Cheese']}, 
+  ]
     return (
+    <ImageBackground style={styles.backgroundImage} blurRadius={2}  source={require('../images/testbackground.jpg')} >
     <View style={styles.container}>
-      <Text>Client data screen goes here!</Text>
-      <Chat />
-    </View>);
+        <MacroGraph
+            pieWidth={150}
+            pieHeight={150}
+            onItemSelected={this.showList}
+            width={300}
+            height={300}
+            data={testData} />
+    <Text>
+    {testData[this.state.index]['Foods'].map((val) =>{
+    	return(<Text>{val}</Text>)
+    })}
+    </Text>
+    <Chat />
+    </View>
+    </ImageBackground>
+    )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
-  }
+  },
+   backgroundImage: {
+    flex: 1,
+    backgroundColor:'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+    overlay: {
+    flex: 5,
+    position: 'absolute',
+    backgroundColor: 'white',
+    opacity: 0.3,
+    left: 0,
+    top: 0,
+    width: width,
+    height: height
+  }  
 })

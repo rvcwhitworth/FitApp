@@ -14,6 +14,7 @@ import Plan from './PlanScreen';
 import TeamScreen from './TeamScreen';
 import DataScreen from './DataScreen';
 import Chat from './Chat'
+import TestNavigator from './planNavigator'
 
 const ClientHome = TabNavigator({
   Home: {
@@ -51,7 +52,7 @@ const App = StackNavigator({
   },
 
   clientHome: {
-    screen: ClientHome
+    screen: Home
   },
   chat:{
     screen: Chat

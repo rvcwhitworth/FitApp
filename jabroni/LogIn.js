@@ -26,7 +26,6 @@ class logInScreen extends React.Component {
   }
 
   render(){
-    console.log('logInScreen props: ', this.props.navigation);
     return (
     <View>
       <Text>Login form...</Text>

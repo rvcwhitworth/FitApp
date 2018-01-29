@@ -4,6 +4,7 @@ import { FloatingAction } from 'react-native-floating-action';
 import Chat from './chatIcon';
 import { graphql, ApolloProvider, compose } from 'react-apollo';
 import gql from 'graphql-tag';
+import ProgressCircle from './progressCircle'
 
   const actions = [{
     text: 'Messages',
@@ -25,9 +26,22 @@ import gql from 'graphql-tag';
 class PlanScreen extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+    	progress: 0
+    }
     this.submit = this.submit.bind(this);
     console.log('plan screen props: ', this.props);
+    this.inc = this.inc.bind(this)
   }
+
+  inc(){
+  	if(this.state.progress < 1){
+  		console.log(this.state.progress)
+  		this.setState({
+  			progress: this.state.progress + 0.1
+  		})
+  	}
 
   submit(e) {
     e.preventDefault();
@@ -43,6 +57,7 @@ class PlanScreen extends React.Component {
     }).catch((error) => {
       console.log('graphQL error: ', error);
     })
+
   }
   
   render(){

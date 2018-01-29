@@ -1,20 +1,22 @@
-import SwipeNavigator from 'react-native-swipe-navigation'
-import Daily from './daily'
-import Discover from './Discover'
+// import SwipeNavigator from 'react-native-swipe-navigation'
+// import Daily from './daily'
+// import Monthly from './monthly'
 
-const ProfileNavigator = SwipeNavigator({
-  Camera: {
-    screen: Daily,
-    top: 'Discover',
-    type: 'over'
-  },
+// console.log('what the fuck', SwipeNavigator())
 
-  Discover: {
-    screen: Discover,
-    color: '#FFFFFF',
-    type: 'over',
-  },
+// const ProfileNavigator = new SwipeNavigator({
+//   Camera: {
+//     screen: Daily,
+//     top: 'Monthly',
+//     type: 'over'
+//   },
 
-})
+//   Monthly: {
+//     screen: Monthly,
+//     color: '#FFFFFF',
+//     type: 'over',
+//   },
 
-export default ProfileNavigator
+// })
+
+// export default ProfileNavigator
