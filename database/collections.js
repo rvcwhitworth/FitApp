@@ -46,7 +46,6 @@ module.exports.setUser = (obj) => {
 				type: obj.type,
 				profile_data: obj.profile_data
 			}).then((result) => {
-				console.log('result: ', result.attributes);
 				return result.attributes;
 			});
 		} else {
