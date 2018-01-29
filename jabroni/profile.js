@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
-import Chat from './chatIcon'
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native'
+import Chat from './chatIcon';
 
   // async componentDidMount() {
   //   await AsyncStorage.setItem('key' : 'I like to save it.')
@@ -48,26 +48,22 @@ class Camera extends React.Component {
   }
 
   render() {
-    const { nav } = this.props
-
     return (
       <View style={styles.container}>
-        <View >
-          <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center', color:'white'}}>PROFILE</Text>
-          <Text style={{padding: 5, textAlign:'center'}}>This is your personal profile, display todays workout on this screen</Text>
-          <Text style={{padding: 5, textAlign:'center'}}>Swipe left for your diet!</Text>
-          <Text style={{padding: 5, textAlign:'center'}}>Swipe right for your daily inputs and progress stuff!</Text>
-          <Chat />
-        </View>
+        <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center', color:'white'}}>PROFILE</Text>
+        <Text style={{padding: 5, textAlign:'center'}}>This is your personal profile, display todays workout on this screen</Text>
+        <Text style={{padding: 5, textAlign:'center'}}>Swipe left for your diet!</Text>
+        <Text style={{padding: 5, textAlign:'center'}}>Swipe right for your daily inputs and progress stuff!</Text>
+        <Chat />
       </View>
-    )
+    );
 
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'black',
+    // backgroundColor: 'black',
     flex: 1,
     paddingTop: 80,
     alignItems: 'center',
