@@ -102,9 +102,9 @@ class SignUpScreen extends React.Component {
     // call getValue() to get the values of the form
     var value = this.refs.form.getValue();
     if (value) { // if validation fails, value will be null
-      if(value.password === value.ConfirmPassword); // value here is an instance of Person
+      // if(value.password === value.ConfirmPassword); // value here is an instance of Person
       this.props.navigation.dispatch(resetAction);    
-    }else{
+    // }else{
 
     }
   }
@@ -167,6 +167,7 @@ var styles = StyleSheet.create({
     justifyContent: 'center'
   }
 });
+
 
 export default SignUpScreen;
 
