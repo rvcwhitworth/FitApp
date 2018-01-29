@@ -4,10 +4,10 @@ import Diet from './Diet'
 import Profile from './profile'
 import LogOut from './logOut.js'
 
-const ProfileNavigator = SwipeNavigator({
+const ProfileNavigator = new SwipeNavigator({
   Camera: {
     screen: Profile,
-    top: 'Diet',
+    left: 'Diet',
     bottom: 'DailyInputs',
     type: 'over'
   },
