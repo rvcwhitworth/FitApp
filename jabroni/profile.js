@@ -50,15 +50,11 @@ class Camera extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-<<<<<<< HEAD
-        <Picturetaker />
-=======
         <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center', color:'white'}}>PROFILE</Text>
         <Text style={{padding: 5, textAlign:'center'}}>This is your personal profile, display todays workout on this screen</Text>
         <Text style={{padding: 5, textAlign:'center'}}>Swipe left for your diet!</Text>
         <Text style={{padding: 5, textAlign:'center'}}>Swipe right for your daily inputs and progress stuff!</Text>
         <Chat />
->>>>>>> apollo
       </View>
     );
 
