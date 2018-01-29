@@ -1,7 +1,8 @@
 import React from 'react'
 import { View, Text, TextInput, StyleSheet } from 'react-native'
+import Chat from './chatIcon.js'
 
-class Weekly extends React.Component {
+class BodyComposition extends React.Component {
   componentDidMount() {
     const { nav } = this.props;
 
@@ -15,8 +16,9 @@ class Weekly extends React.Component {
     return (
       <View style={styles.container}>
         <View style={{marginTop: 50}}>
-          <Text> This will be our large monthly view of workout plan??? </Text>
+          <Text> This will be our body composition graph wooohoooo!! </Text>
         </View>
+        <Chat />
       </View>
     )
 
@@ -30,4 +32,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Weekly
+export default BodyComposition

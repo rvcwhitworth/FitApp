@@ -31,17 +31,14 @@ class Chat extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-
       <FloatingAction
         actions={actions}
+        overlayColor={'transparent'}
         onPressItem={
           (name) => {
             console.log(`selected button: ${name}`)
           }
         } />
-        
-      </View>
     )
 
   }
@@ -50,6 +47,7 @@ class Chat extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0)'
   },
 })
 

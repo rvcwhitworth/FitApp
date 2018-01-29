@@ -1,9 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button } from 'react-native';
 import { FloatingAction } from 'react-native-floating-action';
+<<<<<<< HEAD
 import Chat from './chatIcon';
 import { graphql, ApolloProvider } from 'react-apollo';
 import gql from 'graphql-tag';
+import Chat from './chatIcon'
+import ProgressCircle from './progressCircle'
 
   const actions = [{
     text: 'Messages',
@@ -25,6 +28,19 @@ import gql from 'graphql-tag';
 class PlanScreen extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+    	progress: 0
+    }
+    this.inc = this.inc.bind(this)
+  }
+
+  inc(){
+  	if(this.state.progress < 1){
+  		console.log(this.state.progress)
+  		this.setState({
+  			progress: this.state.progress + 0.1
+  		})
+  	}
   }
   
   render(){
