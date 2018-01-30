@@ -22,16 +22,17 @@ class landingScreen extends React.Component {
 
     return (
       <View style={{flex: 1}}>
-        <Button title="sign up" onPress={() => {
-          navigate('signUp');
-        }}/> 
-
-        <Button title="log in" onPress={() => {
-          navigate('logIn');
-        }}/>
         <ImageBackground source={require('../images/fire.jpeg')}
           style={styles.backgroundImage}>
-
+          <View style={{flex: 1, marginTop: 120}}>
+            <Button title="sign up" onPress={() => {
+              navigate('signUp');
+            }}/> 
+            <View style={{margin: 10}}/>
+            <Button title="log in" onPress={() => {
+              navigate('logIn');
+            }}/>
+        </View>
         </ImageBackground>
       </View>
     );
@@ -46,6 +47,7 @@ const styles = StyleSheet.create({
     backgroundColor:'transparent',
     justifyContent: 'center',
     alignItems: 'center',
+
   },
 });
 

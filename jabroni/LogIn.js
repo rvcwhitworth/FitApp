@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, ScrollView, TouchableHighlight } from 'react-native';
+import { Alert, StyleSheet, Text, View, Button, ScrollView, TouchableHighlight } from 'react-native';
 import { StackNavigator, TabNavigator, NavigationActions } from 'react-navigation';
 import { graphql, ApolloProvider, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -10,15 +10,16 @@ var Form = t.form.Form;
 var styles = StyleSheet.create({
   scrollView:{
     // flex:1,
-    padding: 10
+    padding: 10,
+    justifyContent: 'center'
     // backgroundColor:'blue'
   },
   container: {
     flex: 1,
     justifyContent: 'center',
-    marginTop: 50,
-    padding: 20,
     backgroundColor: '#ffffff',
+    paddingLeft: 5,
+    paddingRight: 5
   },
   title: {
     fontSize: 30,
@@ -62,6 +63,19 @@ const q = gql`
   }
 `
 
+var options = {
+  fields: {
+    username: {
+      type: 'username'
+    },
+    password: {
+      type: 'password',
+      password: true,
+      secureTextEntry: true,
+    }
+  }
+}
+
 class logInScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -92,16 +106,18 @@ class logInScreen extends React.Component {
 
   render(){
     return (
-    <View>
-      <ScrollView style={styles.scrollView}>
+    <View style={styles.container}>
           <Form
             ref="form"
             type={Person}
+            options={options}
           />
           <TouchableHighlight style={styles.button} onPress={this.logIn} underlayColor='red'>
             <Text style={styles.buttonText}>Log In</Text>
           </TouchableHighlight>
-        </ScrollView>
+          <Button title="Don't have an account? sign up" onPress={() => {
+              this.props.navigation.navigate('signUp');
+            }}/> 
     </View>);
   }
 }

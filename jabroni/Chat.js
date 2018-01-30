@@ -18,8 +18,7 @@ class Chat extends React.Component {
           <Text> Maybe this could be our chat? </Text>
         </View>
       </View>
-    )
-
+    );
   }
 }
 

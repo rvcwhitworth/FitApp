@@ -131,11 +131,16 @@ class SignUpScreen extends React.Component {
           <Form
             ref="form"
             type={Person}
-             options={options}
+            options={options}
           />
           <TouchableHighlight style={styles.button} onPress={this.onPress} underlayColor='red'>
             <Text style={styles.buttonText}>Save</Text>
           </TouchableHighlight>
+
+          <Button style={{marginTop: 10}}title="Already have an account? log in" onPress={() => {
+            this.props.navigation.navigate('logIn');
+          }}/>
+          <View style={{marginBottom: 25}}/>
         </ScrollView>
       //  </View>)
     )
@@ -145,8 +150,10 @@ class SignUpScreen extends React.Component {
 
 var styles = StyleSheet.create({
   scrollView:{
-    // flex:1,
-    padding: 10
+    flex:1,
+    paddingTop: 15,
+    paddingLeft: 5,
+    paddingRight: 5
     // backgroundColor:'blue'
   },
   container: {
