@@ -77,7 +77,7 @@ class WorkoutScreen extends React.Component {
     })
   }
 
-  
+
 
   render() {
     const { getExercisePlans, loading } = this.props.data;
@@ -123,14 +123,14 @@ class WorkoutScreen extends React.Component {
                   updateData={this.updateWorkoutDisplay}
                 />
               </View>
-              <Button
-               title={'Submit Workout'}
-                onPress={this.handleWorkoutSubmission}
-              />
             );
           }) : <Text>Enjoy your day off!</Text>}
 
-          
+          {this.state.dailyWorkout !== "OFF" &&  
+            <Button
+              title={'Submit Workout'}
+              onPress={this.handleWorkoutSubmission}
+            />}
           {/* <Chat /> */}
         </View>)}
       </Animated.View>
