@@ -1,5 +1,10 @@
 import React from 'react'
-import { View, Text, TextInput, StyleSheet } from 'react-native'
+import { View, Text, TextInput, StyleSheet, Dimensions } from 'react-native'
+import Chat from './chatIcon'
+import FooterNav from './FooterNav.js'
+import SVG from './SVG/svg5Left.js'
+
+const { width, height } = Dimensions.get('window');
 
 class DailyInputs extends React.Component {
   constructor(props) {
@@ -18,38 +23,62 @@ class DailyInputs extends React.Component {
     });
 
     nav.onNavigateLeftStartedListener(({interpolation, start, end, isBack, isMain}) => {
+      console.log('WORKOUTS')
+      console.log('inside LeftStartedListener')
+      console.log('interpolation', interpolation)
+      console.log('start', start)
+      console.log('end', end)
+      console.log('isBack', isBack)
+      console.log('isMain', isMain)
+
       if(isBack && !isMain) {
-        this.setState({color: '#9575CD'})
+        console.log('what')
       } else if(isBack) {
-        this.setState({color: 'transparent'})
+        console.log('the?')
       }
     })
 
     nav.onNavigateLeftCompletedListener(({completed, isBack}) => {
+      console.log('WORKOUTS')
+      console.log('completed', completed)
+      console.log('isBack', isBack)
       if(!completed && isBack) {
         this.setState({color: '#9575CD'})
       }
     })
 
     nav.onNavigateRightStartedListener(({isBack, isMain}) => {
+      console.log('WORKOUTS')
+      console.log('isBack', isBack)
+      console.log('isMain', isMain)
       if(!isMain) {
         this.setState({color: 'transparent'})
       }
     })
 
     nav.onNavigateRightCompletedListener(({completed}) => {
+      console.log('WORKOUTS')
       if(completed) {
         this.setState({color: '#9575CD'})
       }
     })
   }
 
+  componentWillUnmount() {
+    this.props.nav.cleanUp()
+  }
+
   render() {
     return (
-      <View style={[styles.container, { backgroundColor: this.state.color }]}>
+      <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>
+      <View style={{flex:1}}>
+      <SVG />
+      </View>
         <View style={styles.list}>
-          <Text style={{margin: 10, height: 50, paddingLeft: 5, paddingTop: 20}}> This is where our users enter their workuts </Text>
+          <Text style={{margin: 10, height: 50, paddingLeft: 5, paddingTop: 20}}>This is where our workout entry would be </Text>
+          <Chat nav={this.props.nav}/>
         </View>
+        <FooterNav nav={this.props.nav} index={0}/>
       </View>
     );
   }

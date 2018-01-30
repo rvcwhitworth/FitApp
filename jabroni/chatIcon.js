@@ -25,10 +25,9 @@ class Chat extends React.Component {
   }
 
   componentDidMount() {
-    console.log('what are props', this.props)
-    // nav.onNavigateShouldAllow(() => {
-    //    return true;
-    // });
+    this.props.nav.onNavigateShouldAllow(() => {
+       return true;
+    });
 
   }
 

@@ -26,19 +26,27 @@ const ProfileNavigator = new SwipeNavigator({
 
   DailyInputs: {
   screen: DailyInputs,
+  // right: 'DailyDiet',
+  top: 'Profile',
+  // left: 'DailyWorkouts',
   color: '#FFFFFF',
   type: 'over'
   },
 
   DailyWorkouts: {
     screen: DailyWorkouts,
+    // bottom: 'DailyInputs',
+    // top: 'LogOut',
+    right: 'Profile',
     color: '#FFFFFF',
     type: 'over',
   },
 
   DailyDiet: {
     screen: Diet,
-    top: 'LogOut',
+    // bottom: 'DailyInputs',
+    left: 'Profile',
+    // top: 'LogOut',
     color: '#FFFFFF',
     type: 'over',
   },

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet, Button, Dimensions } from 'react-native';
 import { FloatingAction } from 'react-native-floating-action';
 import Chat from './chatIcon';
 import { graphql, ApolloProvider, compose } from 'react-apollo';
@@ -7,22 +7,7 @@ import gql from 'graphql-tag';
 import ProgressCircle from './progressCircle'
 import FooterNav from './FooterNav.js'
 
-  const actions = [{
-    text: 'Messages',
-    icon: { uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Circle-icons-chat.svg/2000px-Circle-icons-chat.svg.png' },
-    name: 'Cool Icon',
-    position: 2
-  }, {
-    text: 'Video Chat',
-    icon: {uri: 'http://icons.iconarchive.com/icons/graphicpeel/balloons/512/iChat-Video-icon.png'},
-    name: 'Video',
-    position: 1
-  }, {
-    text: 'Dat Good Good',
-    icon: {'uri': 'http://pngimg.com/uploads/eggplant/eggplant_PNG2762.png?i=1'},
-    name: 'Eggplant',
-    position: 3
-  }];
+const { width, height } = Dimensions.get('window');
 
 class PlanScreen extends React.Component {
   constructor(props) {
@@ -67,6 +52,7 @@ class PlanScreen extends React.Component {
     if (this.props.data.loading) return (<View><Text>Loading</Text></View>);
     console.log('DATA FROM GRAPHQL', this.props);
     return (
+    <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>
     <View style={styles.container}>
       <Text>
         Your diet:
@@ -76,6 +62,7 @@ class PlanScreen extends React.Component {
       </Text>
       <Button onPress={this.submit} title="submit" />
       <Chat />
+      </View>
       <FooterNav nav={this.props.nav} index={1} />
     </View>
     )
