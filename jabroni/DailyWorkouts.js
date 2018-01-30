@@ -1,20 +1,21 @@
 import React from 'react'
-import { Alert, View, Text, TextInput, StyleSheet, Animated, Button } from 'react-native'
+import { Alert, View, Text, TextInput, StyleSheet, Animated, Button, Picker } from 'react-native'
 import { graphql, ApolloProvider, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import WorkoutInput from './WorkoutInput';
 
-class DailyWorkoutScreen extends React.Component {
+class WorkoutScreen extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      color: 'transparent'
+      color: 'transparent',
+      selectedDay: new Date().getDay()
     }
-
     this.setupWorkoutDisplay = this.setupWorkoutDisplay.bind(this);
     this.updateWorkoutDisplay = this.updateWorkoutDisplay.bind(this);
     this.handleWorkoutSubmission = this.handleWorkoutSubmission.bind(this);
+    this.handleSelectChange = this.handleSelectChange.bind(this);
   }
 
   componentDidMount() {
@@ -76,23 +77,39 @@ class DailyWorkoutScreen extends React.Component {
     })
   }
 
+  
+
   render() {
     const { getExercisePlans, loading } = this.props.data;
     if (getExercisePlans && !this.state.dailyWorkout && !this.state.displaySet) {
       this.state.dailyWorkout = JSON.parse(getExercisePlans.slice().pop().regimen)[new Date().getDay()];
-      this.setupWorkoutDisplay(this.state.dailyWorkout);
+      if (this.state.dailyWorkout !== "OFF") {
+        this.setupWorkoutDisplay(this.state.dailyWorkout); 
+      }
+      this.state.displaySet = true;
     }
 
     return (
       <Animated.View style={[styles.container, { backgroundColor: this.state.color }]}>
         {loading || !this.state.dailyWorkout || !this.state.displaySet ? (<View><Text>Loading workout data</Text></View>) : (
         <View style={{flex: 1}}>
+          <Picker
+            selectedValue={this.state.selectedDay}
+            onValueChange={this.handleSelectChange}
+          >
+            <Picker.Item label="Sunday" value={0} />
+            <Picker.Item label="Monday" value={1} />
+            <Picker.Item label="Tuesday" value={2} />
+            <Picker.Item label="Wednesday" value={3} />
+            <Picker.Item label="Thursday" value={4} />
+            <Picker.Item label="Friday" value={5} />
+            <Picker.Item label="Sunday" value={6} />
+          </Picker>
           <Text style={styles.header}>
             Your workout:
           </Text>
-          {Object.keys(this.state.dailyWorkout).map((workoutType, i) => {
-            var height = this.state[workoutType] ? 40 : null
-            console.log(height, workoutType)
+          {this.state.dailyWorkout !== "OFF" ? Object.keys(this.state.dailyWorkout).map((workoutType, i) => {
+            var height = this.state[workoutType] ? 40 : null;
             return (
               <View style={{height, marginTop: 5, marginBottom: 5}} key={i}>
                 <Button 
@@ -106,13 +123,14 @@ class DailyWorkoutScreen extends React.Component {
                   updateData={this.updateWorkoutDisplay}
                 />
               </View>
+              <Button
+               title={'Submit Workout'}
+                onPress={this.handleWorkoutSubmission}
+              />
             );
-          })}
+          }) : <Text>Enjoy your day off!</Text>}
 
-          <Button
-            title={'Submit Workout'}
-            onPress={this.handleWorkoutSubmission}
-          />
+          
           {/* <Chat /> */}
         </View>)}
       </Animated.View>
@@ -153,8 +171,6 @@ mutation {
     data
   }
 }
-  `
+`
 
-
-
-export default compose(graphql(planQuery), graphql(planMutation))(DailyWorkoutScreen);
+export default compose(graphql(planQuery), graphql(planMutation))(WorkoutScreen);

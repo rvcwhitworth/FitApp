@@ -1,6 +1,8 @@
 var knex = require('./config.js').knex;
 var bookshelf = require('./schema.js').bookshelf;
 var models = require('./models.js');
+var _ = require('underscore');
+var bcrypt = require('bcrypt');
 
 ////////////////////////////////////////////////
 // create collections:
@@ -38,16 +40,19 @@ module.exports.setUser = (obj) => {
 	// create a new user
 	return module.exports.usernameTaken(obj.username).then((found) => {
 		if (!found) {
-			return Users.create({
-				username: obj.username,
-				password: obj.password,
-				fullName: obj.fullName,
-				email: obj.email,
-				type: obj.type,
-				profile_data: obj.profile_data
-			}).then((result) => {
-				return result.attributes;
-			});
+			return bcrypt.hash(obj.password)
+			.then((hash) => {
+				return Users.create({
+					username: obj.username,
+					password: hash,
+					fullName: obj.fullName,
+					email: obj.email,
+					type: obj.type,
+					profile_data: obj.profile_data
+				}).then((result) => {
+					return result.attributes;
+				});
+			})
 		} else {
 			return null
 		}
@@ -61,15 +66,28 @@ module.exports.getUserByID = (id) => {
 	});
 }
 
+module.exports.getUsersByFullName = (fullName) => {
+	return models.User.where({fullName}).fetchAll().then(({models}) => {
+		console.log('Users', models, 'Plucking', _.pluck(models, 'attributes'));
+		return _.pluck(models, 'attributes');
+	})
+}
+
 module.exports.loginUser = (username, password) => {
 	// validate a username/password combo
-	return new models.User({username: username, password: password}).fetch().then((obj) => {
-		if ( obj ) {
-			return obj.attributes;
+	return new models.User({username: username}).fetch().then((user) => {
+		if (user) {
+			return bcrypt.compare(password, user.password).then((match) => {
+				if (match) {
+					return user;
+				} else {
+					return null;
+				}
+			});
 		} else {
 			return null;
 		}
-	});
+	})
 }
 
 module.exports.setExercisePlan = (obj) => {

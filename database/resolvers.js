@@ -20,6 +20,9 @@ module.exports = {
 		},
 		getChatRooms: (parent, {id}, db) => {
 			return db.getChatRooms(id);
+		},
+		getUsersByFullName: (parent, {fullName}, db) => {
+			return db.getUsersByFullName(fullName);
 		}
 	},
 

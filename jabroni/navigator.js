@@ -42,13 +42,7 @@ const ProfileNavigator = new SwipeNavigator({
     color: '#FFFFFF',
     type: 'over',
   },
-
-  Workout: {
-    screen: Workout,
-    color: '#FFFFFF',
-    type: 'place'
-  },
-
+  
   LogOut: {
     screen: LogOut,
     type: 'over'

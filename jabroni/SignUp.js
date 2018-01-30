@@ -103,11 +103,6 @@ class SignUpScreen extends React.Component {
     // call getValue() to get the values of the form
     var value = this.refs.form.getValue();
     if (value) { // if validation fails, value will be null
-<<<<<<< HEAD
-      // if(value.password === value.ConfirmPassword); // value here is an instance of Person
-      this.props.navigation.dispatch(resetAction);    
-    // }else{
-=======
       this.props.mutate({
         variables: {
           username: value.username,
@@ -120,7 +115,6 @@ class SignUpScreen extends React.Component {
       })
       this.props.navigation.dispatch(resetAction);
     }else{
->>>>>>> signup/login
 
     }
   }

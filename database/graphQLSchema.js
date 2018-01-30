@@ -59,6 +59,7 @@ module.exports = `
 		getDailyRecords(id: Int!, timestamp: String): [Daily_Record]
 		getPersonalRecord(id: Int!): Personal_Record
 		getChatRooms(id: Int!): [Chat_Room]
+		getUsersByFullName(fullName: String!): [User]
 	}
 
 	type Mutation {
