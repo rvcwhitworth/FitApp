@@ -70,6 +70,7 @@ var Goal = t.enums({
 
 var Person = t.subtype(t.struct({
   name: t.String,
+  username: t.String,
   email: Email,
   newPassword: Password,
   confirmPassword: Password,
@@ -102,9 +103,24 @@ class SignUpScreen extends React.Component {
     // call getValue() to get the values of the form
     var value = this.refs.form.getValue();
     if (value) { // if validation fails, value will be null
+<<<<<<< HEAD
       // if(value.password === value.ConfirmPassword); // value here is an instance of Person
       this.props.navigation.dispatch(resetAction);    
     // }else{
+=======
+      this.props.mutate({
+        variables: {
+          username: value.username,
+          password: value.newPassword,
+          type: value.type,
+          email: value.email,
+          fullName: value.name,
+          profile_data: JSON.stringify({goals: value.Goals, age: value.age, rememberMe: value.rememberMe})
+        }
+      })
+      this.props.navigation.dispatch(resetAction);
+    }else{
+>>>>>>> signup/login
 
     }
   }
@@ -168,8 +184,17 @@ var styles = StyleSheet.create({
   }
 });
 
+const m = gql`
+  mutation setUser($username: String!, $password: String!, $fullName: String!, $email: String, $type: String!, $profile_data: String){
+    setUser(username: $username, password: $password, fullName: $fullName, email: $email, type: $type, profile_data: $profile_data) {
+      id
+    }
+  }
+`
 
-export default SignUpScreen;
+
+
+export default graphql(m)(SignUpScreen);
 
 
 
