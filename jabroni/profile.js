@@ -1,6 +1,9 @@
 import React from 'react'
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Button } from 'react-native'
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Button, Dimensions } from 'react-native'
 import Chat from './chatIcon'
+import FooterNav from './FooterNav.js'
+
+
 
   // async componentDidMount() {
   //   await AsyncStorage.setItem('key' : 'I like to save it.')
@@ -8,7 +11,7 @@ import Chat from './chatIcon'
   // }
 
 
-class Camera extends React.Component {
+class Profile extends React.Component {
   constructor(props) {
     super(props)
   }
@@ -21,25 +24,25 @@ class Camera extends React.Component {
        return true;
     });
 
-    nav.onNavigateDownStartedListener(({interpolation, start, end, isBack, isMain}) => {
-      this.setState({color: 'transparent'})
-    })
+    // nav.onNavigateDownStartedListener(({interpolation, start, end, isBack, isMain}) => {
+    //   this.setState({color: 'transparent'})
+    // })
 
-    nav.onNavigateDownCompletedListener(({completed, isBack}) => {
-      if(completed) {
-        this.setState({color: '#E53935'})
-      }
-    })
+    // nav.onNavigateDownCompletedListener(({completed, isBack}) => {
+    //   if(completed) {
+    //     this.setState({color: '#E53935'})
+    //   }
+    // })
 
-    nav.onNavigateUpStartedListener(({isBack, isMain}) => {
-      this.setState({color: 'transparent'})
-    })
+    // nav.onNavigateUpStartedListener(({isBack, isMain}) => {
+    //   this.setState({color: 'transparent'})
+    // })
 
-    nav.onNavigateUpCompletedListener(({completed, isBack}) => {
-      if(completed || isBack && !completed) {
-        this.setState({color: '#E53935'})
-      }
-    })
+    // nav.onNavigateUpCompletedListener(({completed, isBack}) => {
+    //   if(completed || isBack && !completed) {
+    //     this.setState({color: '#E53935'})
+    //   }
+    // })
 
   }
 
@@ -49,27 +52,32 @@ class Camera extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-
-       <Chat nav={nav} />
-        <View >
+      <View style={styles.container}>    
+        <View style={{flex: 1}}>
           <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center', color:'white'}}>PROFILE</Text>
           <Button title="Data" onPress={()=> this.props.nav.navigate('Data')} />
           <Text style={{padding: 5, textAlign:'center'}}>Swipe left for your diet!</Text>
           <Text style={{padding: 5, textAlign:'center'}}>Swipe right for your daily inputs and progress stuff!</Text>
         </View>
+        <FooterNav nav={this.props.nav} index={0}/>
+         <Chat />
       </View>
     );
 
   }
 }
-
+const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: 80,
-    alignItems: 'center',
     flexDirection: 'column',
+    width: width,
+    height: height,
+    backgroundColor: 'white'
+  },
+
+  nav: {
+    position: 'absolute',
+    bottom:0,
   },
 
   button: {
@@ -79,4 +87,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Camera
+export default Profile

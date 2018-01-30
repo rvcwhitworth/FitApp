@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ImageBackground, Dimensions } from 'react-native';
 import Chat from './chatIcon'
 import MacroGraph from './textD3'
+import NavFooter from './FooterNav.js'
 
 const { width, height } = Dimensions.get('window');
 
@@ -44,6 +45,7 @@ export default class DataScreen extends React.Component {
     </Text>
     <Chat />
     </View>
+    <NavFooter nav={this.props.nav} index={2}/>
     </ImageBackground>
     )
   }

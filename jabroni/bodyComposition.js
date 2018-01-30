@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text, TextInput, StyleSheet } from 'react-native'
 import Chat from './chatIcon.js'
 import Test from './daily.js'
+import FooterNav from './FooterNav.js'
 
 class BodyComposition extends React.Component {
   componentDidMount() {
@@ -17,6 +18,9 @@ class BodyComposition extends React.Component {
     return (
       <View style={styles.container}>
         <Test />
+      <View style={{bottom: 0}}>
+        <FooterNav nav={this.props.nav} index={2}/>
+      </View>   
       </View>
     )
 
