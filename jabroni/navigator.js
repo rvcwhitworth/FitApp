@@ -21,6 +21,7 @@ const ProfileNavigator = new SwipeNavigator({
     left: 'DailyWorkouts',
     top: 'LogOut',
     bottom: 'DailyInputs',
+    top: 'LogOut',
     type: 'over'
   },
 
@@ -50,7 +51,7 @@ const ProfileNavigator = new SwipeNavigator({
     color: '#FFFFFF',
     type: 'over',
   },
-
+  
   LogOut: {
     screen: LogOut,
     type: 'over'

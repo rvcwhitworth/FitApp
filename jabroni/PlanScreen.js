@@ -50,7 +50,6 @@ class PlanScreen extends React.Component {
   render(){
     const data = this.props.data;
     if (this.props.data.loading) return (<View><Text>Loading</Text></View>);
-    console.log('DATA FROM GRAPHQL', this.props);
     return (
     <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>
     <View style={styles.container}>
