@@ -18,17 +18,17 @@ class TeamScreen extends React.Component {
     console.log('searching for: ', this.state.searchTerm);
 
     // send this.state.searchTerm to graphQL query
-    // this.props.client.query({
-    //   query: q,
-    //   variables: {
-    //     searchTerm: this.state.searchTerm
-    //   }
-    // }).then((results) => {
-    //   // do something with the results
-    //   console.log('response from search: ', results);
-    // }).catch((err) => {
-    //   console.log('graphQL error in teamScreen query: ', err);
-    // })
+    this.props.client.query({
+      query: q,
+      variables: {
+        searchTerm: this.state.searchTerm
+      }
+    }).then((results) => {
+      // do something with the results
+      console.log('response from search: ', results);
+    }).catch((err) => {
+      console.log('graphQL error in teamScreen query: ', err);
+    })
     this.setState({searchTerm: ''});
     this.searchBar.clearText();
   }
@@ -51,8 +51,8 @@ class TeamScreen extends React.Component {
 }
 
 const q = gql`
-  query loginUser($username: String!, $password: String!){
-    loginUser(username: $username, password: $password) {
+  query getUsersByFullName($fullName: String!){
+    getUsersByFullName(fullName: $fullName) {
       id
     }
   }
