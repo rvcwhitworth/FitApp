@@ -1,8 +1,9 @@
 import React from 'react'
-import { View, Text, TextInput, StyleSheet } from 'react-native'
+import { View, Text, TextInput, StyleSheet, Dimensions } from 'react-native'
 import Chat from './chatIcon.js'
 import Test from './daily.js'
 import FooterNav from './FooterNav.js'
+const { width, height } = Dimensions.get('window');
 
 class BodyComposition extends React.Component {
   componentDidMount() {
@@ -17,10 +18,12 @@ class BodyComposition extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+      <View style={{flex: 1}}>
         <Test />
-      <View style={{bottom: 0}}>
+      <Chat nav={this.props.nav} />
+      </View>
         <FooterNav nav={this.props.nav} index={2}/>
-      </View>   
+       
       </View>
     )
 
@@ -30,7 +33,9 @@ class BodyComposition extends React.Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    flex: 1,
+    flexDirection: 'column',
+    width:width, 
+    height:height
   },
 })
 

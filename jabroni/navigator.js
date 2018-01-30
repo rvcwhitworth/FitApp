@@ -31,7 +31,7 @@ const ProfileNavigator = new SwipeNavigator({
   top: 'Profile',
   // left: 'DailyWorkouts',
   color: '#FFFFFF',
-  type: 'over'
+  type: 'push'
   },
 
   DailyWorkouts: {

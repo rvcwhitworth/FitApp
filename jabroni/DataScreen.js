@@ -43,7 +43,7 @@ export default class DataOverviewScreen extends React.Component {
     	return(<Text>{val}</Text>)
     })}
     </Text>
-    <Chat />
+    <Chat nav={this.props.nav} />
     </View>
     <NavFooter nav={this.props.nav} index={2}/>
     </ImageBackground>

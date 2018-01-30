@@ -16,7 +16,7 @@ class logInScreen extends React.Component {
     <View style={{flexDirection:'column', backgroundColor: 'white', height:height, width:width}}>
     <View style={{flex:1}}>
       <Text>TESTING THIS OUT</Text>
-      <Chat />
+      <Chat nav={this.props.nav} />
     </View>
       <FooterNav nav={this.props.nav} index={2}/>
     </View>);
