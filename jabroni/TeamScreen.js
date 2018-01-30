@@ -3,6 +3,7 @@ import { View, Text, Dimensions } from 'react-native';
 import { graphql, ApolloProvider } from 'react-apollo';
 import gql from 'graphql-tag';
 import FooterNav from './FooterNav.js'
+import Chat from './chatIcon'
 
 export default class TeamScreen extends React.Component {
   constructor(props) {
@@ -16,6 +17,7 @@ export default class TeamScreen extends React.Component {
     <View style={{flexDirection: 'column', width:width, height:height, backgroundColor: 'white'}}>
     <View style={{flex:1}}>
       <Text>Client team screen goes here!</Text>
+      <Chat />
     </View>
       <FooterNav nav={this.props.nav} index={3} />
     </View>);

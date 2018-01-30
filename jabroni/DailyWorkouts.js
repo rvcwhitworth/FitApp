@@ -1,8 +1,13 @@
 import React from 'react'
-import { Alert, View, Text, TextInput, StyleSheet, Animated, Button, Picker } from 'react-native'
+import { Alert, View, Text, TextInput, StyleSheet, Animated, Button, Picker, Dimensions } from 'react-native'
 import { graphql, ApolloProvider, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import WorkoutInput from './WorkoutInput';
+import Chat from './chatIcon'
+import FooterNav from './FooterNav.js'
+import SVG from './SVG/svg5Left.js'
+const { width, height } = Dimensions.get('window');
+
 
 class WorkoutScreen extends React.Component {
   constructor(props) {
@@ -18,39 +23,6 @@ class WorkoutScreen extends React.Component {
     this.handleSelectChange = this.handleSelectChange.bind(this);
   }
 
-  componentDidMount() {
-    const { nav } = this.props;
-
-    nav.onNavigateShouldAllow(() => {
-       return true;
-    });
-
-    nav.onNavigateDownStartedListener(({interpolation, start, end, isBack, isMain}) => {
-      this.setState({color: 'transparent'})
-    })
-
-    nav.onNavigateDownCompletedListener(({completed, isBack}) => {
-      if(completed) {
-        this.setState({color: '#E53935'})
-      }
-    })
-
-    nav.onNavigateUpStartedListener(({isBack, isMain}) => {
-      this.setState({color: 'transparent'})
-    })
-
-    nav.onNavigateUpCompletedListener(({completed, isBack}) => {
-      if(completed || isBack && !completed) {
-        this.setState({color: '#E53935'})
-      }
-    })
-
-  }
-
-  componentWillUnmount() {
-    this.props.nav.cleanUp()
-  }
-
   setupWorkoutDisplay (workout) {
     Object.keys(workout).forEach((workoutType) => {
       this.state[workoutType] = false;
@@ -64,6 +36,7 @@ class WorkoutScreen extends React.Component {
       variables: {
         user_id: 1,
         data: dataString
+
       }
     })
     .then(({ data }) => Alert.alert('Workout receieved!', 'Data from DB:', data.data))
@@ -77,8 +50,6 @@ class WorkoutScreen extends React.Component {
     })
   }
 
-
-
   render() {
     const { getExercisePlans, loading } = this.props.data;
     if (getExercisePlans && !this.state.dailyWorkout && !this.state.displaySet) {
@@ -90,7 +61,8 @@ class WorkoutScreen extends React.Component {
     }
 
     return (
-      <Animated.View style={[styles.container, { backgroundColor: this.state.color }]}>
+      <Animated.View style={[styles.container, { backgroundColor: 'white', flexDirection:'column', width:width, height:height }]}>
+        <SVG />
         {loading || !this.state.dailyWorkout || !this.state.displaySet ? (<View><Text>Loading workout data</Text></View>) : (
         <View style={{flex: 1}}>
           <Picker
@@ -131,8 +103,9 @@ class WorkoutScreen extends React.Component {
               title={'Submit Workout'}
               onPress={this.handleWorkoutSubmission}
             />}
-          {/* <Chat /> */}
+          <Chat nav={this.props.nav}/>
         </View>)}
+      <FooterNav nav={this.props.nav} index={0}/>
       </Animated.View>
     )
   }

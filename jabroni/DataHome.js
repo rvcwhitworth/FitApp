@@ -4,6 +4,7 @@ import Chat from './chatIcon'
 import FooterNav from './FooterNav.js'
 const { width, height } = Dimensions.get('window');
 
+
 class logInScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -15,7 +16,7 @@ class logInScreen extends React.Component {
     <View style={{flexDirection:'column', backgroundColor: 'white', height:height, width:width}}>
     <View style={{flex:1}}>
       <Text>TESTING THIS OUT</Text>
-      <Button title="Back to profile" onPress={()=> this.props.nav.navigate('Profile')} />
+      <Chat />
     </View>
       <FooterNav nav={this.props.nav} index={2}/>
     </View>);

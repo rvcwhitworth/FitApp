@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View, Button, Animated } from 'react-native';
+import SVG from './SVG/svg5Top.js'
 
 class LogOut extends React.Component {
   constructor(props) {
@@ -38,6 +39,9 @@ class LogOut extends React.Component {
   render(){
     return (
     <View style={styles.container} >
+    <View>
+    <SVG />
+    </View>
       <Button title="Switch to Trainer Profile" onPress={() => {
       console.log('hi1')
       }} />
