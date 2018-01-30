@@ -29,10 +29,14 @@
     "body-parser": "^1.18.2",
     "bookshelf": "^0.12.1",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "d3": "^4.13.0",
 =======
     "d3": "^4.12.2",
 >>>>>>> work on signup and login
+=======
+    "d3": "^4.12.2",
+>>>>>>> search
     "expo": "^25.0.0",
     "express-graphql": "^0.6.11",
     "firebase": "^4.9.0",
