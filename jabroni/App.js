@@ -35,6 +35,8 @@ const ClientHome = TabNavigator({
     screen: TeamScreen,
     title: 'Team'
   }
+}, {
+  swipeEnabled: false
 });
 
 const App = StackNavigator({

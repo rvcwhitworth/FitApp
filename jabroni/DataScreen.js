@@ -6,7 +6,7 @@ import NavFooter from './FooterNav.js'
 
 const { width, height } = Dimensions.get('window');
 
-export default class DataScreen extends React.Component {
+export default class DataOverviewScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
