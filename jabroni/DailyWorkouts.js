@@ -14,7 +14,7 @@ class WorkoutScreen extends React.Component {
     super(props)
 
     this.state = {
-      color: 'transparent',
+      color: 'white',
       selectedDay: new Date().getDay()
     }
     this.setupWorkoutDisplay = this.setupWorkoutDisplay.bind(this);
@@ -50,13 +50,18 @@ class WorkoutScreen extends React.Component {
     })
   }
 
+  handleSelectChange (selectedDay) {
+    this.setState({selectedDay, dailyWorkout: this.state.regimen[selectedDay], workoutData: {}});
+  }
+
   render() {
     const { getExercisePlans, loading } = this.props.data;
     if (getExercisePlans && !this.state.dailyWorkout && !this.state.displaySet) {
-      this.state.dailyWorkout = JSON.parse(getExercisePlans.slice().pop().regimen)[new Date().getDay()];
-      if (this.state.dailyWorkout !== "OFF") {
-        this.setupWorkoutDisplay(this.state.dailyWorkout); 
-      }
+      this.state.regimen = JSON.parse(getExercisePlans.slice().pop().regimen);
+      this.state.dailyWorkout =this.state.regimen[this.state.selectedDay];
+      // if (this.state.dailyWorkout !== "OFF") {
+      //   this.setupWorkoutDisplay(this.state.dailyWorkout); 
+      // }
       this.state.displaySet = true;
     }
 
@@ -65,9 +70,14 @@ class WorkoutScreen extends React.Component {
         <SVG />
         {loading || !this.state.dailyWorkout || !this.state.displaySet ? (<View><Text>Loading workout data</Text></View>) : (
         <View style={{flex: 1}}>
+          <Text style={styles.header}>
+            Your Daily Workout
+          </Text>
+
           <Picker
             selectedValue={this.state.selectedDay}
             onValueChange={this.handleSelectChange}
+            itemStyle={{textAlign: 'center'}}
           >
             <Picker.Item label="Sunday" value={0} />
             <Picker.Item label="Monday" value={1} />
@@ -77,26 +87,30 @@ class WorkoutScreen extends React.Component {
             <Picker.Item label="Friday" value={5} />
             <Picker.Item label="Sunday" value={6} />
           </Picker>
-          <Text style={styles.header}>
-            Your workout:
-          </Text>
+
+
           {this.state.dailyWorkout !== "OFF" ? Object.keys(this.state.dailyWorkout).map((workoutType, i) => {
-            var height = this.state[workoutType] ? 40 : null;
             return (
-              <View style={{height, marginTop: 5, marginBottom: 5}} key={i}>
-                <Button 
-                  title={workoutType + ": " + this.state.dailyWorkout[workoutType].frequency}
-                  onPress={() => this.updateWorkoutDisplay(workoutType)}
+              <View style={{flex: 1, marginTop: 5, marginBottom: 5}} key={i}>
+                <Text style={{fontSize: 20, textAlign: 'center'}}
+                  
+                >
+                  {workoutType + ": " + this.state.dailyWorkout[workoutType].frequency}
+                </Text>
+                <TextInput 
+                  
                 />
-                <WorkoutInput 
-                  workoutInfo={this.state.dailyWorkout[workoutType]}
-                  display={this.state[workoutType]}
-                  workoutType={workoutType}
-                  updateData={this.updateWorkoutDisplay}
+                <TextInput 
+                  label
                 />
               </View>
             );
-          }) : <Text>Enjoy your day off!</Text>}
+          }) : 
+            <Text 
+              style={{marginTop: 40, textAlign: 'center', fontSize: 20}}
+            >
+              Enjoy your day off!
+            </Text>}
 
           {this.state.dailyWorkout !== "OFF" &&  
             <Button
@@ -116,7 +130,8 @@ const styles = StyleSheet.create({
   //  backgroundColor: 'transparent',
     flex: 1,
     justifyContent: 'flex-start',
-    marginTop: 1
+    marginTop: 1,
+    backgroundColor: "#fff"
   },
 
   header : {
