@@ -60,7 +60,7 @@ class PlanScreen extends React.Component {
         {data.getDietPlans[data.getDietPlans.length-1].trainer.fullName}
       </Text>
       <Button onPress={this.submit} title="submit" />
-      <Chat />
+      <Chat nav={this.props.nav} />
       </View>
       <FooterNav nav={this.props.nav} index={1} />
     </View>
