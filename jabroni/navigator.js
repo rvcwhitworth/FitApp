@@ -9,11 +9,13 @@ import BodyComposition from './bodyComposition'
 import Chat from './Chat.js'
 import VideoChat from './VideoChat.js'
 import DailyInputs from './DailyInputs.js'
+import TeamScreen from './TeamScreen.js'
+import PlanScreen from './PlanScreen.js'
 
 const ProfileNavigator = new SwipeNavigator({
 
   //FIRST TAB SET (Inputs/Profile)
-  Profile: {
+  Home: {
     screen: Profile,
     right: 'DailyDiet',
     left: 'DailyWorkouts',
@@ -67,6 +69,16 @@ const ProfileNavigator = new SwipeNavigator({
     bottom: 'DataBodyComposition'
   },
 
+  //THIRD TAB SET (PLAN)
+  Plan: {
+    screen: PlanScreen,
+    type: 'over'
+  },
+  //FOUTH TAB SET (TEAM)
+  Team: {
+    screen: TeamScreen,
+    type: 'over'
+  },
   //CHAT MESSAGING AND VIDEO ROUTES
   Messages:{
     screen: Chat,

@@ -5,22 +5,25 @@ import { ButtonGroup} from 'react-native-elements';
 
 class FooterNav extends React.Component {
     constructor(props) {
-      super()
+      super(props)
       this.state = {
-        selectedIndex: 2
+        selectedIndex: this.props.index
       }
       this.updateIndex = this.updateIndex.bind(this)
     }
+
     updateIndex (selectedIndex) {
-      this.setState({selectedIndex})
+       const buttons = ['Home', 'Plan', 'Data', 'Team']
+      if(this.state.selectedIndex !== selectedIndex){
+      this.setState({selectedIndex}, () => {
+        this.props.nav.navigate(buttons[selectedIndex])
+      })
+      }
     }
   render() {
     const buttons = ['Home', 'Plan', 'Data', 'Team'];
 
     return (
-      // <View style={{}}>
-
-      <View style={styles.container}>
         <ButtonGroup
             onPress={this.updateIndex}
             selectedIndex={this.state.selectedIndex}
@@ -29,18 +32,9 @@ class FooterNav extends React.Component {
             selectedButtonStyle={{backgroundColor:"#2196F3"}}
             selectedTextStyle={{color:'white'}}
         />
-      </View>
     )
 
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'white',
-    // flex: 1,
-    bottom: 0
-  },
-})
 
 export default FooterNav

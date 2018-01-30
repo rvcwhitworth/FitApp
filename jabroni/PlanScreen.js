@@ -5,6 +5,7 @@ import Chat from './chatIcon';
 import { graphql, ApolloProvider, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import ProgressCircle from './progressCircle'
+import FooterNav from './FooterNav.js'
 
   const actions = [{
     text: 'Messages',
@@ -42,6 +43,7 @@ class PlanScreen extends React.Component {
   			progress: this.state.progress + 0.1
   		})
   	}
+  }
 
   submit(e) {
     e.preventDefault();
@@ -74,6 +76,7 @@ class PlanScreen extends React.Component {
       </Text>
       <Button onPress={this.submit} title="submit" />
       <Chat />
+      <FooterNav nav={this.props.nav} index={1} />
     </View>
     )
   }
