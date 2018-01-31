@@ -112,21 +112,16 @@ class logInScreen extends React.Component {
     // make axios request to server to get userID
     // axios.get('/users', {u: e.target..., p: e.target....}).then...
     let values = this.refs.form.getValue();
-    var payload = JSON.stringify({username: values.username, type: 'trainer'})
-    AsyncStorage.setItem('Test:key', payload)
-    console.log('logging in with values: ', values);
     this.props.client.query({
       query: q,
       variables: {
-        username: values.username,
+        username: values.username.toLowerCase(),
         password: values.password
       }
     }).then(({data}) => {
       if (!data.loginUser) {
         Alert.alert('Invalid username or password!', 'Please try again.');
       } else {
-        console.log('Successful login', data.loginUser)
-        console.log(JSON.stringify(data.loginUser), typeof JSON.stringify(data.loginUser))
         AsyncStorage.setItem('@FitApp:UserInfo', JSON.stringify(data.loginUser))
         .then(() => this.props.nav.navigation.dispatch(resetAction))
         .catch((err) => console.error('Error writing user info to storage', err))
