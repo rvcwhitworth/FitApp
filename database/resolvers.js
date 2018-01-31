@@ -19,7 +19,18 @@ module.exports = {
 			return db.getPersonalRecord(id);
 		},
 		getChatRooms: (parent, {id}, db) => {
-			return db.getChatRooms(id);
+			 
+			return db.getChatRooms(id).then((rooms)=>{
+				// console.log("in then", rooms)
+				
+				return Promise.all(rooms.map( (ele)=>{
+					// console.log("in Map", ele)
+					return db.getChatRoomsByRoomId(ele.room_id)
+				}))
+			}).then((we)=>{
+				// console.log("here", we[0])
+				return we[0];
+			});
 		},
 		getUsersByFullName: (parent, {fullName}, db) => {
 			return db.getUsersByFullName(fullName);
