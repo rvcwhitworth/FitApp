@@ -12,31 +12,9 @@ import Plan from './PlanScreen';
 import TeamScreen from './TeamScreen';
 import DataScreen from './DataScreen';
 import Chat from './Chat'
-import Home from './ClientNavigator.js'
+import Home from './Navigator.js'
 
-// const ClientHome = TabNavigator({
-//   Home: {
-//     screen: Home,
-//     title: 'Home'
-//   },
-
-//   Plan: {
-//     screen: Plan,
-//     title: 'Plan'
-//   },
-
-//   Data: {
-//     screen: DataScreen,
-//     title: 'Data'
-//   },
-
-//   Team: {
-//     screen: TeamScreen,
-//     title: 'Team'
-//   }
-// }, {
-//   swipeEnabled: false
-// });
+const Swipe = Home('test')
 
 const AuthUser = () => {
   AsyncStorage.getItem('Test:key', (err, val) => {
@@ -66,7 +44,7 @@ const App = StackNavigator({
   },
 
   clientHome: {
-    screen: Home
+    screen: Swipe
   },
   chat:{
     screen: Chat
