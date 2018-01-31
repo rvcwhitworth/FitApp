@@ -96,7 +96,7 @@ class SignUpScreen extends React.Component {
     if (value) { // if validation fails, value will be null
       this.props.mutate({
         variables: {
-          username: value.username,
+          username: value.username.toLowerCase(),
           password: value.newPassword,
           type: value.type,
           email: value.email,
@@ -105,8 +105,10 @@ class SignUpScreen extends React.Component {
         }
       })
       .then(({data}) => {
-        if (data.setUser.id) {
-          this.props.navigation.dispatch(resetAction);
+        if (data.setUser) {
+          AsyncStorage.setItem('@FitApp:UserInfo', JSON.stringify(data.loginUser))
+          .then(() => this.props.navigation.dispatch(resetAction))
+          .catch((err) => console.error('Error writing user info to storage', err))
         }
       })
       .catch((err) => console.log('Error signing up', err));
@@ -118,8 +120,7 @@ class SignUpScreen extends React.Component {
   render(){
     const buttons = ['Trainer', 'Client']
     const { selectedIndex } = this.state
-    console.log('SignUpScreen props: ', this.props.navigation);
-    return (      
+    return (
         <ScrollView style={styles.scrollView}>
           <Form
             ref="form"
@@ -181,6 +182,11 @@ const m = gql`
   mutation setUser($username: String!, $password: String!, $fullName: String!, $email: String, $type: String!, $profile_data: String){
     setUser(username: $username, password: $password, fullName: $fullName, email: $email, type: $type, profile_data: $profile_data) {
       id
+      username
+      fullName
+      type
+      email
+      profile_data
     }
   }
 `
