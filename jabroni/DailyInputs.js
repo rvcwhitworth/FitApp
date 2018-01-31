@@ -23,7 +23,7 @@ class DailyInputs extends React.Component {
        return true;
     });
 
-    nav.onNavigateLeftStartedListener(({interpolation, start, end, isBack, isMain}) => {
+    nav.onNavigateUpStartedListener(({interpolation, start, end, isBack, isMain}) => {
       this.props.nav.cleanUp()
       console.log('INPUTS')
       console.log('inside LeftStartedListener')
@@ -32,7 +32,8 @@ class DailyInputs extends React.Component {
       console.log('end', end)
       console.log('isBack', isBack)
       console.log('isMain', isMain)
-
+      isBack = false;
+      return isBack
       if(isBack && !isMain) {
         console.log('what')
       } else if(isBack) {
@@ -40,7 +41,7 @@ class DailyInputs extends React.Component {
       }
     })
 
-    nav.onNavigateLeftCompletedListener(({completed, isBack}) => {
+    nav.onNavigateUpCompletedListener(({completed, isBack}) => {
       console.log('INPUTS')
       console.log('completed', completed)
       console.log('isBack', isBack)

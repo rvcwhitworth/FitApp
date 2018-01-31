@@ -4,6 +4,9 @@ import Chat from './chatIcon'
 import FooterNav from './FooterNav.js'
 import SVG from './SVG/svg5Center.js'
 
+
+const { width, height } = Dimensions.get('window');
+
 class Profile extends React.Component {
   constructor(props) {
     super(props);
@@ -46,7 +49,6 @@ class Profile extends React.Component {
 
   }
 }
-const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',

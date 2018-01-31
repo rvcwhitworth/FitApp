@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, StyleSheet, Text, View, Button, ScrollView, TouchableHighlight } from 'react-native';
+import { Alert, StyleSheet, Text, View, Button, ScrollView, TouchableHighlight, AsyncStorage } from 'react-native';
 import { StackNavigator, TabNavigator, NavigationActions } from 'react-navigation';
 import { graphql, ApolloProvider, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -86,11 +86,26 @@ class logInScreen extends React.Component {
     console.log('login props: ', this.props);
   }
 
+  componentDidMount(){
+    AsyncStorage.getItem('Test:key', (err, val) => {
+      if (err) console.log(err);
+      else{
+        console.log(val)
+        if(JSON.parse(val).type === 'trainer'){
+          this.props.nav.navigation.dispatch(resetAction)
+        }}
+  })
+  }
+
+
+
   logIn(e){
     e.preventDefault();
     // make axios request to server to get userID
     // axios.get('/users', {u: e.target..., p: e.target....}).then...
     let values = this.refs.form.getValue();
+    var payload = JSON.stringify({username: values.username, type: 'trainer'})
+    AsyncStorage.setItem('Test:key', payload)
     console.log('logging in with values: ', values);
     this.props.client.query({
       query: q,
@@ -99,6 +114,7 @@ class logInScreen extends React.Component {
         password: values.password
       }
     }).then((result) => {
+      this.props.authorize()
       console.log('log in result: ', result);
       this.props.navigation.dispatch(resetAction);
     }).catch((err) => {
@@ -109,6 +125,7 @@ class logInScreen extends React.Component {
       });
     })
     // navigate to clientHomeScreen
+    this.props.nav.navigation.dispatch(resetAction);
   }
 
   render(){

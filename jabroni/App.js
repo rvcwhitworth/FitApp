@@ -1,12 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, Button, StatusBar, AsyncStorage } from 'react-native';
 import { StackNavigator, TabNavigator } from 'react-navigation';
 import { ApolloProvider } from 'react-apollo'
 import { ApolloClient } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-
-import Home from './navigator'
 import LandingScreen from './LandingPage';
 import LogInScreen from './LogIn';
 import SignUpScreen from './SignUp';
@@ -14,30 +12,45 @@ import Plan from './PlanScreen';
 import TeamScreen from './TeamScreen';
 import DataScreen from './DataScreen';
 import Chat from './Chat'
+import Home from './ClientNavigator.js'
 
-const ClientHome = TabNavigator({
-  Home: {
-    screen: Home,
-    title: 'Home'
-  },
+// const ClientHome = TabNavigator({
+//   Home: {
+//     screen: Home,
+//     title: 'Home'
+//   },
 
-  Plan: {
-    screen: Plan,
-    title: 'Plan'
-  },
+//   Plan: {
+//     screen: Plan,
+//     title: 'Plan'
+//   },
 
-  Data: {
-    screen: DataScreen,
-    title: 'Data'
-  },
+//   Data: {
+//     screen: DataScreen,
+//     title: 'Data'
+//   },
 
-  Team: {
-    screen: TeamScreen,
-    title: 'Team'
-  }
-}, {
-  swipeEnabled: false
-});
+//   Team: {
+//     screen: TeamScreen,
+//     title: 'Team'
+//   }
+// }, {
+//   swipeEnabled: false
+// });
+
+const AuthUser = () => {
+  AsyncStorage.getItem('Test:key', (err, val) => {
+      if (err) console.log(err);
+      else console.log(val, JSON.parse(val))
+  })
+}
+
+
+const testFactory = (nav) => {
+  return (
+    <LogInScreen authorize={AuthUser} nav={nav} />
+    )
+}
 
 const App = StackNavigator({
   landing: {
@@ -49,7 +62,7 @@ const App = StackNavigator({
   },
 
   logIn: {
-    screen: LogInScreen,
+    screen: testFactory,
   },
 
   clientHome: {
@@ -63,7 +76,7 @@ const App = StackNavigator({
   headerMode: 'none'
 });
 
-App.router = ClientHome.router;
+App.router = Home.router;
 
 class AppView extends React.Component {
   constructor (props) {
