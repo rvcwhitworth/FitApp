@@ -14,7 +14,7 @@ import DataScreen from './DataScreen';
 import Chat from './Chat'
 import Home from './Navigator.js'
 
-const Swipe = Home('test')
+const Swipe = Home('client')
 const HOST_URI = 'http://ec2-18-219-7-36.us-east-2.compute.amazonaws.com:4000/graphql';
 
 const AuthUser = () => {

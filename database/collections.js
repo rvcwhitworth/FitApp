@@ -40,7 +40,7 @@ module.exports.setUser = (obj) => {
 	// create a new user
 	return module.exports.usernameTaken(obj.username).then((found) => {
 		if (!found) {
-			return bcrypt.hash(obj.password)
+			return bcrypt.hash(obj.password, 12)
 			.then((hash) => {
 				return Users.create({
 					username: obj.username,
