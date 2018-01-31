@@ -15,6 +15,7 @@ import Chat from './Chat'
 import Home from './Navigator.js'
 
 const Swipe = Home('test')
+const HOST_URI = 'http://ec2-18-219-7-36.us-east-2.compute.amazonaws.com:4000/graphql';
 
 const AuthUser = () => {
   AsyncStorage.getItem('Test:key', (err, val) => {
@@ -62,7 +63,7 @@ class AppView extends React.Component {
 
     /** GraphQL Client */
     this.client = new ApolloClient({
-      link: new HttpLink({ uri:'http://ec2-18-219-7-36.us-east-2.compute.amazonaws.com:4000/graphql'}),
+      link: new HttpLink({ uri: HOST_URI}),
       cache: new InMemoryCache()
     });
   } 

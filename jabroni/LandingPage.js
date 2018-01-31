@@ -32,6 +32,8 @@ class landingScreen extends React.Component {
             <Button title="log in" onPress={() => {
               navigate('logIn');
             }}/>
+            <View style={{margin: 10}}/>            
+            <Button title="bypass" onPress={() => navigate('clientHome')}/>
         </View>
         </ImageBackground>
       </View>

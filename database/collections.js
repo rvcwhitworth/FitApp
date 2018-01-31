@@ -51,7 +51,8 @@ module.exports.setUser = (obj) => {
 					profile_data: obj.profile_data
 				}).then((result) => {
 					return result.attributes;
-				});
+				})
+				.catch((err) => console.error('Error creating user', err));
 			})
 		} else {
 			return null
