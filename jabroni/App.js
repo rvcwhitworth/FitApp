@@ -17,7 +17,6 @@ import Home from './Navigator.js'
 
 const TrainerHome = Home('test')
 const ClientHome = Home('client')
-
 const HOST_URI = 'http://ec2-18-219-7-36.us-east-2.compute.amazonaws.com:4000/graphql';
 
 const AuthUser = () => {
