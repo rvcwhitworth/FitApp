@@ -1,13 +1,14 @@
 import React from 'react'
-import { StyleSheet, Text, View, Button, Animated } from 'react-native';
-import SVG from './SVG/svg5Top.js'
+import { StyleSheet, Text, View, Button, Animated, AsyncStorage } from 'react-native';
 
-class LogOut extends React.Component {
+class LogOut extends React.Component{
   constructor(props) {
     super(props);
+    this.getOut = this.getOut.bind(this)
   }
 
   componentDidMount() {
+    console.log('am i a genius???', this.props)
     // const { nav } = this.props;
 
     // nav.onNavigateShouldAllow(() => {
@@ -35,19 +36,22 @@ class LogOut extends React.Component {
     // })
 
   }
+
+  getOut(){
+    AsyncStorage.clear((err) => { if(err) console.log(err) })
+    console.log('WE CLEARED IT', this.props)
+    this.props.topNav.navigation.navigate('landing')
+  }
   
   render(){
     return (
     <View style={styles.container} >
     <View>
-    <SVG />
     </View>
       <Button title="Switch to Trainer Profile" onPress={() => {
       console.log('hi1')
       }} />
-      <Button title="Logout" style={styles.button} onPress={() => {
-       console.log("hi2")
-      }} />
+      <Button title="Logout" style={styles.button} onPress={this.getOut} />
     </View>);
   }
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, ImageBackground, Button } from 'react-native';
 import { StackNavigator, TabNavigator } from 'react-navigation';
 import { ButtonGroup} from 'react-native-elements';
-//THIS IS FOR THE CLIENT
+//THIS IS FOR THE TRAINER
 class FooterNav extends React.Component {
     constructor(props) {
       super(props)
@@ -13,7 +13,7 @@ class FooterNav extends React.Component {
     }
 
     updateIndex (selectedIndex) {
-       const buttons = ['Home', 'Plan', 'Data', 'Team']
+       const buttons = ['Home', 'Plans', 'Roster']
       if(this.state.selectedIndex !== selectedIndex){
       this.setState({selectedIndex}, () => {
         this.props.nav.navigate(buttons[selectedIndex])
@@ -21,7 +21,7 @@ class FooterNav extends React.Component {
       }
     }
   render() {
-    const buttons = ['Home', 'Plan', 'Data', 'Team'];
+    const buttons = ['Home', 'Plans', 'Roster'];
 
     return (
         <ButtonGroup

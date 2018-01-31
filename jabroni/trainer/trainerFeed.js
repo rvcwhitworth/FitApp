@@ -2,8 +2,7 @@ import React from 'react'
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Button, Dimensions } from 'react-native'
 import Chat from '../chatIcon'
 import Nav from './trainerNav.js'
-import SVG from '../SVG/svg4Center.js'
-
+import SVG from '../SVG/svg4Right.js'
 const { width, height } = Dimensions.get('window');
 
 
@@ -13,7 +12,7 @@ const { width, height } = Dimensions.get('window');
   //   //JSON stringify the data into storage and JSON parse it out, THIS IS SO AMAZING
   // }
 
-class Profile extends React.Component {
+class TrainerFeed extends React.Component {
   constructor(props) {
     super(props)
   }
@@ -21,6 +20,12 @@ class Profile extends React.Component {
 
   componentDidMount() {
     this.props.nav.cleanUp()
+    const { nav } = this.props;
+
+    // nav.onNavigateDownShouldAllow(() => {
+    //   return false;
+    // });
+
   }
 
   componentWillUnmount() {
@@ -34,7 +39,7 @@ class Profile extends React.Component {
         <SVG />
       </View>  
         <View style={{flex: 2}}>
-          <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center'}}>YOU'RE A TRAINER HARRRYYYYY</Text>
+          <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center'}}>This is our trainer news feed for our guy</Text>
           <Chat nav={this.props.nav}/>
         </View>
         <Nav nav={this.props.nav} index={0}/>
@@ -63,4 +68,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Profile
+export default TrainerFeed

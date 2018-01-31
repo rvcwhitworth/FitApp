@@ -1,13 +1,10 @@
 import React from 'react'
-<<<<<<< HEAD
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Button, Dimensions, Image } from 'react-native'
-=======
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Button, Dimensions, AsyncStorage } from 'react-native'
->>>>>>> First iteration of auth
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Button, Dimensions, Image, AsyncStorage } from 'react-native'
 import Chat from './chatIcon'
 import FooterNav from './FooterNav.js'
 import SVG from './SVG/svg5Center.js'
 import ClientProfile from './client/clientProfile.js'
+import TrainerProfile from './trainer/trainerProfile.js'
 
 const { width, height } = Dimensions.get('window');
 
@@ -27,7 +24,7 @@ class Profile extends React.Component {
       else {
         if(JSON.parse(val)){
         this.setState({
-          type: JSON.parse(val).type
+          type: 'client'
         })
       }
     }
@@ -95,19 +92,15 @@ class Profile extends React.Component {
     console.log('what is the state of affairs', this.state)
     if(this.state.type=== 'trainer'){
     return (
-      <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>  
-      <View style={{flex:1}}>
-        <SVG />
-      </View>  
-        <View style={{flex: 2}}>
-          <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center'}}>I AM THE TRAIIINNNAAAAAAA</Text>
-          <Chat nav={this.props.nav}/>
-        </View>
-        <FooterNav nav={this.props.nav} index={0}/>
-      </View>
-    )} else{
+      <TrainerProfile nav={this.props.nav} />
+    )} else if(this.state.type === 'client'){
       return(
         <ClientProfile nav={this.props.nav}/>)
+    } else{
+      return(
+        <View style={styles.container}>
+        <Image source={{uri: 'https://media.giphy.com/media/y1ZBcOGOOtlpC/200.gif'}} />
+        </View>)
     }
 
   }

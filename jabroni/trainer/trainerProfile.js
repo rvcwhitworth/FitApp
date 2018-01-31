@@ -1,16 +1,16 @@
 import React from 'react'
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Button, Dimensions } from 'react-native'
 import Chat from '../chatIcon'
-import FooterNav from '../FooterNav.js'
-import SVG from '../SVG/svg5Center.js'
+import Nav from './trainerNav.js'
+import SVG from '../SVG/svg4Left.js'
+const { width, height } = Dimensions.get('window');
 
 
 
   // async componentDidMount() {
   //   await AsyncStorage.setItem('key' : 'I like to save it.')
   //   //JSON stringify the data into storage and JSON parse it out, THIS IS SO AMAZING
-  // }
-const { width, height } = Dimensions.get('window');
+  // };
 
 class TrainerProfile extends React.Component {
   constructor(props) {
@@ -21,6 +21,11 @@ class TrainerProfile extends React.Component {
   componentDidMount() {
     this.props.nav.cleanUp()
     const { nav } = this.props;
+
+    // nav.onNavigateDownShouldAllow(() => {
+    //   return false;
+    // });
+
   }
 
   componentWillUnmount() {
@@ -34,10 +39,10 @@ class TrainerProfile extends React.Component {
         <SVG />
       </View>  
         <View style={{flex: 2}}>
-          <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center'}}>I AM THE TRAIIINNNAAAAAAA</Text>
+          <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center'}}>I AM THE TRAIIINNNAAAAAAA NAAAOOOWWWW</Text>
           <Chat nav={this.props.nav}/>
         </View>
-        <FooterNav nav={this.props.nav} index={0}/>
+        <Nav nav={this.props.nav} index={0}/>
       </View>
     );
 
