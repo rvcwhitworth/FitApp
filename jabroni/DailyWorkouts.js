@@ -111,7 +111,7 @@ class WorkoutScreen extends React.Component {
             >
               Enjoy your day off!
             </Text>}
-          }) : <Text>Enjoy your day off!</Text>}
+          
 
           {this.state.dailyWorkout !== "OFF" &&  
             <Button
