@@ -123,12 +123,12 @@ class logInScreen extends React.Component {
         Alert.alert('Invalid username or password!', 'Please try again.');
       } else {
         AsyncStorage.setItem('@FitApp:UserInfo', JSON.stringify(data.loginUser))
-        .then(() => this.props.nav.navigation.dispatch(resetAction))
+        .then(() => this.props.navigation.dispatch(resetAction))
         .catch((err) => console.error('Error writing user info to storage', err))
       }
     }).catch((err) => {
       console.log('log in error: ', err);
-      alert('error!');
+      Alert.alert('error logging in!', 'Check console for details');
       this.setState({
         error: true
       });

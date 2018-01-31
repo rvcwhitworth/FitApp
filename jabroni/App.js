@@ -15,10 +15,6 @@ import DataScreen from './DataScreen';
 import Chat from './Chat'
 import Home from './Navigator.js'
 
-<<<<<<< HEAD
-=======
-
->>>>>>> merge conflict1
 const TrainerHome = Home('test')
 const ClientHome = Home('client')
 const HOST_URI = 'http://ec2-18-219-7-36.us-east-2.compute.amazonaws.com:4000/graphql';
