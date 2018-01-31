@@ -116,10 +116,12 @@ class logInScreen extends React.Component {
         username: values.username,
         password: values.password
       }
-    }).then((result) => {
-      this.props.authorize()
-      console.log('log in result: ', result);
-      this.props.navigation.dispatch(resetAction);
+    }).then(({data}) => {
+      if (!data.loginUser) {
+        Alert.alert('Invalid username or password!', 'Please try again.');
+      } else {
+        this.props.navigation.dispatch(resetAction);
+      }
     }).catch((err) => {
       console.log('log in error: ', err);
       alert('error!');
@@ -127,8 +129,6 @@ class logInScreen extends React.Component {
         error: true
       });
     })
-    // navigate to clientHomeScreen
-    this.props.nav.navigation.dispatch(resetAction);
   }
 
   render(){

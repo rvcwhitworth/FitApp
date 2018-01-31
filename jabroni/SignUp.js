@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, ScrollView, TouchableHighlight } from 'react-native';
+import { Alert, StyleSheet, Text, View, Button, ScrollView, TouchableHighlight } from 'react-native';
 import { StackNavigator, TabNavigator } from 'react-navigation';
 import { graphql, ApolloProvider } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -113,9 +113,10 @@ class SignUpScreen extends React.Component {
           profile_data: JSON.stringify({goals: value.Goals, age: value.age, rememberMe: value.rememberMe})
         }
       })
-      this.props.navigation.dispatch(resetAction);
-    }else{
-
+      .then(({data}) => console.log(data))
+      .catch((err) => console.log('Error signing up', err));
+    } else{
+      Alert.alert('Invalid input!', 'Please try again.');
     }
   }
 
