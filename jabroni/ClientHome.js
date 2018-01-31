@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { StackNavigator, TabNavigator } from 'react-navigation';
-import Navigator from './navigator';
+import Navigator from './ClientNavigator';
 
 class HomeScreen extends React.Component {
   constructor (props) {

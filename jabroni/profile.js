@@ -10,7 +10,7 @@ import SVG from './SVG/svg5Center.js'
   //   await AsyncStorage.setItem('key' : 'I like to save it.')
   //   //JSON stringify the data into storage and JSON parse it out, THIS IS SO AMAZING
   // }
-
+const { width, height } = Dimensions.get('window');
 
 class Profile extends React.Component {
   constructor(props) {
@@ -91,7 +91,6 @@ class Profile extends React.Component {
 
   }
 }
-const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',

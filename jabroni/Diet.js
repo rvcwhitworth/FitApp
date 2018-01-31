@@ -18,13 +18,13 @@ class DietScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.props.nav.cleanUp('DailyInputs')
+    this.props.nav.cleanUp()
     const { nav } = this.props;
 
-    // nav.onNavigateLeftShouldAllow((...args) => {
-    //   console.log('can we use this???', ...args)
-    //     return true;
-    //   });
+    nav.onNavigateLeftShouldAllow((...args) => {
+      console.log('can we use this???', ...args)
+        return true;
+      });
 
     nav.onNavigateShouldAllow(() => {
       this.props.nav.cleanUp('DailyInputs')
@@ -42,6 +42,8 @@ class DietScreen extends React.Component {
       console.log('end', end)
       console.log('isBack', isBack)
       console.log('isMain', isMain)
+      isBack = false
+      return isBack
 
       if(isBack) {
         this.props.nav.cleanUp('DailyInputs')
