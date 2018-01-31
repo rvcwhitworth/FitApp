@@ -79,6 +79,9 @@ var options = {
 class logInScreen extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      error: false
+    }
     this.logIn = this.logIn.bind(this);
     console.log('login props: ', this.props);
   }
@@ -113,8 +116,13 @@ class logInScreen extends React.Component {
     }).then((result) => {
       this.props.authorize()
       console.log('log in result: ', result);
+      this.props.navigation.dispatch(resetAction);
     }).catch((err) => {
       console.log('log in error: ', err);
+      alert('error!');
+      this.setState({
+        error: true
+      });
     })
     // navigate to clientHomeScreen
     this.props.nav.navigation.dispatch(resetAction);
