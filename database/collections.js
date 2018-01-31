@@ -194,15 +194,49 @@ module.exports.setChatRoom = (obj) => {
 	});
 }
 
+
 module.exports.getChatRooms = (id) => {
 	let result = [];
 	return models.Chat_Room.where({user_id: id}).fetchAll().then((obj) => {
 		obj.forEach(model => {
 			result.push(model.attributes);
 		});
+		// console.log("result>>===>>", result)
 		return result;
 	});
-}
+} 
+
+module.exports.getChatRoomsByRoomId = (id) => {
+	let result = [];
+
+	return models.Chat_Room.where({room_id: id}).fetchAll().then((obj) => {
+		obj.forEach(model => {
+			result.push(model.attributes);
+		});
+		// console.log("result>>===>>", result)
+		return result;
+	});
+} 
+
+// var results = []
+// return models.Chat_Room.where({user_id: id}).fetchAll().then((rooms) => {
+// 	rooms.forEach( (room) => {
+// 		result.push(room.attributes) 
+// 		console.log('First ForEach')
+// 	});
+	
+	// result.forEach( (room)=>{
+	// 	models.Chat_Room.where({room_id: room.room_id}).fetchAll().then( (newRooms)=>{
+	// 		newRooms.forEach( (newRoom)=>{
+	// 			console.log("Second For Each", newResults)
+	// 			newResults.push(newRoom.attributes)
+	// 		})
+	// 	})
+	// })
+// })
+// console.log('results==>>', results)
+// return results;
+
 
 module.exports.setDailyRecord = (obj) => {
 	return Daily_Records.create({
