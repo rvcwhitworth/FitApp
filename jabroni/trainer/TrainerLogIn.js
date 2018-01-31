@@ -59,6 +59,11 @@ const q = gql`
   query loginUser($username: String!, $password: String!){
     loginUser(username: $username, password: $password) {
       id
+      fullName
+      username
+      type
+      email
+      profile_data
     }
   }
 `
@@ -114,14 +119,16 @@ class TrainerlogInScreen extends React.Component {
     this.props.client.query({
       query: q,
       variables: {
-        username: values.username,
+        username: values.username.toLowerCase(),
         password: values.password
       }
     }).then(({data}) => {
       if (!data.loginUser) {
         Alert.alert('Invalid username or password!', 'Please try again.');
       } else {
-        this.props.navigation.dispatch(resetAction);
+        AsyncStorage.setItem('@sseleFitApp:UserInfo', JSON.stringify(data.loginUser))
+        .then(() => this.props.navigation.dispatch(resetAction))
+        .catch((err) => console.error('Error writing user info to storage', err))
       }
     }).catch((err) => {
       console.log('log in error: ', err);

@@ -132,7 +132,7 @@ class SignUpScreen extends React.Component {
           </TouchableHighlight>
 
           <Button style={{marginTop: 10}}title="Already have an account? log in" onPress={() => {
-            this.props.navigation.navigate('logIn');
+            this.props.navigation.navigate('landing');
           }}/>
           <View style={{marginBottom: 25}}/>
         </ScrollView>

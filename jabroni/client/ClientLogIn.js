@@ -125,7 +125,7 @@ class logInScreen extends React.Component {
       }
     }).catch((err) => {
       console.log('log in error: ', err);
-      alert('error!');
+      Alert.alert('error logging in!', 'Check console for details');
       this.setState({
         error: true
       });
