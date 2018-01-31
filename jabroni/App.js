@@ -6,7 +6,8 @@ import { ApolloClient } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import LandingScreen from './LandingPage';
-import LogInScreen from './LogIn';
+import ClientLogInScreen from './client/ClientLogIn.js';
+import TrainerLogInScreen from './trainer/TrainerLogIn.js'
 import SignUpScreen from './SignUp';
 import Plan from './PlanScreen';
 import TeamScreen from './TeamScreen';
@@ -14,7 +15,12 @@ import DataScreen from './DataScreen';
 import Chat from './Chat'
 import Home from './Navigator.js'
 
-const Swipe = Home('client')
+<<<<<<< HEAD
+=======
+
+>>>>>>> merge conflict1
+const TrainerHome = Home('test')
+const ClientHome = Home('client')
 const HOST_URI = 'http://ec2-18-219-7-36.us-east-2.compute.amazonaws.com:4000/graphql';
 
 const AuthUser = () => {
@@ -22,13 +28,6 @@ const AuthUser = () => {
       if (err) console.log(err);
       else console.log(val, JSON.parse(val))
   })
-}
-
-
-const testFactory = (nav) => {
-  return (
-    <LogInScreen authorize={AuthUser} nav={nav} />
-    )
 }
 
 const App = StackNavigator({
@@ -40,13 +39,22 @@ const App = StackNavigator({
     screen: SignUpScreen,
   },
 
-  logIn: {
-    screen: testFactory,
+  ClientLogIn: {
+    screen: ClientLogInScreen
   },
 
   clientHome: {
-    screen: Swipe
+    screen: ClientHome
   },
+
+  TrainerLogIn: {
+    screen: TrainerLogInScreen
+  },
+
+  TrainerHome: {
+    screen: TrainerHome
+  },
+
   chat:{
     screen: Chat
   }

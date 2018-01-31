@@ -29,10 +29,17 @@ class landingScreen extends React.Component {
               navigate('signUp');
             }}/> 
             <View style={{margin: 10}}/>
-            <Button title="log in" onPress={() => {
-              navigate('logIn');
+
+            <Button title="Client log in" onPress={() => {
+              navigate('ClientLogIn');
             }}/>
-            <View style={{margin: 10}}/>            
+            <View style={{margin: 10}}/> 
+
+            <Button title="Trainer log in" onPress={() => {
+              navigate('TrainerLogIn');
+            }}/>
+            <View style={{margin: 10}}/> 
+
             <Button title="bypass" onPress={() => navigate('clientHome')}/>
         </View>
         </ImageBackground>
