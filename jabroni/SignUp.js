@@ -96,7 +96,6 @@ class SignUpScreen extends React.Component {
     // axios.get('/users', {u: e.target..., p: e.target....}).then...
     console.log('LOG IN');
     // navigate to clientHomeScreen
-    this.props.navigation.dispatch(resetAction);
   }
 
   onPress() {
@@ -113,7 +112,11 @@ class SignUpScreen extends React.Component {
           profile_data: JSON.stringify({goals: value.Goals, age: value.age, rememberMe: value.rememberMe})
         }
       })
-      .then(({data}) => console.log(data))
+      .then(({data}) => {
+        if (data.setUser.id) {
+          this.props.navigation.dispatch(resetAction);
+        }
+      })
       .catch((err) => console.log('Error signing up', err));
     } else{
       Alert.alert('Invalid input!', 'Please try again.');

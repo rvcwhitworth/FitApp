@@ -78,9 +78,10 @@ module.exports.loginUser = (username, password) => {
 	// validate a username/password combo
 	return new models.User({username: username}).fetch().then((user) => {
 		if (user) {
-			return bcrypt.compare(password, user.password).then((match) => {
+			console.log('USER BEFORE COMPARE', user)
+			return bcrypt.compare(password, user.attributes.password).then((match) => {
 				if (match) {
-					return user;
+					return user.attributes;
 				} else {
 					return null;
 				}
@@ -88,7 +89,7 @@ module.exports.loginUser = (username, password) => {
 		} else {
 			return null;
 		}
-	})
+	}).catch((err) => console.error('Error on log in', err))
 }
 
 module.exports.setExercisePlan = (obj) => {
