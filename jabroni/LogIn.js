@@ -96,13 +96,11 @@ class logInScreen extends React.Component {
       if (err) console.log(err);
       else{
         console.log(val)
-        if(JSON.parse(val)){
-          if(JSON.parse(val).type === 'trainer'){
-            this.props.nav.navigation.dispatch(resetAction)
-          }
-        }
-      }
-  })
+
+        if(JSON.parse(val) && JSON.parse(val).type === 'trainer'){
+          this.props.nav.navigation.dispatch(resetAction)
+        }}
+    })
   }
 
 
