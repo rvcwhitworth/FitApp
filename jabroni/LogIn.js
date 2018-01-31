@@ -59,6 +59,11 @@ const q = gql`
   query loginUser($username: String!, $password: String!){
     loginUser(username: $username, password: $password) {
       id
+      fullName
+      username
+      type
+      email
+      profile_data
     }
   }
 `
@@ -120,7 +125,11 @@ class logInScreen extends React.Component {
       if (!data.loginUser) {
         Alert.alert('Invalid username or password!', 'Please try again.');
       } else {
-        this.props.navigation.dispatch(resetAction);
+        console.log('Successful login', data.loginUser)
+        console.log(JSON.stringify(data.loginUser), typeof JSON.stringify(data.loginUser))
+        AsyncStorage.setItem('@FitApp:UserInfo', JSON.stringify(data.loginUser))
+        .then(() => this.props.nav.navigation.dispatch(resetAction))
+        .catch((err) => console.error('Error writing user info to storage', err))
       }
     }).catch((err) => {
       console.log('log in error: ', err);
