@@ -27,7 +27,7 @@ class Svg5Left extends React.Component {
                 height="75"
                 width="75"
             >
-            //CENTER
+            {/*CENTER*/}
                 <Circle
                     x="30"
                     y="30"
@@ -35,7 +35,7 @@ class Svg5Left extends React.Component {
                     stroke="black"
                     strokeWidth="1"
                     fill="white" />
-            //LEFT
+            {/*LEFT*/}
                 <Circle
                     x="20"
                     y="30"
@@ -43,7 +43,7 @@ class Svg5Left extends React.Component {
                     stroke="black"
                     strokeWidth="1"
                     fill="black"  />
-            //RIGHT
+            {/*RIGHT*/}
                 <Circle
                     x="40"
                     y="30"
@@ -51,7 +51,7 @@ class Svg5Left extends React.Component {
                     stroke="black"
                     strokeWidth="1"
                     fill="white" />
-            //TOP
+            {/*TOP*/}
                 <Circle
                     x="30"
                     y="20"
@@ -59,7 +59,7 @@ class Svg5Left extends React.Component {
                     stroke="black"
                     strokeWidth="1"
                     fill="white" />
-            //BOTTOM
+            {/*BOTTOM*/}
                 <Circle
                     x="30"
                     y="40"

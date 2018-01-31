@@ -2,14 +2,14 @@ import React from 'react'
 import { View, Text, TextInput, StyleSheet } from 'react-native'
 
 class Chat extends React.Component {
-  componentDidMount() {
-    const { nav } = this.props;
+  // componentDidMount() {
+  //   const { nav } = this.props;
 
-    // nav.onNavigateShouldAllow(() => {
-    //    return true;
-    // });
+  //   // nav.onNavigateShouldAllow(() => {
+  //   //    return true;
+  //   // });
 
-  }
+  // }
 
   render() {
     return (
