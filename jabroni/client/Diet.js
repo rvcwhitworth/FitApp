@@ -2,9 +2,9 @@ import React from 'react'
 import { View, Text, TextInput, StyleSheet, Animated, Dimensions } from 'react-native'
 import { graphql, ApolloProvider } from 'react-apollo';
 import gql from 'graphql-tag';
-import SVG from './SVG/svg5Right.js'
+import SVG from '../SVG/svg5Right.js'
 import FooterNav from './FooterNav.js'
-import Chat from './chatIcon.js'
+import Chat from '../utilities/chatIcon'
 
 const { width, height } = Dimensions.get('window');
 

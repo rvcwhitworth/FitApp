@@ -3,17 +3,18 @@ import { Text, View, TouchableOpacity, Dimensions, Button, AsyncStorage } from '
 import { Camera, Permissions } from 'expo';
 import * as firebase from 'firebase';
 import TOKENS from '../TOKENS.js';
+import firebase from './utilities/firebase.js'
 
-const firebaseConfig = {
-  apiKey: TOKENS.firebaseConfig.apiKey,
-  authDomain: TOKENS.firebaseConfig.authDomain,
-  databaseURL: TOKENS.firebaseConfig.databaseURL,
-  projectId: TOKENS.firebaseConfig.projectId,
-  storageBucket: TOKENS.firebaseConfig.storageBucket,
-  messagingSenderId: TOKENS.firebaseConfig.messagingSenderId,
-};
+// const firebaseConfig = {
+//   apiKey: TOKENS.firebaseConfig.apiKey,
+//   authDomain: TOKENS.firebaseConfig.authDomain,
+//   databaseURL: TOKENS.firebaseConfig.databaseURL,
+//   projectId: TOKENS.firebaseConfig.projectId,
+//   storageBucket: TOKENS.firebaseConfig.storageBucket,
+//   messagingSenderId: TOKENS.firebaseConfig.messagingSenderId,
+// };
 
-const firebaseApp = firebase.initializeApp(firebaseConfig);
+// const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 var storageRef = firebase.storage().ref();
 var imageStore = storageRef.child('images');

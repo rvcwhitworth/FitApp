@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ImageBackground, Dimensions } from 'react-native';
-import Chat from './chatIcon'
-import MacroGraph from './textD3'
+import Chat from '../utilities/chatIcon'
+import MacroGraph from '../utilities/textD3'
 import NavFooter from './FooterNav.js'
 
 const { width, height } = Dimensions.get('window');
@@ -29,7 +29,7 @@ export default class DataOverviewScreen extends React.Component {
     {"number": 20, "name": 'Fats', 'Foods': ['Twinkies', 'Nuts', 'Cheese']}, 
   ]
     return (
-    <ImageBackground style={styles.backgroundImage} blurRadius={2}  source={require('../images/testbackground.jpg')} >
+    <ImageBackground style={styles.backgroundImage} blurRadius={2}  source={require('../../images/testbackground.jpg')} >
     <View style={styles.container}>
         <MacroGraph
             pieWidth={150}

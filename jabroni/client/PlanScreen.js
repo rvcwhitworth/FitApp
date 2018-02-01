@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button, Dimensions } from 'react-native';
 import { FloatingAction } from 'react-native-floating-action';
-import Chat from './chatIcon';
+import Chat from '../utilities/chatIcon'
 import { graphql, ApolloProvider, compose } from 'react-apollo';
 import gql from 'graphql-tag';
-import ProgressCircle from './progressCircle'
+import ProgressCircle from '../utilities/progressCircle'
 import FooterNav from './FooterNav.js'
 
 const { width, height } = Dimensions.get('window');

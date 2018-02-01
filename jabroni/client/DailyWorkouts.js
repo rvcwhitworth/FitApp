@@ -2,10 +2,9 @@ import React from 'react'
 import { Alert, View, Text, TextInput, StyleSheet, Animated, Button, Picker, Dimensions } from 'react-native'
 import { graphql, ApolloProvider, compose } from 'react-apollo';
 import gql from 'graphql-tag';
-import WorkoutInput from './WorkoutInput';
-import Chat from './chatIcon'
+import Chat from '../utilities/chatIcon'
 import FooterNav from './FooterNav.js'
-import SVG from './SVG/svg5Left.js'
+import SVG from '../SVG/svg5Left.js'
 const { width, height } = Dimensions.get('window');
 
 

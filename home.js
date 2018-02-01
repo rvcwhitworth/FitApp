@@ -5,18 +5,18 @@ import logInScreen from './jabroni/LogIn';
 import signUpScreen from './jabroni/SignUp';
 import clientHome from './jabroni/ClientHome';
 import { StackNavigator } from 'react-navigation';
-import * as firebase from 'firebase';
-import TOKENS from './TOKENS.js';
+// import * as firebase from 'firebase';
+// import TOKENS from './TOKENS.js';
 
-const firebaseConfig = {
-  apiKey: TOKENS.firebaseConfig.apiKey,
-  authDomain: TOKENS.firebaseConfig.authDomain,
-  databaseURL: TOKENS.firebaseConfig.databaseURL,
-  projectId: TOKENS.firebaseConfig.projectId,
-  storageBucket: TOKENS.firebaseConfig.storageBucket,
-  messagingSenderId: TOKENS.firebaseConfig.messagingSenderId,
-};
-const firebaseApp = firebase.initializeApp(firebaseConfig);
+// const firebaseConfig = {
+//   apiKey: TOKENS.firebaseConfig.apiKey,
+//   authDomain: TOKENS.firebaseConfig.authDomain,
+//   databaseURL: TOKENS.firebaseConfig.databaseURL,
+//   projectId: TOKENS.firebaseConfig.projectId,
+//   storageBucket: TOKENS.firebaseConfig.storageBucket,
+//   messagingSenderId: TOKENS.firebaseConfig.messagingSenderId,
+// };
+// const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 class Home extends React.Component {
   render() {

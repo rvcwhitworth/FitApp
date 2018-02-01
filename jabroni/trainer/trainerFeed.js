@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Button, Dimensions } from 'react-native'
-import Chat from '../chatIcon'
+import Chat from '../utilities/chatIcon'
 import Nav from './trainerNav.js'
 import SVG from '../SVG/svg4Right.js'
 const { width, height } = Dimensions.get('window');

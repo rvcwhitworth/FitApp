@@ -1,32 +1,27 @@
 import React from 'react'
-<<<<<<< HEAD
-import { View, Text, TextInput, StyleSheet, AsyncStorage } from 'react-native'
-import { graphql, ApolloProvider, compose } from 'react-apollo';
-import gql from 'graphql-tag';
-=======
 import { View, Text, TextInput, StyleSheet, TouchableHighlight, AsyncStorage } from 'react-native'
 import { graphql, ApolloProvider, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Button, Divider } from 'react-native-elements'
+import firebase from './firebase.js'
 
-import * as firebase from 'firebase';
-import TOKENS from './../TOKENS.js';
+// import * as firebase from 'firebase';
+// import TOKENS from './../TOKENS.js';
 var t = require('tcomb-form-native');
 var Form = t.form.Form;
 
-const firebaseConfig = {
-  apiKey: TOKENS.firebaseConfig.apiKey,
-  authDomain: TOKENS.firebaseConfig.authDomain,
-  databaseURL: TOKENS.firebaseConfig.databaseURL,
-  projectId: TOKENS.firebaseConfig.projectId,
-  storageBucket: TOKENS.firebaseConfig.storageBucket,
-  messagingSenderId: TOKENS.firebaseConfig.messagingSenderId,
-};
+// const firebaseConfig = {
+//   apiKey: TOKENS.firebaseConfig.apiKey,
+//   authDomain: TOKENS.firebaseConfig.authDomain,
+//   databaseURL: TOKENS.firebaseConfig.databaseURL,
+//   projectId: TOKENS.firebaseConfig.projectId,
+//   storageBucket: TOKENS.firebaseConfig.storageBucket,
+//   messagingSenderId: TOKENS.firebaseConfig.messagingSenderId,
+// };
 
-const firebaseApp = firebase.initializeApp(firebaseConfig);
+// const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 var database = firebase.database();
->>>>>>> feature
 
 class Chat extends React.Component {
   constructor(props){

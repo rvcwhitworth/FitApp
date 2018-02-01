@@ -1,8 +1,8 @@
 import React from 'react'
 import { View, Text, TextInput, StyleSheet, Dimensions } from 'react-native'
-import Chat from '../chatIcon.js'
+import Chat from '../utilities/chatIcon.js'
 import Graph from './bodyCompGraph.js'
-import FooterNav from '../FooterNav.js'
+import FooterNav from './FooterNav.js'
 const { width, height } = Dimensions.get('window');
 
 class BodyComposition extends React.Component {
