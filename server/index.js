@@ -15,12 +15,13 @@ const graphqlHTTP = require('express-graphql');
 const graphql = require('graphql');
 
 
-var firebaseDb = admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: TOKEN.firebaseConfig.databaseURL
-});
 
-var database = firebaseDb.database();
+// var firebaseDb = admin.initializeApp({
+//     credential: admin.credential.cert(serviceAccount),
+//     databaseURL: TOKEN.firebaseConfig.databaseURL
+// });
+
+// var database = firebaseDb.database();
 
 app.use('/graphql', graphqlHTTP({
 	schema: graphqltools.makeExecutableSchema({typeDefs: graphQLSchema, resolvers: resolvers}),
@@ -28,19 +29,19 @@ app.use('/graphql', graphqlHTTP({
 	context: collections
 }));
 
-function pushMessge(roomId, message){ //ADD THIS MESSAGE TO THIS ROOM
-    database.ref('/rooms/' + roomId + '/messages').push(message)
-}
+// function pushMessge(roomId, message){ //ADD THIS MESSAGE TO THIS ROOM
+//     database.ref('/rooms/' + roomId + '/messages').push(message)
+// }
 
-function roomsListenerSetup(roomsArray){ //ADDS EVENTLISTENER FOR NEW MESSAGES TO THESE ROOMS
-    roomsArray.map((roomId)=>{
-        database.ref('/rooms/' + roomId + '/messages').on("value", function(snapshot){
-            console.log(snapshot.val());
-        }, 
-        function(errorObject){
-            console.log("the read failed: " + errorObject.code);
-        })
-    })
-}
+// function roomsListenerSetup(roomsArray){ //ADDS EVENTLISTENER FOR NEW MESSAGES TO THESE ROOMS
+//     roomsArray.map((roomId)=>{
+//         database.ref('/rooms/' + roomId + '/messages').on("value", function(snapshot){
+//             console.log(snapshot.val());
+//         }, 
+//         function(errorObject){
+//             console.log("the read failed: " + errorObject.code);
+//         })
+//     })
+// }
     
 app.listen(port, () => console.log('Listening on port', port));
