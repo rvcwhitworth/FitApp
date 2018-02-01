@@ -48,7 +48,7 @@ class PlanScreen extends React.Component {
   }
   
   render(){
-    const data = this.props.data;
+    const data = this.props.data || ['please', 'stop', 'breaking'];
     if (this.props.data.loading) return (<View><Text>Loading</Text></View>);
     return (
     <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>

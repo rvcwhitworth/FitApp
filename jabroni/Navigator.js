@@ -39,7 +39,6 @@ return new SwipeNavigator({
     left: 'DailyWorkouts',
     top: 'LogOut',
     bottom: 'DailyInputs',
-    top: 'LogOut',
     type: 'over'
   },
 
