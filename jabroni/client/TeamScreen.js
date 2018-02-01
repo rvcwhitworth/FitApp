@@ -4,7 +4,7 @@ import { SearchBar } from 'react-native-elements';
 import { graphql, ApolloProvider, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import FooterNav from './FooterNav.js'
-import Chat from './chatIcon'
+import Chat from '../utilities/chatIcon'
 
 class TeamScreen extends React.Component {
   constructor(props) {

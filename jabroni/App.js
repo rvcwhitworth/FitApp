@@ -9,18 +9,15 @@ import LandingScreen from './LandingPage';
 import ClientLogInScreen from './client/ClientLogIn.js';
 import TrainerLogInScreen from './trainer/TrainerLogIn.js'
 import SignUpScreen from './SignUp';
-import Plan from './PlanScreen';
-import TeamScreen from './TeamScreen';
-import DataScreen from './DataScreen';
-import Chat from './Chat'
+import Plan from './client/PlanScreen';
+import TeamScreen from './client/TeamScreen';
+import DataScreen from './client/DataScreen';
+import Chat from './utilities/Chat'
 import Home from './Navigator.js'
 
-<<<<<<< HEAD
-=======
-
->>>>>>> merge conflict1
 const TrainerHome = Home('test')
 const ClientHome = Home('client')
+
 const HOST_URI = 'http://ec2-18-219-7-36.us-east-2.compute.amazonaws.com:4000/graphql';
 
 const AuthUser = () => {

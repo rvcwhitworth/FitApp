@@ -1,8 +1,8 @@
 import React from 'react'
 import { View, Text, TextInput, StyleSheet, Dimensions } from 'react-native'
-import Chat from './chatIcon'
+import Chat from '../utilities/chatIcon'
 import FooterNav from './FooterNav.js'
-import SVG from './SVG/svg5Bottom.js'
+import SVG from '../SVG/svg5Bottom.js'
 
 const { width, height } = Dimensions.get('window');
 

@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, Text, TextInput, StyleSheet } from 'react-native'
+const { width, height } = Dimensions.get('window');
 
 class Weekly extends React.Component {
   componentDidMount() {
@@ -15,7 +16,7 @@ class Weekly extends React.Component {
     return (
       <View style={styles.container}>
         <View style={{marginTop: 50}}>
-          <Text> This will be our weekly view of workout plan??? </Text>
+          <Text> something something something</Text>
         </View>
       </View>
     )
@@ -26,7 +27,9 @@ class Weekly extends React.Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    flex: 1,
+    width: width,
+    height: height,
+    flexDirection: 'column'
   },
 })
 

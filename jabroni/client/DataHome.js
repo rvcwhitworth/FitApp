@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, ImageBackground, Button, Dimensions } from 'react-native';
-import Chat from './chatIcon'
+import Chat from '../utilities/chatIcon'
 import FooterNav from './FooterNav.js'
 const { width, height } = Dimensions.get('window');
 

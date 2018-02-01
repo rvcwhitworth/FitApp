@@ -1,5 +1,4 @@
 import React from 'react';
-import FooterNav from './FooterNav';
 import { StyleSheet, Text, View, ImageBackground, Button } from 'react-native';
 import { StackNavigator, TabNavigator } from 'react-navigation';
 import { ButtonGroup} from 'react-native-elements';
