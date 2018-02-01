@@ -21,9 +21,14 @@ class PlanScreen extends React.Component {
       data: {
         workoutData: '',
         dietData: ''
-      }
+      },
+      items: {}
     }
     
+    this.loadItems = this.loadItems.bind(this);
+    this.renderItem = this.renderItem.bind(this);
+    this.renderEmptyDate = this.renderEmptyDate.bind(this);
+    this.rowHasChanged = this.rowHasChanged.bind(this);
     this.onDayPress = this.onDayPress.bind(this);
     this.submit = this.submit.bind(this);
     this.inc = this.inc.bind(this)
@@ -43,7 +48,7 @@ class PlanScreen extends React.Component {
     .then((userInfoString) => {
       this.state.user = JSON.parse(userInfoString);
 
-      Promise.all(
+      return Promise.all([
         this.props.client.query({
         query: dietQuery,
         variables: {
@@ -53,12 +58,13 @@ class PlanScreen extends React.Component {
       })
       .then(({data}) => {
         this.setState(prevState => {
-          prevState.data.dietData = data;
+          prevState.data.dietData = JSON.parse(data.getDietPlans[data.getDietPlans.length - 1].diet);
           return prevState;
-        })
-      }),
+        }, () => Promise.resolve())
+      })
+      .catch((err) => console.err('Error retrieving dietQuery', err)),
       this.props.client.query({
-        query: exerciseQuery,
+        query: workoutQuery,
         variables: {
           id: this.state.user.id,
           type: this.state.user.type
@@ -66,11 +72,12 @@ class PlanScreen extends React.Component {
       })
       .then(({data}) => {
         this.setState(prevState => {
-          prevState.data.workoutData = data;
+          prevState.data.workoutData = JSON.parse(data.getExercisePlans[data.getExercisePlans.length - 1].regimen);
+          prevState.loading = false;
           return prevState;
-        })
-      }))
-      .then(() => this.setState({loading: false}))
+        }, () => Promise.resolve())
+      }).catch((err) => console.err('Error retrieving workoutQuery', err))
+    ]).catch((err) => console.error('Error resolving both promises!', err))
     })
     .catch((err) => console.error('Error retrieving user info from storage!', err));
   }
@@ -100,29 +107,109 @@ class PlanScreen extends React.Component {
     });
   }
 
-  render(){
-    const data = this.state.data;
-    if (this.state.loading) return (<View><Text>Loading</Text></View>);
+  loadItems (startDate) {
+    // setTimeout(() => {
+    //   var currentDate = Object.assign({}, startDate);
+    //   var items = {};
+    //   while(currentDate.day <= 31) {
+    //     console.log('l 115 got here!, getDay', startDate, currentDate, new Date(currentDate.year, currentDate.month - 1, currentDate.day).getDay());
+    //     items[currentDate.dateString] = 
+    //       [
+    //         {
+    //           workout: this.state.data.workoutData[new Date(currentDate.year, currentDate.month - 1, currentDate.day).getDay()], 
+    //           diet: this.state.data.dietData[new Date(currentDate.year, currentDate.month - 1, currentDate.day).getDay()]
+    //         }
+    //       ]
+        
+    //     currentDate.day++;
+    //     currentDate.dateString = 
+    //       currentDate.year + '-' + 
+    //       (currentDate.month.toString().length === 1 ? '0' + currentDate.month.toString() : currentDate.month) + '-' + 
+    //       (currentDate.day.toString().length === 1 ? '0' + currentDate.day.toString() : currentDate.day);
+    //   }
+  
+    //   this.setState({items}, () => console.log('l 129 got here', this.state.items));
+    // }, 1000);
+
+    setTimeout(() => {
+      for (let i = -15; i < 85; i++) {
+        const time = day.timestamp + i * 24 * 60 * 60 * 1000;
+        const strTime = this.timeToString(time);
+        if (!this.state.items[strTime]) {
+          this.state.items[strTime] = [];
+          const numItems = Math.floor(Math.random() * 5);
+          for (let j = 0; j < numItems; j++) {
+            this.state.items[strTime].push({
+              name: 'Item for ' + strTime,
+              height: Math.max(50, Math.floor(Math.random() * 150))
+            });
+          }
+        }
+      }
+      //console.log(this.state.items);
+      const newItems = {};
+      Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
+      this.setState({
+        items: newItems
+      });
+    }, 1000);
+  }
+
+   timeToString(time) {
+    const date = new Date(time);
+    return date.toISOString().split('T')[0];
+  }
+
+  isValidDate(startDate, currentDate) {
+    console.log('l 135 MADE IT going to return', new Date(currentDate.year, currentDate.month - 1, currentDate.day).getMonth() !== new Date(startDate.timestamp).getMonth())
+    return new Date(currentDate.year, currentDate.month - 1, currentDate.day).getMonth() !== new Date(startDate.timestamp).getMonth()
+  }
+
+  renderItem ({diet, workout}) {
+    // return (
+    //   <View style={styles.item}>
+    //     <Text>Workout: {JSON.stringify(item.workout)}</Text>
+    //     <Text>Diet: {JSON.stringify(item.diet)}</Text>
+    //   </View>
+    // );
+
     return (
-    <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>
-      <Calendar 
+      <View style={[styles.item, {height: item.height}]}><Text>{item.name}</Text></View>
+    );
+  }
+
+  renderEmptyDate () {
+    return (
+      <View style={styles.emptyDate}><Text>This is empty date!</Text></View>
+    );
+  }
+
+  rowHasChanged (r1, r2) {
+    return r1.name !== r2.name;
+  }
+
+  render(){
+    if (this.state.loading) return (<View><Text style={{textAlign: 'center'}}>Loading your data!</Text></View>);
+    return (
+      <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>
+      {/* <Calendar 
         onDayPress={this.onDayPress}
         hideExtraDays
         markedDates={{[this.state.selected]: {selected: true}}}
       />
       <View style={styles.container}>
-        <Text>{this.state.data.workoutData}</Text>
-        <Text>{this.state.data.exerciseData}</Text>
-      </View>
-    {/* <View style={styles.container}>
-      <Text>
-        Your diet:
-        {data.getDietPlans[data.getDietPlans.length-1].diet}
-        Your trainer:
-        {data.getDietPlans[data.getDietPlans.length-1].trainer.fullName}
-      </Text>
-      <Button onPress={this.submit} title="submit" />
-    </View>*/}
+        <Text>Workout: {JSON.stringify(this.state.data.workoutData[this.state.selectedDay])}</Text>
+        <Text>Diet: {JSON.stringify(this.state.data.dietData[this.state.selectedDay])}</Text>
+      </View> */}
+   
+      <Agenda 
+        items={this.state.items}
+        loadItemsForMonth={this.loadItems}
+        renderItem={this.renderItem}
+        renderEmptyDate={this.renderEmptyDate}
+        rowHasChanged={this.rowHasChanged}
+      />
+
       <Chat nav={this.props.nav} />
       <FooterNav nav={this.props.nav} index={1} /> 
     </View>
@@ -131,20 +218,23 @@ class PlanScreen extends React.Component {
 
 }
 
-const diet = {
-  0: {'calories': 2200, 'carbs': 20, 'protein': 80}, 
-  1: {'carbs': 25, 'protein': 75}, 
-  2: {'carbs': 30, 'protein': 70}, 
-  3: {'carbs': 35, 'protein': 65}, 
-  4: {'carbs': 40, 'protein': 60}, 
-  5: {'carbs': 45, 'protein': 55}, 
-  6: {'carbs': 50, 'protein': 50}
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff'
+  },
+  item: {
+    backgroundColor: 'white',
+    flex: 1,
+    borderRadius: 5,
+    padding: 10,
+    marginRight: 10,
+    marginTop: 17
+  },
+  emptyDate: {
+    height: 15,
+    flex:1,
+    paddingTop: 30
   }
 });
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Button, Dimensions } from 'react-native'
+import { Image, View, Text, TextInput, StyleSheet, TouchableOpacity, Button, Dimensions } from 'react-native'
 import Chat from '../utilities/chatIcon'
 import FooterNav from './FooterNav.js'
 import SVG from '../SVG/svg5Center.js'
@@ -96,7 +96,6 @@ class Profile extends React.Component {
   }
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
@@ -112,7 +111,17 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: 'blue',
     marginBottom: 15
+  },
+  circle: {
+    height: 250,
+    width: 250,
+    borderRadius: 250/2
+  },
+  circleContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center'
   }
-})
+});
 
 export default Profile
