@@ -3,8 +3,12 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, Button, Dimensions
 import Chat from './chatIcon'
 import FooterNav from './FooterNav.js'
 import SVG from './SVG/svg5Center.js'
+<<<<<<< HEAD
 import ClientProfile from './client/clientProfile.js'
 import TrainerProfile from './trainer/trainerProfile.js'
+=======
+import Camera from './Camera.js'
+>>>>>>> set up camera. save files to firestore.
 
 const { width, height } = Dimensions.get('window');
 
@@ -16,7 +20,6 @@ class Profile extends React.Component {
       type: 'temp'
     }
   }
-
 
   componentDidMount() {
     AsyncStorage.getItem('Test:key', (err, val) => {
@@ -85,7 +88,7 @@ class Profile extends React.Component {
 
   onPress(e){
     e.preventDefault();
-    console.log('you clicked the image!');
+    this.props.nav.navigate('Camera')
   }
 
   render() {
@@ -128,7 +131,6 @@ const styles = StyleSheet.create({
     width: 250,
     height: 250,
     borderRadius: 250/2,
-    backgroundColor: 'red'
   },
 
   circleContainer: {
@@ -136,6 +138,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   }
-})
+});
 
 export default Profile

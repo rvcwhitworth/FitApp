@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, TouchableOpacity, Dimensions, Button, AsyncStorage } from 'react-native';
 import { Camera, Permissions } from 'expo';
 import * as firebase from 'firebase';
-import TOKENS from '../../TOKENS.js';
+import TOKENS from '../TOKENS.js';
 
 const firebaseConfig = {
   apiKey: TOKENS.firebaseConfig.apiKey,
@@ -14,7 +14,9 @@ const firebaseConfig = {
 };
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);
-const imageStore = firebase.storage().ref().child('images');
+
+var storageRef = firebase.storage().ref();
+var imageStore = storageRef.child('images');
 
 export default class CameraExample extends React.Component {
   constructor(props) {
@@ -22,7 +24,6 @@ export default class CameraExample extends React.Component {
     this.state = {
       hasCameraPermission: null,
       type: Camera.Constants.Type.back,
-      userID: null
     }
     this.goBack = this.goBack.bind(this);
     this.snap = this.snap.bind(this);
@@ -30,15 +31,6 @@ export default class CameraExample extends React.Component {
 
   async componentWillMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
-      if ( err ) {
-        console.log('async storage error: ', err);
-      } else {
-        this.setState({userID: JSON.parse(val).id})
-
-      }
-    });
-    // should really prompt user for permissions on first log in...auto grant for now:
     this.setState({ hasCameraPermission: status === 'granted' });
   }
 
@@ -49,32 +41,32 @@ export default class CameraExample extends React.Component {
 
   snap() {
     if(this.camera) {
-      this.camera.takePictureAsync({quality: 1, base64: true, exif: true})
-      .then((pic) => {
+      this.camera.takePictureAsync({quality: 1, base64: true, exif: true}).then((pic) => {
       // pic is an object with keys: height, width, uri, base64, and exif.
       // base64 is the encoded image file itself
       // exif contains metadata like DateTimeOriginal (timestamp when photo was taken)
       // height and width are obvious
       // uri is a temporary reference to the local image file.
-      
-        // use id to set up path in firebase storage for this user's pictures
-        let folder = imageStore.child(this.state.userID.toString());
-        let fileName = pic.exif.DateTimeOriginal; // timestamp
+      // to make a permanent copy of the image, use Expo.FileSystem.copyAsync
 
-        // save image to fireStore
-        let address = folder.child(fileName);
-        address.putString(pic.base64).then((snapshot) => {
-          console.log('successfully uploaded image data.');
-        }).catch(err => {
-          console.log('firebase save error: ', err);
-        })
-      })
-      .catch(err => {console.log('camera error: ', err)});
+      // save image to fireStore...
+      
+      // var spaceRef = imageStore.child(fileName);
+
+        spaceRef.putString(pic.base64).then((snapshot) => {
+          console.log('successfully uploaded base64 string.');
+        }).catch((e) => {
+          console.log('firebase error: ', e);
+        });
+      }).catch(err => {console.log('camera error: ', err)});
     }
   }
 
+
   render() {
-    console.log('camera.state: ', this.state)
+    AsyncStorage.getAllKeys().then(keys => {
+        console.log('storage keys:', keys);
+      });
     const { hasCameraPermission } = this.state;
     const { width, height } = Dimensions.get('window');
     if (hasCameraPermission === null) {

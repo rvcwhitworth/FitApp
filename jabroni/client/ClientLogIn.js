@@ -94,15 +94,10 @@ class logInScreen extends React.Component {
   componentDidMount(){
     AsyncStorage.getItem('Test:key', (err, val) => {
       if (err) console.log(err);
-      else{
-        console.log(val)
-        if(JSON.parse(val)){
-          if(JSON.parse(val).type === 'client'){
-            this.props.navigation.dispatch(resetAction)
-          }
-        }
+      else {
+        this.props.nav.navigation.dispatch(resetAction)
       }
-  })
+    }
   }
 
 
