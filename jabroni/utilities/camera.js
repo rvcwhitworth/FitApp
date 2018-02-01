@@ -3,7 +3,7 @@ import { Text, View, TouchableOpacity, Dimensions, Button, AsyncStorage } from '
 import { Camera, Permissions } from 'expo';
 // import * as firebase from 'firebase';
 // import TOKENS from '../../TOKENS.js';
-import firebase from '../utilities/firebase.js'
+import firebase from './firebase.js'
 
 // const firebaseConfig = {
 //   apiKey: TOKENS.firebaseConfig.apiKey,
