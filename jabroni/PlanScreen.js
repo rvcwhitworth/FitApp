@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button, Dimensions } from 'react-native';
+import { AsyncStorage, View, Text, StyleSheet, Button, Dimensions } from 'react-native';
 import { FloatingAction } from 'react-native-floating-action';
 import Chat from './chatIcon';
-import { graphql, ApolloProvider, compose } from 'react-apollo';
+import { withApollo, graphql, ApolloProvider, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import ProgressCircle from './progressCircle'
 import FooterNav from './FooterNav.js'
+import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 
 const { width, height } = Dimensions.get('window');
 
@@ -14,10 +15,17 @@ class PlanScreen extends React.Component {
     super(props);
 
     this.state = {
-    	progress: 0
+      progress: 0,
+      loading: true,
+      selectedDay: new Date().getDay(),
+      data: {
+        workoutData: '',
+        dietData: ''
+      }
     }
+    
+    this.onDayPress = this.onDayPress.bind(this);
     this.submit = this.submit.bind(this);
-    console.log('plan screen props: ', this.props);
     this.inc = this.inc.bind(this)
   }
 
@@ -30,9 +38,47 @@ class PlanScreen extends React.Component {
   	}
   }
 
+  componentWillMount () {
+    AsyncStorage.getItem('@FitApp:UserInfo')
+    .then((userInfoString) => {
+      this.state.user = JSON.parse(userInfoString);
+
+      Promise.all(
+        this.props.client.query({
+        query: dietQuery,
+        variables: {
+          id: this.state.user.id,
+          type: this.state.user.type
+        }
+      })
+      .then(({data}) => {
+        this.setState(prevState => {
+          prevState.data.dietData = data;
+          return prevState;
+        })
+      }),
+      this.props.client.query({
+        query: exerciseQuery,
+        variables: {
+          id: this.state.user.id,
+          type: this.state.user.type
+        }
+      })
+      .then(({data}) => {
+        this.setState(prevState => {
+          prevState.data.workoutData = data;
+          return prevState;
+        })
+      }))
+      .then(() => this.setState({loading: false}))
+    })
+    .catch((err) => console.error('Error retrieving user info from storage!', err));
+  }
+
   submit(e) {
     e.preventDefault();
-    this.props.mutate({
+    this.props.client.mutate({
+      query: m,
       variables: {
         name: "Ethans plan",
         diet: JSON.stringify(diet),
@@ -46,13 +92,29 @@ class PlanScreen extends React.Component {
     })
 
   }
-  
+
+  onDayPress(day) {
+    this.setState({
+      selected: day.dateString,
+      selectedDay: new Date(day.timestamp).getDay()
+    });
+  }
+
   render(){
-    const data = this.props.data;
-    if (this.props.data.loading) return (<View><Text>Loading</Text></View>);
+    const data = this.state.data;
+    if (this.state.loading) return (<View><Text>Loading</Text></View>);
     return (
     <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>
-    <View style={styles.container}>
+      <Calendar 
+        onDayPress={this.onDayPress}
+        hideExtraDays
+        markedDates={{[this.state.selected]: {selected: true}}}
+      />
+      <View style={styles.container}>
+        <Text>{this.state.data.workoutData}</Text>
+        <Text>{this.state.data.exerciseData}</Text>
+      </View>
+    {/* <View style={styles.container}>
       <Text>
         Your diet:
         {data.getDietPlans[data.getDietPlans.length-1].diet}
@@ -60,9 +122,9 @@ class PlanScreen extends React.Component {
         {data.getDietPlans[data.getDietPlans.length-1].trainer.fullName}
       </Text>
       <Button onPress={this.submit} title="submit" />
+    </View>*/}
       <Chat nav={this.props.nav} />
-      </View>
-      <FooterNav nav={this.props.nav} index={1} />
+      <FooterNav nav={this.props.nav} index={1} /> 
     </View>
     )
   }
@@ -70,7 +132,7 @@ class PlanScreen extends React.Component {
 }
 
 const diet = {
-  0: {'carbs': 20, 'protein': 80}, 
+  0: {'calories': 2200, 'carbs': 20, 'protein': 80}, 
   1: {'carbs': 25, 'protein': 75}, 
   2: {'carbs': 30, 'protein': 70}, 
   3: {'carbs': 35, 'protein': 65}, 
@@ -101,7 +163,7 @@ mutation setDietPlan($name: String!, $diet: String!, $trainer_id: Int!, $client_
   }
 }`
 
-const q = gql`
+const dietQuery = gql`
   query getDietPlans($id: Int!, $type: String!){
     getDietPlans(id: $id, type: $type) {
       diet
@@ -112,11 +174,12 @@ const q = gql`
   }
 `
 
-export default compose(graphql(q, {
-  options: {
-    variables: {
-      id: 1,
-      type: "client"
+const workoutQuery = gql`
+  query getExercisePlans($id: Int!, $type: String!){
+    getExercisePlans(id: $id, type: $type) {
+      regimen
     }
   }
-}), graphql(m))(PlanScreen);
+`
+
+export default withApollo(PlanScreen);

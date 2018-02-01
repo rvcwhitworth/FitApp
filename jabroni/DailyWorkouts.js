@@ -1,6 +1,17 @@
 import React from 'react'
-import { Alert, View, Text, TextInput, StyleSheet, Animated, Button, Picker, Dimensions } from 'react-native'
-import { graphql, ApolloProvider, compose } from 'react-apollo';
+import { 
+  AsyncStorage, 
+  Alert, 
+  View, 
+  Text, 
+  TextInput, 
+  StyleSheet, 
+  Animated, 
+  Button, 
+  Picker, 
+  Dimensions 
+} from 'react-native'
+import { withApollo, graphql, ApolloProvider, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import WorkoutInput from './WorkoutInput';
 import Chat from './chatIcon'
@@ -8,6 +19,9 @@ import FooterNav from './FooterNav.js'
 import SVG from './SVG/svg5Left.js'
 const { width, height } = Dimensions.get('window');
 
+// defaults if async storage user id can't be loaded
+var USER_ID = 1;
+var USER_TYPE = 'client'
 
 class WorkoutScreen extends React.Component {
   constructor(props) {
@@ -16,13 +30,34 @@ class WorkoutScreen extends React.Component {
     this.state = {
       color: 'white',
       selectedDay: new Date().getDay(),
-      workoutData: {}
+      workoutData: {},
+      loading: true
     }
     this.setupWorkoutData = this.setupWorkoutData.bind(this);
     this.updateWorkoutDisplay = this.updateWorkoutDisplay.bind(this);
     this.handleWorkoutSubmission = this.handleWorkoutSubmission.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  componentWillMount () {
+    AsyncStorage.getItem('@FitApp:UserInfo')
+    .then((userInfoString) => {
+      this.state.user = JSON.parse(userInfoString);
+      console.log('USER IN STATE', this.state.user);
+      this.props.client.query({
+        query: planQuery,
+        variables: {
+          id: this.state.user.id,
+          type: this.state.user.type
+        }
+      })
+      .then(({data}) => {
+        console.log('DATA IN WILL MOUNT', data)
+        this.setState({data, loading: false})
+      })
+    })
+    .catch((err) => console.error('Error retrieving user info from storage!', err));
   }
 
   handleInputChange (newData, workoutType, dataField) {
@@ -46,10 +81,10 @@ class WorkoutScreen extends React.Component {
 
   handleWorkoutSubmission () {
     let dataString = JSON.stringify({workout: this.state.workoutData})
-    console.log('SENDING THIS TO MUTATION', dataString, 'which is a', typeof dataString);
-    this.props.mutate({
+    this.props.client.mutate({
+      query: planMutation,
       variables: {
-        user_id: 1,
+        user_id: this.state.user.id,
         data: dataString
       }
     })
@@ -75,7 +110,17 @@ class WorkoutScreen extends React.Component {
   }
 
   render() {
-    const { getExercisePlans, loading } = this.props.data;
+    if (this.state.loading) {
+      return (
+      <Animated.View style={[styles.container, { backgroundColor: 'white', flexDirection:'column', width:width, height:height }]}>
+        <View style={{flex: 1}}>
+          <SVG />
+        </View>
+      </Animated.View>)
+    }
+
+    const { getExercisePlans } = this.state.data;
+    console.log('l123 GOT HERE WITH', getExercisePlans)
     if (getExercisePlans && !this.state.dailyWorkout && !this.state.displaySet) {
       this.state.regimen = JSON.parse(getExercisePlans.slice().pop().regimen);
       this.state.dailyWorkout =this.state.regimen[this.state.selectedDay];
@@ -90,7 +135,7 @@ class WorkoutScreen extends React.Component {
         <View style={{flex: 1}}>
           <SVG />
         </View>
-        {loading || !this.state.dailyWorkout || !this.state.displaySet ? (<View><Text>Loading workout data</Text></View>) : (
+        {!this.state.dailyWorkout || !this.state.displaySet ? (<View><Text>Loading workout data</Text></View>) : (
         <View style={{flex: 8, alignItems: 'center'}}>
           <Text style={styles.header}>
             Your Daily Workout
@@ -176,8 +221,8 @@ const styles = StyleSheet.create({
 })
 
 const planQuery = gql`
-{
-  getExercisePlans(id: 1, type: "client") {
+query getExercisePlans($id: Int!, $type: String!){
+  getExercisePlans(id: $id, type: $type) {
     regimen
   }
 }`
@@ -193,4 +238,4 @@ mutation setDailyRecord($user_id: Int!, $data: String!) {
 }
 `
 
-export default compose(graphql(planQuery), graphql(planMutation))(WorkoutScreen);
+export default withApollo(WorkoutScreen);
