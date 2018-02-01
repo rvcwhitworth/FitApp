@@ -49,7 +49,7 @@ export default class CameraExample extends React.Component {
 
   goBack() {
     console.log('go back!');
-    this.props.nav.navigate('Home');
+    this.props.nav.navigateBack();
   }
 
   snap() {
@@ -97,6 +97,7 @@ export default class CameraExample extends React.Component {
   }
 
   render() {
+    console.log('camera nav ', this.props.nav);
     const { hasCameraPermission } = this.state;
     const { width, height } = Dimensions.get('window');
     if (hasCameraPermission === null) {
