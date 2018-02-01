@@ -92,12 +92,14 @@ class logInScreen extends React.Component {
   }
 
   componentDidMount(){
-    AsyncStorage.getItem('Test:key', (err, val) => {
+    AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
       if (err) console.log(err);
       else {
-        this.props.nav.navigation.dispatch(resetAction)
+        if(val){
+        this.props.navigation.dispatch(resetAction)
+        }
       }
-    }
+    })
   }
 
 
@@ -123,7 +125,7 @@ class logInScreen extends React.Component {
         console.log('Successful login', data.loginUser)
         console.log(JSON.stringify(data.loginUser), typeof JSON.stringify(data.loginUser))
         AsyncStorage.setItem('@FitApp:UserInfo', JSON.stringify(data.loginUser))
-        .then(() => this.props.nav.navigation.dispatch(resetAction))
+        .then(() => this.props.navigation.dispatch(resetAction))
         .catch((err) => console.error('Error writing user info to storage', err))
       }
     }).catch((err) => {

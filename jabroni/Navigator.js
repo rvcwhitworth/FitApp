@@ -6,22 +6,18 @@ import Profile from './client/clientProfile.js'
 import LogOut from './logOut.js'
 import Data from './DataHome.js'
 import DataDiet from './DataScreen.js'
-import BodyComposition from './bodyComposition'
+import BodyComposition from './client/bodyComposition'
 import Chat from './Chat.js'
 import VideoChat from './VideoChat.js'
 import DailyInputs from './DailyInputs.js'
 import TeamScreen from './TeamScreen.js'
 import PlanScreen from './PlanScreen.js'
-<<<<<<< HEAD:jabroni/Navigator.js
 import TrainerLanding from './trainer/trainerLanding.js'
 import TrainerProfile from './trainer/trainerProfile.js'
 import TrainerFeed from './trainer/trainerFeed.js'
 import Camera from './client/camera.js'
 import WorkoutPlans from './trainer/trainerPlans.js'
 import Roster from './trainer/trainerRoster.js'
-=======
-import Camera from './Camera.js'
->>>>>>> set up camera. save files to firestore.:jabroni/ClientNavigator.js
 
 
 const ProfileNavigator = (type) => {
