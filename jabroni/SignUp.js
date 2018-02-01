@@ -98,7 +98,7 @@ class SignUpScreen extends React.Component {
         variables: {
           username: value.username.toLowerCase(),
           password: value.newPassword,
-          type: value.type,
+          type: value.type.toLowerCase(),
           email: value.email,
           fullName: value.name,
           profile_data: JSON.stringify({goals: value.Goals, age: value.age, rememberMe: value.rememberMe})
