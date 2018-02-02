@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ImageBackground, Dimensions } from 'react-nativ
 import Chat from '../utilities/chatIcon'
 import MacroGraph from '../utilities/textD3'
 import NavFooter from './FooterNav.js'
+import SVG from '../SVG/svg5Right.js'
 
 const { width, height } = Dimensions.get('window');
 
@@ -31,6 +32,7 @@ export default class DataOverviewScreen extends React.Component {
     return (
     <ImageBackground style={styles.backgroundImage} blurRadius={2}  source={require('../../images/testbackground.jpg')} >
     <View style={styles.container}>
+    <SVG />
         <MacroGraph
             pieWidth={150}
             pieHeight={150}

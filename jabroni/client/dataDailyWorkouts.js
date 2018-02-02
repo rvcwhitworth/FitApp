@@ -1,12 +1,9 @@
 import React from 'react'
 import { View, Text, TextInput, StyleSheet, Dimensions } from 'react-native'
-import Chat from '../utilities/chatIcon.js'
-import Graph from './bodyCompGraph.js'
-import FooterNav from './FooterNav.js'
 const { width, height } = Dimensions.get('window');
-import SVG from '../SVG/svg5Bottom.js'
+import SVG from '../SVG/svg5Left.js'
 
-class BodyComposition extends React.Component {
+class Weekly extends React.Component {
   componentDidMount() {
     const { nav } = this.props;
 
@@ -20,12 +17,9 @@ class BodyComposition extends React.Component {
     return (
       <View style={styles.container}>
       <SVG />
-      <View style={{flex: 1}}>
-        <Graph />
-      <Chat nav={this.props.nav} />
-      </View>
-        <FooterNav nav={this.props.nav} index={2}/>
-       
+        <View style={{marginTop: 5, flex:1}}>
+          <Text> So this is where we would show lifting data over time ect ect....</Text>
+        </View>
       </View>
     )
 
@@ -36,9 +30,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     flexDirection: 'column',
-    width:width, 
-    height:height
+    width: width,
+    height: height
   },
 })
 
-export default BodyComposition
+export default Weekly

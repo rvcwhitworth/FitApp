@@ -5,6 +5,7 @@ import { routerReducer } from 'react-router-redux';
 import auth from './authorize.jsx'
 
 
+
 export default combineReducers({
 	example,
 	auth,
