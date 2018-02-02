@@ -21,3 +21,4 @@ yarn-error.log*
 TOKENS.js
 
 serviceAccount.json
+/webAPI/src/www/bundle.js
