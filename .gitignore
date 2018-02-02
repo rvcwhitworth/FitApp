@@ -5,6 +5,7 @@
 
 # dependencies
 /node_modules
+/webAPI/src/www/bundle.js
 
 # misc
 .env.local
