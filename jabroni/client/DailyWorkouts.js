@@ -76,14 +76,14 @@ class WorkoutScreen extends React.Component {
   handleWorkoutSubmission () {
     let dataString = JSON.stringify({workout: this.state.workoutData})
     this.props.client.mutate({
-      query: planMutation,
+      mutation: planMutation,
       variables: {
         user_id: this.state.user.id,
         data: dataString
       }
     })
     .then(({data}) => {
-      Alert.alert('Workout receieved!', 'Data from DB:' + data.setDailyRecord.data)
+      Alert.alert('Workout receieved!', 'Great work today, keep it up!')
     })
     .catch((error) => {
       Alert.alert('Error!', 'Error logged to console.')

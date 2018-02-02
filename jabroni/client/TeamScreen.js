@@ -1,5 +1,5 @@
 import React from 'react';
-import { AsyncStorage, Alert, StyleSheet, Image, View, Text, Dimensions, Button, Keyboard } from 'react-native';
+import { FlatList, AsyncStorage, Alert, StyleSheet, Image, View, Text, Dimensions, Button, Keyboard } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { graphql, ApolloProvider, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -33,7 +33,15 @@ class TeamScreen extends React.Component {
           id: this.state.user.id
         }
       }).then(({data}) => {
-        this.setState({spotters: data.getSpotters})
+        this.setState({spotters: data.getSpotters}, () => {
+          this.state.spotters.forEach(({trainer}) => {
+            console.log('TRAINER in mount', trainer)
+            imageStore
+              .ref('images/' + trainer.id + '/profilePicture')
+              .getDownloadURL()
+              .then((url) => this.downloadPic(url, trainer.id))
+          })
+        })
       })
     })
   }
@@ -43,14 +51,14 @@ class TeamScreen extends React.Component {
       mutation: addSpotter,
       variables: {
         client_id: this.state.user.id,
-        trainer_id: user.id
+        trainer_id: parseInt(user.id)
       }
     }).then(({data}) => {
       console.log('DATA AFTER SET', data)
       let searchResults = this.state.searchResults;
       searchResults.splice(searchResults.indexOf(user));
       this.setState({
-        spotters: [...this.state.spotters, data.setSpotter],
+        spotters: [...this.state.spotters, data.setSpotter.trainer],
         searchResults
       })
     })
@@ -72,8 +80,7 @@ class TeamScreen extends React.Component {
         });
         this.setState({searchResults: temp}, () => {
           this.state.searchResults.forEach((user) => {
-            user.picURL = 
-              imageStore
+            imageStore
               .ref('images/' + user.id + '/profilePicture')
               .getDownloadURL()
               .then((url) => this.downloadPic(url, user.id))
@@ -110,16 +117,19 @@ class TeamScreen extends React.Component {
 
       {/*spotters */}
       <View style={{flex: 4, alignContent: 'center'}}>
-        {this.state.spotters.map((user) => {
-          <View key={user.id} style={{alignContent: 'center', justifyContent: 'space-around', alignContent: 'center', flexDirection: 'row', width: width  * (2/3), margin: 10}}>
-            {this.state.photos[user.id] ? 
-              (<Image source={{ uri: `data:image/jpg;base64,${this.state.photos[user.id]}` }} style={styles.circle}/>) :
+        {this.state.spotters.map(({trainer}) => {
+          console.log('TRAINER IN RENDER', trainer);
+          return (
+          <View key={trainer.id} style={{alignContent: 'center', justifyContent: 'space-around', alignContent: 'center', flexDirection: 'row', width: width  * (2/3), margin: 10}}>
+            {this.state.photos[trainer.id] ? 
+              (<Image source={{ uri: `data:image/jpg;base64,${this.state.photos[trainer.id]}` }} style={styles.circle}/>) :
               (<Image source={require('../../images/tearingMeApart.jpeg')} style={styles.circle}/>)}
             <View style={{flex : 1, marginLeft: 5}}>
-              <Text>Username: <Text style={{fontWeight: 'bold'}}>{user.username}</Text></Text>
-              <Text>Name: <Text style={{fontWeight: 'bold'}}>{user.fullName}</Text></Text>
+              <Text>Username: <Text style={{fontWeight: 'bold'}}>{trainer.username}</Text></Text>
+              <Text>Name: <Text style={{fontWeight: 'bold'}}>{trainer.fullName}</Text></Text>
             </View>
           </View>
+          )
         })}
       </View>
 
@@ -133,20 +143,22 @@ class TeamScreen extends React.Component {
       </View>
       <View style={{flex: 4, alignContent: 'center', justifyContent: 'flex-start'}}>
         {this.state.loading ? <Text style={{textAlign: 'center', fontSize: 16}}> Searching for spotters! </Text> :
-        this.state.searchResults.map((user) => {
-          return (
-            <View key={user.id} style={{alignContent: 'center', justifyContent: 'space-around', alignContent: 'center', flexDirection: 'row', width: width  * (2/3), margin: 10}}>
-              {this.state.photos[user.id] ? 
-                (<Image source={{ uri: `data:image/jpg;base64,${this.state.photos[user.id]}` }} style={styles.circle}/>) :
-                (<Image source={require('../../images/tearingMeApart.jpeg')} style={styles.circle}/>)}
-              <View style={{flex : 1, marginLeft: 5}}>
-                <Text>Username: <Text style={{fontWeight: 'bold'}}>{user.username}</Text></Text>
-                <Text>Name: <Text style={{fontWeight: 'bold'}}>{user.fullName}</Text></Text>
+        <FlatList
+          data={this.state.searchResults}
+          renderItem={(user) => {
+            return (
+              <View key={user.id} style={{alignContent: 'center', justifyContent: 'space-around', alignContent: 'center', flexDirection: 'row', width: width  * (2/3), margin: 10}}>
+                {this.state.photos[user.id] ? 
+                  (<Image source={{ uri: `data:image/jpg;base64,${this.state.photos[user.id]}` }} style={styles.circle}/>) :
+                  (<Image source={require('../../images/tearingMeApart.jpeg')} style={styles.circle}/>)}
+                <View style={{flex : 1, marginLeft: 5}}>
+                  <Text>Username: <Text style={{fontWeight: 'bold'}}>{user.username}</Text></Text>
+                  <Text>Name: <Text style={{fontWeight: 'bold'}}>{user.fullName}</Text></Text>
+                </View>
+                <Button title={'  +  '} onPress={() => this.addSpotter(user)}/>
               </View>
-              <Button title={'  +  '} onPress={() => this.addSpotter(user)}/>
-            </View>
-          )
-        })}
+          )}}
+        />}
         <Chat nav={this.props.nav}/>
       </View>
     <FooterNav nav={this.props.nav} index={4} />
@@ -168,9 +180,10 @@ const searchQuery = gql`
 const spotterQuery = gql`
 query getSpotters($id: Int!){
   getSpotters(id: $id, type: "client") {
-    client {
+    trainer {
       username
       fullName
+      id
     }
   }
 }
@@ -179,11 +192,13 @@ query getSpotters($id: Int!){
 const addSpotter = gql`
 mutation setSpotter($trainer_id: Int!, $client_id: Int!){
   setSpotter(trainer_id: $trainer_id, client_id: $client_id, type: "support") {
-    id
-    fullName
-    email
-    profile_data
-    username
+    trainer {
+      id
+      fullName
+      email
+      profile_data
+      username
+    }
   }
 }
 `
