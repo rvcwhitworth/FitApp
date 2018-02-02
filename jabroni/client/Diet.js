@@ -181,7 +181,7 @@ class DietScreen extends React.Component {
             selectedValue={this.state.selectedDay}
             onValueChange={this.handleSelectChange}
             itemStyle={{textAlign: 'center'}}
-            style={{alignContent: 'center', textAlign: 'center', width: 150}}
+            style={{alignSelf: 'center', alignContent: 'center', width: 150}}
           >
             <Picker.Item label="Sunday" value={0} />
             <Picker.Item label="Monday" value={1} />
