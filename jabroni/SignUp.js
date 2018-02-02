@@ -1,5 +1,6 @@
 import React from 'react';
-import { Alert, StyleSheet, Text, View, Button, ScrollView, TouchableHighlight } from 'react-native';
+
+import { Alert, StyleSheet, Text, View, Button, ScrollView, TouchableHighlight, AsyncStorage } from 'react-native';
 import { StackNavigator, TabNavigator, NavigationActions } from 'react-navigation';
 import { graphql, ApolloProvider } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -57,16 +58,6 @@ var Goal = t.enums({
   BulkUp: 'Bulk Up',
   Slim: 'Slim Down'
 });
-// var Person = t.struct({
-//   name: t.String,              // a required string
-//   Email: Email,              // a required string
-//   password: t.String,              // a required string
-//   ConfirmPassword: t.String,              // a required string
-//   age: t.Number,               // a required number
-//   type: Type,
-//   Goals: Goal,
-//   rememberMe: t.Boolean        // a boolean
-// });
 
 var Person = t.subtype(t.struct({
   name: t.String,
@@ -93,6 +84,7 @@ class SignUpScreen extends React.Component {
   onPress() {
     // call getValue() to get the values of the form
     var value = this.refs.form.getValue();
+    console.log('value: ', value);
     if (value) { // if validation fails, value will be null
       this.props.mutate({
         variables: {
@@ -105,8 +97,9 @@ class SignUpScreen extends React.Component {
         }
       })
       .then(({data}) => {
+        console.log('data to send to async storage: ', data);
         if (data.setUser) {
-          AsyncStorage.setItem('@FitApp:UserInfo', JSON.stringify(data.loginUser))
+          AsyncStorage.setItem('@FitApp:UserInfo', JSON.stringify(data.setUser))
           .then(() => this.props.navigation.dispatch(resetAction))
           .catch((err) => console.error('Error writing user info to storage', err))
         }

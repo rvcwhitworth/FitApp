@@ -1,9 +1,9 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, Dimensions, Button, AsyncStorage } from 'react-native';
+import { Text, View, TouchableOpacity, Dimensions, Button, Image, AsyncStorage } from 'react-native';
 import { Camera, Permissions } from 'expo';
 // import * as firebase from 'firebase';
 // import TOKENS from '../../TOKENS.js';
-import firebase from '../utilities/firebase.js'
+import firebase from './firebase.js'
 
 // const firebaseConfig = {
 //   apiKey: TOKENS.firebaseConfig.apiKey,
@@ -16,17 +16,22 @@ import firebase from '../utilities/firebase.js'
 
 // const firebaseApp = firebase.initializeApp(firebaseConfig);
 const imageStore = firebase.storage().ref().child('images');
+const database = firebase.database();
 
 export default class CameraExample extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       hasCameraPermission: null,
-      type: Camera.Constants.Type.back,
-      userID: null
+      type: Camera.Constants.Type.front,
+      userID: null,
+      reviewMode: false,
+      pic: null
     }
     this.goBack = this.goBack.bind(this);
     this.snap = this.snap.bind(this);
+    this.save = this.save.bind(this);
+    this.cancel = this.cancel.bind(this);
   }
 
   async componentWillMount() {
@@ -45,7 +50,7 @@ export default class CameraExample extends React.Component {
 
   goBack() {
     console.log('go back!');
-    this.props.nav.navigate('Home');
+    this.props.nav.navigateBack();
   }
 
   snap() {
@@ -57,25 +62,46 @@ export default class CameraExample extends React.Component {
       // exif contains metadata like DateTimeOriginal (timestamp when photo was taken)
       // height and width are obvious
       // uri is a temporary reference to the local image file.
-      
-        // use id to set up path in firebase storage for this user's pictures
-        let folder = imageStore.child(this.state.userID.toString());
-        let fileName = pic.exif.DateTimeOriginal; // timestamp
 
-        // save image to fireStore
-        let address = folder.child(fileName);
-        address.putString(pic.base64).then((snapshot) => {
-          console.log('successfully uploaded image data.');
-        }).catch(err => {
-          console.log('firebase save error: ', err);
-        })
+      // toggle review mode, save pic object to state
+      this.setState({reviewMode: true, pic: pic });
       })
       .catch(err => {console.log('camera error: ', err)});
     }
   }
 
+  cancel(e) {
+    e.preventDefault();
+    this.setState({
+      pic: null,
+      reviewMode: false
+    });
+  }
+
+  save(e) {
+    e.preventDefault();
+    // use id to set up path in firebase storage for this user's pictures
+    let folder = imageStore.child(this.state.userID.toString());
+    let fileName = this.state.pic.exif.DateTimeOriginal; // timestamp
+
+    // save image to fireStore
+    let address = folder.child(fileName);
+    address.putString(this.state.pic.base64).then((snapshot) => {
+      // save reference to file in firebase database so it can be downloaded later:
+      database.ref('imgURLs').child(this.state.userID.toString()).push().set({
+        name: fileName
+      });
+
+      this.setState({
+        reviewMode: false,
+        pic: null
+      });
+    }).catch(err => {
+      console.log('firebase save error: ', err);
+    })
+  }
+
   render() {
-    console.log('camera.state: ', this.state)
     const { hasCameraPermission } = this.state;
     const { width, height } = Dimensions.get('window');
     if (hasCameraPermission === null) {
@@ -83,7 +109,18 @@ export default class CameraExample extends React.Component {
     } else if (hasCameraPermission === false) {
       return <Text>No access to camera</Text>;
     } else {
-      return (
+      return this.state.reviewMode ? (
+        <View style={{flex: 1, width: width, height: height}}>
+          <Image style={{flex: 1, width: width, height: width}} source={{uri:this.state.pic.uri}} />
+          <View style={{position: 'absolute', flexDirection: 'row', alignSelf: 'flex-start'}}>
+            <Button onPress={this.cancel} title="Delete" color="red"/>
+          </View>
+          <View style={{position: 'absolute', flexDirection: 'row', alignSelf: 'flex-end'}}>
+            <Button onPress={this.save} title="Save" color="green"/>
+          </View>
+        </View>
+        )
+      : (
         <View style={{ flex: 1, width: width, height: height }}>
           <Camera style={{ flex: 1 }} type={this.state.type} ref={ref => {this.camera = ref;}} >
             <Button onPress={this.goBack} title="back" />

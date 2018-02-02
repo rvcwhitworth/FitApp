@@ -13,9 +13,9 @@ import { FloatingAction } from 'react-native-floating-action';
     name: 'Video',
     position: 1
   }, {
-    text: 'Dat Good Good',
-    icon: {'uri': 'http://pngimg.com/uploads/eggplant/eggplant_PNG2762.png?i=1'},
-    name: 'Eggplant',
+    text: 'Camera',
+    icon: require('../../images/camera.png'),
+    name: 'Camera',
     position: 3
   }];
 
