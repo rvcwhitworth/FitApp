@@ -51,11 +51,10 @@ class PlanScreen extends React.Component {
         this.props.client.query({
         query: dietQuery,
         variables: {
-          id: this.state.user.id,
-          type: this.state.user.type
+          id: this.state.user.id
         }
       })
-      .then(({data}) => {
+      .then(({data}) => {     
         this.setState(prevState => {
           prevState.data.dietData = JSON.parse(data.getDietPlans[data.getDietPlans.length - 1].diet);
           return prevState;
@@ -65,11 +64,10 @@ class PlanScreen extends React.Component {
       this.props.client.query({
         query: workoutQuery,
         variables: {
-          id: this.state.user.id,
-          type: this.state.user.type
+          id: this.state.user.id
         }
       })
-      .then(({data}) => {
+      .then(({data}) => {     
         this.setState(prevState => {
           prevState.data.workoutData = JSON.parse(data.getExercisePlans[data.getExercisePlans.length - 1].regimen);
           prevState.loading = false;
@@ -100,9 +98,10 @@ class PlanScreen extends React.Component {
   }
 
   onDayPress(day) {
+    console.log(day)
     this.setState({
       selected: day.dateString,
-      selectedDay: day.day - 1
+      selectedDay: new Date(day.dateString).getDay()
     });
   }
 
@@ -170,7 +169,7 @@ class PlanScreen extends React.Component {
             hideExtraDays
             markedDates={{[this.state.selected]: {selected: true}}}
           />
-          {console.log('selected!', selectedWorkout, selectedDiet)}
+          {console.log('selected!', selectedWorkout, selectedDiet, this.state.selectedDay)}
           <View style={[styles.container, {justifyContent: 'space-around'}]}>
             <Text style={styles.subHeader}>Workout:</Text>
             {selectedWorkout === "OFF" ? <Text style={{fontSize: 14, textAlign: 'center'}}>Off day!</Text> :
@@ -252,8 +251,8 @@ mutation setDietPlan($name: String!, $diet: String!, $trainer_id: Int!, $client_
 }`
 
 const dietQuery = gql`
-  query getDietPlans($id: Int!, $type: String!){
-    getDietPlans(id: $id, type: $type) {
+  query getDietPlans($id: Int!) {
+    getDietPlans(id: $id, type: "client") {
       diet
       trainer {
         fullName
@@ -263,8 +262,8 @@ const dietQuery = gql`
 `
 
 const workoutQuery = gql`
-  query getExercisePlans($id: Int!, $type: String!){
-    getExercisePlans(id: $id, type: $type) {
+  query getExercisePlans($id: Int!) {
+    getExercisePlans(id: $id, type: "client") {
       regimen
     }
   }

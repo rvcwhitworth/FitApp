@@ -5,7 +5,9 @@
   "devDependencies": {
     "react-native-scripts": "1.10.0",
     "jest-expo": "25.0.0",
-    "react-test-renderer": "16.2.0"
+    "react-test-renderer": "16.2.0",
+    "babel-preset-es2015": "^6.24.1",
+    "gulp": "^3.9.1"
   },
   "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
   "scripts": {
@@ -43,8 +45,6 @@
     "jsonwebtoken": "^8.1.1",
     "knex": "^0.14.2",
     "mysql": "^2.15.0",
-    "nodemon": "^1.14.11",
-    "react": "16.2.0",
     "react-apollo": "^2.0.4",
     "react-native": "0.52.0",
     "react-native-calendars": "^1.16.1",
@@ -56,7 +56,6 @@
     "react-navigation": "^1.0.0-beta.27",
     "tcomb-form-native": "^0.6.11",
     "underscore": "^1.8.3",
-    "axios": "^0.17.1",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
@@ -89,9 +88,5 @@
     "utf7": "^1.0.2",
     "webpack": "^3.10.0",
     "webpack-dev-middleware": "^2.0.4"
-  },
-    "devDependencies": {
-    "babel-preset-es2015": "^6.24.1",
-    "gulp": "^3.9.1"
   }
 }

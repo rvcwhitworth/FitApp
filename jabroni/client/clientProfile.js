@@ -51,7 +51,6 @@ class Profile extends React.Component {
   }
 
   render() {
-    console.log('profile nav: ', this.props.nav);
     return ( 
       <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>
         <View style={{flex:1}}>

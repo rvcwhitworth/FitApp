@@ -43,8 +43,7 @@ class WorkoutScreen extends React.Component {
       this.props.client.query({
         query: planQuery,
         variables: {
-          id: this.state.user.id,
-          type: this.state.user.type
+          id: this.state.user.id
         }
       })
       .then(({data}) => {
@@ -131,7 +130,7 @@ class WorkoutScreen extends React.Component {
           <SVG />
         </View>
         {!this.state.dailyWorkout || !this.state.displaySet ? (<View><Text>Loading workout data</Text></View>) : (
-        <View style={{flex: 8, alignItems: 'center'}}>
+        <View style={{flex: 9, alignItems: 'center'}}>
           <Text style={styles.header}>
             Your Daily Workout
           </Text>
@@ -216,8 +215,8 @@ const styles = StyleSheet.create({
 })
 
 const planQuery = gql`
-query getExercisePlans($id: Int!, $type: String!){
-  getExercisePlans(id: $id, type: $type) {
+query getExercisePlans($id: Int!){
+  getExercisePlans(id: $id, type: "client") {
     regimen
   }
 }`
