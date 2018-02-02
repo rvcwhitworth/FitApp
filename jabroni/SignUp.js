@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Alert, StyleSheet, Text, View, Button, ScrollView, TouchableHighlight, AsyncStorage } from 'react-native';
 import { StackNavigator, TabNavigator, NavigationActions } from 'react-navigation';
 import { graphql, ApolloProvider } from 'react-apollo';
@@ -10,7 +11,7 @@ var Form = t.form.Form;
 const resetAction = NavigationActions.reset({
   index: 0,
   actions: [
-    NavigationActions.navigate({ routeName: 'clientHome'})
+    NavigationActions.navigate({ routeName: 'clientHome'})    
   ]
 })
 
