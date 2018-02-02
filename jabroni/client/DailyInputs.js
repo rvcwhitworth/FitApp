@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TextInput, StyleSheet, Dimensions } from 'react-native'
+import { View, Text, TextInput, StyleSheet, Dimensions, Button } from 'react-native'
 import Chat from '../utilities/chatIcon'
 import FooterNav from './FooterNav.js'
 import SVG from '../SVG/svg5Bottom.js'
@@ -12,7 +12,16 @@ class DailyInputs extends React.Component {
 
     this.state = {
       color: '#9575CD',
+      weight: '',
+      BodyFatPer: '',
+      height: '',
+      wasit: '',
+      hip: '',
+      neck: ''
     }
+    this.handleInputs = this.handleInputs.bind(this)
+    this.Calculate = this.Calculate.bind(this)
+    this.fakeItTillYouMakeIt = this.fakeItTillYouMakeIt.bind(this)
   }
 
   componentDidMount() {
@@ -22,63 +31,94 @@ class DailyInputs extends React.Component {
     nav.onNavigateShouldAllow(() => {
        return true;
     });
-
-    nav.onNavigateUpStartedListener(({interpolation, start, end, isBack, isMain}) => {
       this.props.nav.cleanUp()
-      console.log('INPUTS')
-      console.log('inside LeftStartedListener')
-      console.log('interpolation', interpolation)
-      console.log('start', start)
-      console.log('end', end)
-      console.log('isBack', isBack)
-      console.log('isMain', isMain)
-      isBack = false;
-      return isBack
-      if(isBack && !isMain) {
-        console.log('what')
-      } else if(isBack) {
-        console.log('the?')
-      }
-    })
 
-    nav.onNavigateUpCompletedListener(({completed, isBack}) => {
-      console.log('INPUTS')
-      console.log('completed', completed)
-      console.log('isBack', isBack)
-      if(!completed && isBack) {
-        this.setState({color: '#9575CD'})
-      }
-    })
-
-    nav.onNavigateRightStartedListener(({isBack, isMain}) => {
-      console.log('INPUTS')
-      console.log('isBack', isBack)
-      console.log('isMain', isMain)
-      if(!isMain) {
-        this.setState({color: 'transparent'})
-      }
-    })
-
-    nav.onNavigateRightCompletedListener(({completed}) => {
-      console.log('INPUTS')
-      if(completed) {
-        this.setState({color: '#9575CD'})
-      }
-    })
   }
 
   componentWillUnmount() {
     this.props.nav.cleanUp()
   }
 
+  handleInputs(text, id){
+    var objCreate = () => {
+      var obj = {}
+      obj[id] = text
+      return obj
+    }
+    this.setState(objCreate)
+  }
+
+  Calculate(){
+    var height = Number(this.state.height)
+    var bfPercent = 495/(1.29579-.35004 * Math.log10(Number(this.state.waist)*2.54 + Number(this.state.hip)*2.54 - Number(this.state.neck)*2.54) + .22100*Math.log10(height*2.54)) - 450
+    bfPercent = bfPercent.toFixed(2)
+    this.setState({
+      BodyFatPer: bfPercent
+    })
+  }
+
+  fakeItTillYouMakeIt(){
+    this.setState({
+      color: '#9575CD',
+      weight: '',
+      BodyFatPer: '',
+      height: '',
+      wasit: '',
+      hip: '',
+      neck: ''
+    })
+  }
+
   render() {
     return (
       <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>
-      <View style={{flex:1}}>
-      <SVG />
-      </View>
         <View style={styles.list}>
-          <Text style={{margin: 10, height: 50, paddingLeft: 5, paddingTop: 20}}>This is where our diet for the day would be </Text>
+          <SVG />
+          <Text style={{margin: 10, height: 50, paddingLeft: 5, paddingTop: 20}}>How are you doing today?</Text>
+
+          <TextInput style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          placeholder='Enter Weight Here'
+          onChangeText={(text) => this.handleInputs(text, 'weight')}
+          value={this.state.weight} />
+
+          <TextInput style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          placeholder='Enter Body Fat Percentage Here'
+          onChangeText={(text) => this.handleInputs(text, 'BodyFatPer')}
+          value={this.state.BodyFatPer} />
+
+          <Button style={{marginTop: 10}}title="Save your measurments" onPress={this.fakeItTillYouMakeIt}/>
+
+          <View> 
+          <Text style={{margin: 10, height: 50, paddingLeft: 5, paddingTop: 20}}>Body Fat Percentage Calculator</Text>
+
+          <TextInput style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          placeholder='Enter Weight Here (Lbs)'
+          onChangeText={(text) => this.handleInputs(text, 'weight')}
+          value={this.state.weight} />
+
+          <TextInput style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          placeholder='Enter Height Here (Inches)'
+          onChangeText={(text) => this.handleInputs(text, 'height')}
+          value={this.state.height} />
+
+          <TextInput style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          placeholder='Enter Waist Measurment Here (Inches)'
+          onChangeText={(text) => this.handleInputs(text, 'waist')}
+          value={this.state.waist} />
+          </View>
+
+          <TextInput style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          placeholder='Enter Hip Measurment Here (Inches)'
+          onChangeText={(text) => this.handleInputs(text, 'hip')}
+          value={this.state.hip} />
+
+          <TextInput style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          placeholder='Enter Neck Measurment Here (Inches)'
+          onChangeText={(text) => this.handleInputs(text, 'neck')}
+          value={this.state.neck} />
+
+          <Button style={{marginTop: 10}}title="Calculate Your Body Composition!" onPress={this.Calculate}/>
+
           <Chat nav={this.props.nav}/>
         </View>
         <FooterNav nav={this.props.nav} index={0}/>

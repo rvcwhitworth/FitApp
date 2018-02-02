@@ -12,6 +12,10 @@ class FooterNav extends React.Component {
       this.updateIndex = this.updateIndex.bind(this)
     }
 
+    componentWillReceiveProps(nextProps){
+      this.setState({selectedIndex: nextProps.index})
+    }
+
     updateIndex (selectedIndex) {
        const buttons = ['Home', 'Plan', 'Data', 'Photos', 'Team']
       if(this.state.selectedIndex !== selectedIndex){
