@@ -36,14 +36,12 @@ class Chat extends React.Component {
     }
     this.touch = this.touch.bind(this)
   }
-  // componentDidMount() {
-  //   const { nav } = this.props;
+  componentDidMount() {
+    const { nav } = this.props;
 
-  //   // nav.onNavigateShouldAllow(() => {
-  //   //    return true;
-  //   // });
+    console.log('CHAT PROPS', this.props)
 
-  // }
+  }
   touch(room_id){
     database.ref('/rooms/' + room_id + '/messages').on("value", (snapshot)=>{
       this.setState({messages: Object.values(snapshot.val())}, ()=>{
@@ -74,15 +72,16 @@ class Chat extends React.Component {
                 
                 ()=>{this.touch(room.room_id)}
 
-              }
-              />
+              } />
             }
           } )}
         </View>
+        <Button title='Go Back' onPress={() => this.props.nav.navigateBack()} />
         <View style={{display: this.state.showRoom}}>
           {this.state.messages.map( (message, idx)=>{
             return <Text key={idx} style={styles.message}> {message.user} :     {message.message}</Text>
           } )}
+
           <Form
             ref="form"
             type={this.state.Person}
