@@ -12,7 +12,8 @@ class Profile extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      profPic: require('../../images/tearingMeApart.jpeg')
+      profPic: require('../../images/muscle.gif'),
+      userInfo: {}
     }
     this.downloadPic = this.downloadPic.bind(this);
   }
@@ -23,10 +24,20 @@ class Profile extends React.Component {
       if ( err ) console.log('error retrieving UserInfo from AsyncStorage.');
       else {
         let id = JSON.parse(val).id;
+        this.setState({userInfo: JSON.parse(val)}); // store info for rendering
         // use id to download profile picture
-        imageStore.ref('/images/'+id+'/profilePicture').getDownloadURL().then((url) => {
-          this.downloadPic(url);
-        });
+        AsyncStorage.getItem('@FitApp:profilePicture', (err, val) => {
+          if ( err ) {console.log('error retrieving profile picture from async storage.')}
+          else {
+            if ( !val ) {
+              imageStore.ref('/images/'+id+'/profilePicture').getDownloadURL().then((url) => {
+                this.downloadPic(url);
+              });
+            } else {
+              this.setState({ profPic: { uri: `data:image/jpg;base64,${val}`}})
+            }
+          }
+        })
       }
     })
   }
@@ -61,7 +72,7 @@ class Profile extends React.Component {
           <Image style={styles.circle} source={this.state.profPic} />
         </TouchableOpacity>
           <View style={{flex: 2}}>
-            <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center'}}>PROFILE</Text>
+            <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center'}}>{this.state.userInfo.fullName}</Text>
             <Text style={{padding: 5, textAlign:'center'}}>Swipe left for your diet!</Text>
             <Text style={{padding: 5, textAlign:'center'}}>Swipe right for your daily inputs and progress stuff!</Text>
             <Chat nav={this.props.nav}/>
