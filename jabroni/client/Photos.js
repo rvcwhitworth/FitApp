@@ -6,7 +6,7 @@ import {
 	AsyncStorage,
 	Image,
 	StyleSheet,
-	Button
+	Button,
 } from "react-native";
 import NavFooter from "./FooterNav.js";
 import Chat from "../utilities/chatIcon.js";
@@ -26,6 +26,7 @@ class Photos extends React.Component {
 		this.downloadPic = this.downloadPic.bind(this);
 		this.next = this.next.bind(this);
 		this.prev = this.prev.bind(this);
+		this.setProfPic = this.setProfPic.bind(this);
 	}
 
 	async componentWillMount() {
@@ -44,8 +45,7 @@ class Photos extends React.Component {
 							for (var key in obj) {
 								fileNames.push(obj[key].name);
 							}
-							// look up said files from the imageStore and store them in state.
-							console.log("images to grab from imageStore: ", fileNames);
+							// download files from the imageStore and store them in state.
 							fileNames.forEach(name => {
 								let url = imageStore
 									.ref("images/" + this.state.userID.toString() + "/" + name)
@@ -72,6 +72,15 @@ class Photos extends React.Component {
 		xhr.send();
 	}
 
+	setProfPic(e) {
+		e.preventDefault();
+		// use this.state.index to write current photo to asyncStorage:
+		let pic = this.state.photos[this.state.index];
+		AsyncStorage.setItem('@FitApp:ProfPic', this.state.photos[this.state.index][1]).then(() => {
+			console.log('go check out your new profile picture.')
+    }).catch((err) => console.error('Error writing profile picture to storage', err))
+	}
+
 	next(e) {
 		e.preventDefault();
 		let i = this.state.index;
@@ -92,7 +101,7 @@ class Photos extends React.Component {
 
 	render() {
 		const { width, height } = Dimensions.get("window");
-		const curr = this.state.photos[this.state.index]; // a tuple representing the image/timestamp currently being displayed
+		const curr = this.state.photos[this.state.index]; // a tuple representing the [timestamp,image] currently being displayed
 		return (
 			<View
 				style={{
@@ -110,6 +119,7 @@ class Photos extends React.Component {
 						</View>
 					) : (
 						<View style={{width: "50%", height: "50%", justifyContent: 'center'}}>
+							<Button onPress={this.setProfPic} title="set as profile picture" />
 							<Image
 								source={{ uri: `data:image/jpg;base64,${curr[1]}` }}
 								style={{ flex: 1, width: "100%", height: "100%", resizeMode: "contain" }}
