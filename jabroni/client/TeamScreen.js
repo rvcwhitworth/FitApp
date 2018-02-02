@@ -46,14 +46,15 @@ class TeamScreen extends React.Component {
 
     return (
     <View style={{flexDirection: 'column', width:width, height:height, backgroundColor: 'white'}}>
-      <View style={{flex:1, flexDirection: 'row', justifyContent: 'center'}}>
-        <SearchBar lightTheme style={{height: 40}} clearIcon={{color: '#86939e', name: 'close'}} 
-          placeholder="find spotters" onChangeText={(text) => this.setState({searchTerm: text})} 
-          onClearText={() => this.setState({searchTerm: ''})} ref={searchBar => this.searchBar = searchBar}
-        />
-        <Button onPress={this.search} title="search" />
+      <View style={{flex: 1}}>
+        <View style={{flex:1, flexDirection: 'row', justifyContent: 'center'}}>
+          <SearchBar lightTheme style={{height: 40}} clearIcon={{color: '#86939e', name: 'close'}} 
+            placeholder="find spotters" onChangeText={(text) => this.setState({searchTerm: text})} 
+            onClearText={() => this.setState({searchTerm: ''})} ref={searchBar => this.searchBar = searchBar}
+          />
+          <Button onPress={this.search} title="search" />
+        </View>
       </View>
-
       <View>
         <Text>
         {this.state.searchResults[this.state.searchResults.length-1].fullName}
