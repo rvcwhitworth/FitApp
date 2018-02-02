@@ -84,8 +84,7 @@ class DietScreen extends React.Component {
       this.props.client.query({
         query: dietQuery,
         variables: {
-          id: this.state.user.id,
-          type: this.state.user.type
+          id: this.state.user.id
         }
       })
       .then(({data}) => {
@@ -246,8 +245,8 @@ const styles = StyleSheet.create({
 })
 
 const dietQuery = gql`
-query getDietPlans($id: Int!, $type: String!){
-  getDietPlans(id: $id, type: $type) {
+query getDietPlans($id: Int!){
+  getDietPlans(id: $id, type: "client") {
     diet
     trainer {
       fullName
