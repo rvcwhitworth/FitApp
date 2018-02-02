@@ -18,6 +18,7 @@ import TrainerFeed from './trainer/trainerFeed.js'
 import Camera from './client/camera.js'
 import WorkoutPlans from './trainer/trainerPlans.js'
 import Roster from './trainer/trainerRoster.js'
+import DataDailyWorkouts from './client/dataDailyWorkouts.js'
 
 
 const ProfileNavigator = (type) => {
@@ -96,10 +97,17 @@ return new SwipeNavigator({
     screen: Data,
     color: '#FFFFFF',
     type: 'over',
-    top: 'DataDiet',
-    bottom: 'DataBodyComposition'
+    right: 'DataDiet',
+    left: 'DataDailyWorkouts',
+    bottom: 'DataBodyComposition',
+    top: 'LogOut'
   },
 
+  DataDailyWorkouts: {
+    screen: DataDailyWorkouts,
+    color: '#FFFFFF',
+    type: 'over'
+  },
   //THIRD TAB SET (PLAN)
   Plan: {
     screen: PlanScreen,
