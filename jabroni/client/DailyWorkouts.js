@@ -43,8 +43,7 @@ class WorkoutScreen extends React.Component {
       this.props.client.query({
         query: planQuery,
         variables: {
-          id: this.state.user.id,
-          type: this.state.user.type
+          id: this.state.user.id
         }
       })
       .then(({data}) => {
@@ -216,8 +215,8 @@ const styles = StyleSheet.create({
 })
 
 const planQuery = gql`
-query getExercisePlans($id: Int!, $type: String!){
-  getExercisePlans(id: $id, type: $type) {
+query getExercisePlans($id: Int!){
+  getExercisePlans(id: $id, type: "client") {
     regimen
   }
 }`
