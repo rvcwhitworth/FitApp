@@ -1,18 +1,18 @@
 import React from 'react';
-import { Alert, StyleSheet, Text, View, Button, ScrollView, TouchableHighlight } from 'react-native';
-import { StackNavigator, TabNavigator } from 'react-navigation';
+import { Alert, StyleSheet, Text, View, Button, ScrollView, TouchableHighlight, AsyncStorage } from 'react-native';
+import { StackNavigator, TabNavigator, NavigationActions } from 'react-navigation';
 import { graphql, ApolloProvider } from 'react-apollo';
 import gql from 'graphql-tag';
 import { FormLabel, FormInput, FormValidationMessage, ButtonGroup } from 'react-native-elements'
 var t = require('tcomb-form-native');
 var Form = t.form.Form;
 
-// const resetAction = NavigationActions.reset({
-//   index: 0,
-//   actions: [
-//     NavigationActions.navigate({ routeName: 'clientHome'})
-//   ]
-// })
+const resetAction = NavigationActions.reset({
+  index: 0,
+  actions: [
+    NavigationActions.navigate({ routeName: 'clientHome'})
+  ]
+})
 
 var Email = t.refinement(t.String, function (s) {
   return /@/.test(s);

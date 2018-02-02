@@ -13,7 +13,7 @@ class FooterNav extends React.Component {
     }
 
     updateIndex (selectedIndex) {
-       const buttons = ['Home', 'Plan', 'Data', 'Team']
+       const buttons = ['Home', 'Plan', 'Data', 'Photos', 'Team']
       if(this.state.selectedIndex !== selectedIndex){
       this.setState({selectedIndex}, () => {
         this.props.nav.navigate(buttons[selectedIndex])
@@ -21,7 +21,7 @@ class FooterNav extends React.Component {
       }
     }
   render() {
-    const buttons = ['Home', 'Plan', 'Data', 'Team'];
+    const buttons = ['Home', 'Plan', 'Data', 'Photos', 'Team'];
 
     return (
         <ButtonGroup
