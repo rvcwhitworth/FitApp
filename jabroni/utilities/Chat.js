@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, Text, TextInput, StyleSheet, TouchableHighlight, AsyncStorage } from 'react-native'
-import { graphql, ApolloProvider, compose } from 'react-apollo';
+import { View, Text, TextInput, StyleSheet, TouchableHighlight, AsyncStorage, ScrollView } from 'react-native'
+import { graphql, ApolloProvider, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Button, Divider } from 'react-native-elements'
 import firebase from './firebase.js'
@@ -23,6 +23,7 @@ var Form = t.form.Form;
 
 var database = firebase.database();
 
+
 class Chat extends React.Component {
   constructor(props){
     super(props);
@@ -30,22 +31,52 @@ class Chat extends React.Component {
       showRoom : "none",
       showRooms : "flex",
       messages : [],
-       Person: t.struct({
+      rooms: [],
+      roomID: '',
+      Person: t.struct({
           Message: t.String,
         }),
     }
     this.touch = this.touch.bind(this)
+    this.backToRooms = this.backToRooms.bind(this)
+    this.sendMessage = this.sendMessage.bind(this)
+    this.getId = this.getId.bind(this)
+    this.sendMessage = this.sendMessage.bind(this)
   }
   componentDidMount() {
     const { nav } = this.props;
 
-    console.log('CHAT PROPS', this.props)
+    // console.log('this ,bdfwhkfwejfkfnjounted roigjht')
+    this.props.client.query({
+      query: getChatRooms,
+      variables: {
+        id: 2
+      }
+  }).then((val) => {
+    console.log(val, typeof val)
+    this.setState({
+      rooms: val.data.getChatRooms
+    }, () => this.getId())
+  })
+}
 
-  }
+  getId(){
+      AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
+      if (err) console.log(err);
+      else {
+        if(val){
+        var obj = JSON.parse(val)
+        this.setState({user: obj})
+        }
+      }
+    })
+}
+
   touch(room_id){
     database.ref('/rooms/' + room_id + '/messages').on("value", (snapshot)=>{
+      console.log('hey you', snapshot.val())
       this.setState({messages: Object.values(snapshot.val())}, ()=>{
-        this.setState({showRooms: "none", showRoom: "flex"})
+        this.setState({showRooms: "none", showRoom: "flex", roomID: room_id})
       })
     }, 
     function(errorObject){
@@ -53,17 +84,31 @@ class Chat extends React.Component {
     })
   }
 
-  render() {
-    if(this.props.data.loading){
-      return (<Text>Loading....</Text>)
+  sendMessage(text){
+    var value = this.refs.form.getValue();
+    console.log(this.state.roomID)
+    var obj = {
+      "message" : value["Message"],
+      "user" : this.state.user.fullName
     }
+    var ref = database.ref('/rooms/' + this.state.roomID + '/messages').push(obj)
+  }
+
+  backToRooms(){
+    this.setState({
+      messages: []
+    })
+  }
+
+  render() {
+    console.log('this is the state', this.state)
+
+   if(this.state.messages.length < 1){
+
     return (
       <View style={styles.container}>
-
         <View style={{marginTop: 50, display: this.state.showRooms}}>
-          {/* <Text> Maybe this could be our chat? <Text>{console.log(">>>+++>>>",this.props.data.getChatRooms[0])}</Text></Text> */}
-          {this.props.data.getChatRooms.map( (room, idx)=>{
-            console.log(room)
+          {this.state.rooms.map( (room, idx)=>{
             if(room.user.fullName){
               return <Button
               key={idx}
@@ -75,8 +120,14 @@ class Chat extends React.Component {
               } />
             }
           } )}
-        </View>
         <Button title='Go Back' onPress={() => this.props.nav.navigateBack()} />
+        </View>
+        </View>
+        )} 
+
+      else{
+      return(     
+       <ScrollView style={styles.container}>
         <View style={{display: this.state.showRoom}}>
           {this.state.messages.map( (message, idx)=>{
             return <Text key={idx} style={styles.message}> {message.user} :     {message.message}</Text>
@@ -84,14 +135,15 @@ class Chat extends React.Component {
 
           <Form
             ref="form"
-            type={this.state.Person}
-          />
-          <TouchableHighlight style={styles.button} onPress={()=>{console.log("press")}} underlayColor='red'>
+            type={this.state.Person} />
+          <TouchableHighlight style={styles.button} onPress={()=>{this.sendMessage()}} underlayColor='red'>
             <Text style={styles.buttonText}>Send</Text>
           </TouchableHighlight>
+          <Button title='Go Back' onPress={() => this.backToRooms()} />
         </View>
-      </View>
+      </ScrollView>
     );
+    }
   }
 }
 
@@ -99,6 +151,10 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     flex: 1,
+    paddingVertical: 20
+  },
+  contentContainer: {
+    paddingVertical: 20
   },
   message: {
     borderColor: "red",
@@ -123,6 +179,7 @@ const styles = StyleSheet.create({
   
 })
 
+
 const getChatRooms = gql`
 {
   getChatRooms(id: 2) {
@@ -135,4 +192,4 @@ const getChatRooms = gql`
   }
 }`
 
-export default graphql(getChatRooms)(Chat)
+export default withApollo(Chat);
