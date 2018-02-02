@@ -131,7 +131,7 @@ class WorkoutScreen extends React.Component {
           <SVG />
         </View>
         {!this.state.dailyWorkout || !this.state.displaySet ? (<View><Text>Loading workout data</Text></View>) : (
-        <View style={{flex: 8, alignItems: 'center'}}>
+        <View style={{flex: 9, alignItems: 'center'}}>
           <Text style={styles.header}>
             Your Daily Workout
           </Text>
