@@ -61,7 +61,7 @@ class TeamScreen extends React.Component {
         {this.state.searchResults[this.state.searchResults.length-1].profile_data}
         </Text>
       </View>
-      <FooterNav nav={this.props.nav} index={3} />
+      <FooterNav nav={this.props.nav} index={4} />
     </View>);
   }
 }

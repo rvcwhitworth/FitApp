@@ -18,6 +18,7 @@ import TrainerFeed from './trainer/trainerFeed.js'
 import Camera from './utilities/camera.js'
 import WorkoutPlans from './trainer/trainerPlans.js'
 import Roster from './trainer/trainerRoster.js'
+import Photos from './client/Photos.js'
 
 
 const ProfileNavigator = (type) => {
@@ -127,6 +128,11 @@ return new SwipeNavigator({
     screen: Camera,
     type: 'push',
   },
+
+  Photos: {
+    screen: Photos,
+    type: 'over'
+  }
 
 })()
 }

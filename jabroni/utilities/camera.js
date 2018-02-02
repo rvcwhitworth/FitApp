@@ -16,13 +16,14 @@ import firebase from './firebase.js'
 
 // const firebaseApp = firebase.initializeApp(firebaseConfig);
 const imageStore = firebase.storage().ref().child('images');
+const database = firebase.database();
 
 export default class CameraExample extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       hasCameraPermission: null,
-      type: Camera.Constants.Type.back,
+      type: Camera.Constants.Type.front,
       userID: null,
       reviewMode: false,
       pic: null
@@ -86,7 +87,11 @@ export default class CameraExample extends React.Component {
     // save image to fireStore
     let address = folder.child(fileName);
     address.putString(this.state.pic.base64).then((snapshot) => {
-      console.log('successfully uploaded image data.');
+      // save reference to file in firebase database so it can be downloaded later:
+      database.ref('imgURLs').child(this.state.userID.toString()).push().set({
+        name: fileName
+      });
+
       this.setState({
         reviewMode: false,
         pic: null
@@ -97,7 +102,6 @@ export default class CameraExample extends React.Component {
   }
 
   render() {
-    console.log('camera nav ', this.props.nav);
     const { hasCameraPermission } = this.state;
     const { width, height } = Dimensions.get('window');
     if (hasCameraPermission === null) {
@@ -109,10 +113,10 @@ export default class CameraExample extends React.Component {
         <View style={{flex: 1, width: width, height: height}}>
           <Image style={{flex: 1, width: width, height: width}} source={{uri:this.state.pic.uri}} />
           <View style={{position: 'absolute', flexDirection: 'row', alignSelf: 'flex-start'}}>
-            <Button onPress={this.cancel} title="X" color="red"/>
+            <Button onPress={this.cancel} title="Delete" color="red"/>
           </View>
           <View style={{position: 'absolute', flexDirection: 'row', alignSelf: 'flex-end'}}>
-            <Button onPress={this.save} title="save" color="green"/>
+            <Button onPress={this.save} title="Save" color="green"/>
           </View>
         </View>
         )
