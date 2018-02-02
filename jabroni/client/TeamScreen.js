@@ -207,13 +207,5 @@ const styles = StyleSheet.create({
   }
 })
 
-const styles = StyleSheet.create({
-  circle: {
-    height: 50,
-    width: 50,
-    borderRadius: 50/2
-  }
-})
-
 export default withApollo(TeamScreen)
 
