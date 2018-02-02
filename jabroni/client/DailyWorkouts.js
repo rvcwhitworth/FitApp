@@ -18,10 +18,6 @@ import FooterNav from './FooterNav.js'
 import SVG from '../SVG/svg5Left.js'
 const { width, height } = Dimensions.get('window');
 
-// defaults if async storage user id can't be loaded
-var USER_ID = 1;
-var USER_TYPE = 'client'
-
 class WorkoutScreen extends React.Component {
   constructor(props) {
     super(props)
@@ -155,7 +151,6 @@ class WorkoutScreen extends React.Component {
             <Picker.Item label="Sunday" value={6} />
           </Picker>
 
-
           {this.state.dailyWorkout !== "OFF" ? Object.keys(this.state.dailyWorkout).map((workoutType, i) => {
             return (
               <View style={{flex: 1, marginBottom: 5}} key={i}>
@@ -209,7 +204,8 @@ const styles = StyleSheet.create({
 
   header : {
     textAlign: 'center',
-    fontSize: 28
+    fontSize: 28,
+    fontWeight: 'bold'
   },
 
   list: {

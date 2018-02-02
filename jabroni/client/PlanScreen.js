@@ -9,6 +9,7 @@ import FooterNav from './FooterNav.js'
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 
 const { width, height } = Dimensions.get('window');
+const today = new Date();
 
 class PlanScreen extends React.Component {
   constructor(props) {
@@ -17,11 +18,9 @@ class PlanScreen extends React.Component {
     this.state = {
       progress: 0,
       loading: true,
-      selectedDay: new Date().getDay(),
-      data: {
-        workoutData: '',
-        dietData: ''
-      },
+      selectedDay: today.getDay(),
+      selected: today.toISOString().split('T')[0],
+      data: {},
       items: {}
     }
     
@@ -43,7 +42,7 @@ class PlanScreen extends React.Component {
   	}
   }
 
-  componentWillMount () {
+  componentDidMount () {
     AsyncStorage.getItem('@FitApp:UserInfo')
     .then((userInfoString) => {
       this.state.user = JSON.parse(userInfoString);
@@ -103,61 +102,33 @@ class PlanScreen extends React.Component {
   onDayPress(day) {
     this.setState({
       selected: day.dateString,
-      selectedDay: new Date(day.timestamp).getDay()
+      selectedDay: day.day - 1
     });
   }
 
   loadItems (startDate) {
-    // setTimeout(() => {
-    //   var currentDate = Object.assign({}, startDate);
-    //   var items = {};
-    //   while(currentDate.day <= 31) {
-    //     console.log('l 115 got here!, getDay', startDate, currentDate, new Date(currentDate.year, currentDate.month - 1, currentDate.day).getDay());
-    //     items[currentDate.dateString] = 
-    //       [
-    //         {
-    //           workout: this.state.data.workoutData[new Date(currentDate.year, currentDate.month - 1, currentDate.day).getDay()], 
-    //           diet: this.state.data.dietData[new Date(currentDate.year, currentDate.month - 1, currentDate.day).getDay()]
-    //         }
-    //       ]
-        
-    //     currentDate.day++;
-    //     currentDate.dateString = 
-    //       currentDate.year + '-' + 
-    //       (currentDate.month.toString().length === 1 ? '0' + currentDate.month.toString() : currentDate.month) + '-' + 
-    //       (currentDate.day.toString().length === 1 ? '0' + currentDate.day.toString() : currentDate.day);
-    //   }
-  
-    //   this.setState({items}, () => console.log('l 129 got here', this.state.items));
-    // }, 1000);
-
     setTimeout(() => {
-      for (let i = -15; i < 85; i++) {
-        const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-        const strTime = this.timeToString(time);
-        if (!this.state.items[strTime]) {
-          this.state.items[strTime] = [];
-          const numItems = Math.floor(Math.random() * 5);
-          for (let j = 0; j < numItems; j++) {
-            this.state.items[strTime].push({
-              name: 'Item for ' + strTime,
-              height: Math.max(50, Math.floor(Math.random() * 150))
-            });
-          }
-        }
+      var currentDate = Object.assign({}, startDate);
+      var items = {};
+      while(currentDate.day <= 31) {
+        console.log('l 115 got here!, getDay', startDate, currentDate, new Date(currentDate.year, currentDate.month - 1, currentDate.day).getDay());
+        items[currentDate.dateString] = 
+          [
+            {
+              workout: this.state.data.workoutData[new Date(currentDate.year, currentDate.month - 1, currentDate.day).getDay()], 
+              diet: this.state.data.dietData[new Date(currentDate.year, currentDate.month - 1, currentDate.day).getDay()]
+            }
+          ]
+        
+        currentDate.day++;
+        currentDate.dateString = 
+          currentDate.year + '-' + 
+          (currentDate.month.toString().length === 1 ? '0' + currentDate.month.toString() : currentDate.month) + '-' + 
+          (currentDate.day.toString().length === 1 ? '0' + currentDate.day.toString() : currentDate.day);
       }
-      //console.log(this.state.items);
-      const newItems = {};
-      Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
-      this.setState({
-        items: newItems
-      });
+  
+      this.state.items = items
     }, 1000);
-  }
-
-   timeToString(time) {
-    const date = new Date(time);
-    return date.toISOString().split('T')[0];
   }
 
   isValidDate(startDate, currentDate) {
@@ -165,52 +136,65 @@ class PlanScreen extends React.Component {
     return new Date(currentDate.year, currentDate.month - 1, currentDate.day).getMonth() !== new Date(startDate.timestamp).getMonth()
   }
 
-  renderItem ({diet, workout}) {
-    // return (
-    //   <View style={styles.item}>
-    //     <Text>Workout: {JSON.stringify(item.workout)}</Text>
-    //     <Text>Diet: {JSON.stringify(item.diet)}</Text>
-    //   </View>
-    // );
-
+  renderItem ({workout, diet}) {
     return (
-      <View style={[styles.item, {height: item.height}]}><Text>{item.name}</Text></View>
+      <View style={styles.item}>
+        <Text>Workout: {JSON.stringify(workout)}</Text>
+        <Text>Diet: {JSON.stringify(diet)}</Text>
+      </View>
     );
   }
 
   renderEmptyDate () {
     return (
-      <View style={styles.emptyDate}><Text>This is empty date!</Text></View>
+      <View style={styles.emptyDate}><Text>This is an empty date!</Text></View>
     );
   }
 
   rowHasChanged (r1, r2) {
-    return r1.name !== r2.name;
+    return r1.workout !== r2.workout;
   }
 
   render(){
-    if (this.state.loading) return (<View><Text style={{textAlign: 'center'}}>Loading your data!</Text></View>);
+    if (this.state.loading || !this.state.data.workoutData || !this.state.data.dietData) {
+      return (<View><Text style={{textAlign: 'center'}}>Loading your data!</Text></View>);
+    }
+    var selectedWorkout = this.state.data.workoutData[this.state.selectedDay];
+    var selectedDiet = this.state.data.dietData[this.state.selectedDay];
     return (
       <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>
-      {/* <Calendar 
-        onDayPress={this.onDayPress}
-        hideExtraDays
-        markedDates={{[this.state.selected]: {selected: true}}}
-      />
-      <View style={styles.container}>
-        <Text>Workout: {JSON.stringify(this.state.data.workoutData[this.state.selectedDay])}</Text>
-        <Text>Diet: {JSON.stringify(this.state.data.dietData[this.state.selectedDay])}</Text>
-      </View> */}
-   
-      <Agenda 
-        items={this.state.items}
-        loadItemsForMonth={this.loadItems}
-        renderItem={this.renderItem}
-        renderEmptyDate={this.renderEmptyDate}
-        rowHasChanged={this.rowHasChanged}
-      />
+        <View style={{flex: 1}}>
+          <Calendar 
+            styles={styles.calendar}
+            onDayPress={this.onDayPress}
+            hideExtraDays
+            markedDates={{[this.state.selected]: {selected: true}}}
+          />
+          {console.log('selected!', selectedWorkout, selectedDiet)}
+          <View style={[styles.container, {justifyContent: 'space-around'}]}>
+            <Text style={styles.subHeader}>Workout:</Text>
+            {selectedWorkout === "OFF" ? <Text style={{fontSize: 14, textAlign: 'center'}}>Off day!</Text> :
+              Object.keys(selectedWorkout).map((workout, i) => {
+                return <Text style={{fontSize: 14, textAlign: 'center'}} key={workout+i}>{workout + ': ' + selectedWorkout[workout].frequency}</Text>
+              })}
+            <Text style={styles.subHeader}>Diet:</Text>
+              {Object.keys(selectedDiet).map((diet, i) => {
+                return <Text style={{fontSize: 14, textAlign: 'center'}} key={diet+i}>{(diet === 'calories' ? '' : diet + ': ') + selectedDiet[diet] + ' ' + (diet === 'calories' ? 'calories' : 'grams')}</Text>
+              })}
+          </View>
+      
+          {/* <Agenda 
+            items={this.state.items}
+            loadItemsForMonth={this.loadItems}
+            renderItem={this.renderItem}
+            renderEmptyDate={this.renderEmptyDate}
+            rowHasChanged={this.rowHasChanged}
+            minDate={today.getFullYear + '-' + today.getMonth + '-' + '01'}
+            maxDate={today.getFullYear + '-' + today.getMonth + '-' + '31'}
+          /> */}
 
-      <Chat nav={this.props.nav} />
+          <Chat nav={this.props.nav} />
+        </View>
       <FooterNav nav={this.props.nav} index={1} /> 
     </View>
     )
@@ -220,6 +204,7 @@ class PlanScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 2,
     flex: 1,
     backgroundColor: '#fff'
   },
@@ -235,6 +220,19 @@ const styles = StyleSheet.create({
     height: 15,
     flex:1,
     paddingTop: 30
+  },
+  calendar: {
+    borderTopWidth: 1,
+    paddingTop: 5,
+    borderBottomWidth: 1,
+    borderColor: '#eee',
+    height: 355,
+    paddingBottom: 10
+  },
+  subHeader: {
+    fontSize: 20,
+    textAlign: 'center',
+    fontWeight: 'bold'
   }
 });
 
