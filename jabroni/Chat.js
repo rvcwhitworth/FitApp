@@ -21,6 +21,14 @@ var Form = t.form.Form;
 
 // const firebaseApp = firebase.initializeApp(firebaseConfig);
 
+
+    // this.props.client.query({
+    //   query: q,
+    //   variables: {
+    //     username: values.username.toLowerCase(),
+    //     password: values.password
+    //   }
+
 var database = firebase.database();
 
 class Chat extends React.Component {
@@ -35,15 +43,20 @@ class Chat extends React.Component {
         }),
     }
     this.touch = this.touch.bind(this)
+    console.log('this ,bdfwhkfwejfkfnjounted roigjht')
   }
-  // componentDidMount() {
-  //   const { nav } = this.props;
+  componentWillMount() {
+    console.log('this ,bdfwhkfwejfkfnjounted roigjht')
+    // AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
+    //   if (err) console.log(err);
+    //   else {
+    //     if(val){
+    //     console.log('who is dis?????', val)
+    //     }
+    //   }
+    // })
 
-  //   // nav.onNavigateShouldAllow(() => {
-  //   //    return true;
-  //   // });
-
-  // }
+  }
   touch(room_id){
     database.ref('/rooms/' + room_id + '/messages').on("value", (snapshot)=>{
       this.setState({messages: Object.values(snapshot.val())}, ()=>{
@@ -56,6 +69,7 @@ class Chat extends React.Component {
   }
 
   render() {
+    console.log('FULLLLLLLLLLBSSSSS')
     if(this.props.data.loading){
       return (<Text>Loading....</Text>)
     }
@@ -124,9 +138,22 @@ const styles = StyleSheet.create({
   
 })
 
+const q = gql`
+  query loginUser($username: String!, $password: String!){
+    loginUser(username: $username, password: $password) {
+      id
+      fullName
+      username
+      type
+      email
+      profile_data
+    }
+  }
+`
+
 const getChatRooms = gql`
-{
-  getChatRooms(id: 2) {
+  query getChatRooms($id: Int!) {
+    getChatRooms(id: $id){
     id
     room_id
     user{
