@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Button, Dimensions, Image } from 'react-native'
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Button, Dimensions, Image, AsyncStorage } from 'react-native'
 import Chat from '../utilities/chatIcon'
 import FooterNav from './FooterNav.js'
 import SVG from '../SVG/svg5Center.js'
@@ -9,6 +9,20 @@ const { width, height } = Dimensions.get('window');
 class Profile extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      profPic: require('../../images/tearingMeApart.jpeg')
+    }
+  }
+
+  componentWillMount() {
+    const profPic = AsyncStorage.getItem('@FitApp:ProfPic', (err, val) => {
+      if ( err ) console.log('error retrieving profile picture from AsyncStorage');
+      else {
+        this.setState({
+          profPic: { uri: `data:image/jpg;base64,${val}` }
+        });
+      }
+    });
   }
 
   componentDidMount() {
@@ -20,8 +34,13 @@ class Profile extends React.Component {
     this.props.nav.cleanUp()
   }
 
+  // AsyncStorage.setItem('@FitApp:UserInfo', JSON.stringify(data.loginUser))
+  //       .then(() => this.props.navigation.dispatch(resetAction))
+  //       .catch((err) => console.error('Error writing user info to storage', err))
+
   render() {
     console.log('profile nav: ', this.props.nav);
+    
     return ( 
       <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>
         <View style={{flex:1}}>
@@ -29,7 +48,7 @@ class Profile extends React.Component {
         </View>  
         <TouchableOpacity style={styles.circleContainer} onPress={this.onPress}>
           {/*<View style={styles.circle}/>*/}
-          <Image style={styles.circle} source={require('../../images/tearingMeApart.jpeg')} />
+          <Image style={styles.circle} source={this.state.profPic} />
         </TouchableOpacity>
           <View style={{flex: 2}}>
             <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center'}}>PROFILE</Text>
