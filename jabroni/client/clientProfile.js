@@ -3,8 +3,10 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, Button, Dimensions
 import Chat from '../utilities/chatIcon'
 import FooterNav from './FooterNav.js'
 import SVG from '../SVG/svg5Center.js'
+import firebase from '../utilities/firebase.js'
 
 const { width, height } = Dimensions.get('window');
+const imageStore = firebase.storage();
 
 class Profile extends React.Component {
   constructor(props) {
@@ -12,17 +14,31 @@ class Profile extends React.Component {
     this.state = {
       profPic: require('../../images/tearingMeApart.jpeg')
     }
+    this.downloadPic = this.downloadPic.bind(this);
   }
 
   componentWillMount() {
-    const profPic = AsyncStorage.getItem('@FitApp:ProfPic', (err, val) => {
-      if ( err ) console.log('error retrieving profile picture from AsyncStorage');
+    // read profile picture from firebase storage:
+    AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
+      if ( err ) console.log('error retrieving UserInfo from AsyncStorage.');
       else {
-        this.setState({
-          profPic: { uri: `data:image/jpg;base64,${val}` }
+        let id = JSON.parse(val).id;
+        // use id to download profile picture
+        imageStore.ref('/images/'+id+'/profilePicture').getDownloadURL().then((url) => {
+          this.downloadPic(url);
         });
       }
-    });
+    })
+  }
+
+  downloadPic(url, name) {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = "text";
+    xhr.onload = event => {
+      this.setState({ profPic: { uri: `data:image/jpg;base64,${xhr.response}` }});
+    };
+    xhr.open("GET", url);
+    xhr.send();
   }
 
   componentDidMount() {
@@ -34,13 +50,8 @@ class Profile extends React.Component {
     this.props.nav.cleanUp()
   }
 
-  // AsyncStorage.setItem('@FitApp:UserInfo', JSON.stringify(data.loginUser))
-  //       .then(() => this.props.navigation.dispatch(resetAction))
-  //       .catch((err) => console.error('Error writing user info to storage', err))
-
   render() {
     console.log('profile nav: ', this.props.nav);
-    
     return ( 
       <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>
         <View style={{flex:1}}>
