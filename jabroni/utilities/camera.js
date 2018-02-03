@@ -134,20 +134,19 @@ export default class CameraExample extends React.Component {
       : (
         <View style={{ flex: 1, width: width, height: height }}>
           <Camera style={{ flex: 1 }} type={this.state.type} ref={ref => {this.camera = ref;}} >
-            {this.state.saveMessageDisplay ? <Text style={{flex: 0, fontSize: 15, color: 'white'}}>Saved! </Text> : null }
-            <Button onPress={this.goBack} title="back" />
             <View
               style={{
                 flex: 1,
                 backgroundColor: 'transparent',
                 flexDirection: 'row',
+                justifyContent: 'space-between'
               }}>
+              <TouchableOpacity onPress={this.goBack} style={styles.backArrowContainer}>
+                <Image source={require('../../images/backArrow.png')} style={styles.backArrow}/>
+              </TouchableOpacity>
+              {this.state.saveMessageDisplay ? <Text style={{flex: 0, fontSize: 15, color: 'white', alignSelf: 'center', justifyContent: 'center'}}>Saved! </Text> : null }
               <TouchableOpacity
-                style={{
-                  flex: 0.1,
-                  alignSelf: 'flex-end',
-                  alignItems: 'center',
-                }}
+                style={styles.flipButtonContainer}
                 onPress={() => {
                   this.setState({
                     type: this.state.type === Camera.Constants.Type.back
@@ -155,13 +154,12 @@ export default class CameraExample extends React.Component {
                       : Camera.Constants.Type.back,
                   });
                 }}>
-                <Text
-                  style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
-                  {' '}Flip{' '}
-                </Text>
+                <Image source={require('../../images/flipCamera.png')} style={styles.flipButton}/>
               </TouchableOpacity>
             </View>
-            <Button onPress={this.snap} title="snap"/>
+            <TouchableHighlight style={styles.circleContainer} onPress={this.snap} activeOpacity={0.4}>
+              <View style={styles.circle} />
+            </TouchableHighlight>
           </Camera>
         </View>
       );
@@ -170,6 +168,47 @@ export default class CameraExample extends React.Component {
 }
 
 styles = StyleSheet.create({
+  flipButtonContainer: {
+    flex: 0,
+    alignItems: 'flex-end',
+    width: 50,
+    height: 50
+  },
+  flipButton: {
+    resizeMode: 'contain',
+    width: "100%",
+    height: "100%"
+  },
+  backArrowContainer: {
+    flex: 0,
+    justifyContent: 'flex-start',
+    width: 50,
+    height: 50
+  },
+  backArrow: {
+    flex: 0,
+    resizeMode: 'contain',
+    width: "100%",
+    height: "100%"
+  },
+  circleContainer: {
+    flex: 0,
+    flexDirection: 'row',
+    height: 50,
+    width: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
+    marginBottom: 5,
+    alignSelf: 'center'
+  },
+  circle: {
+    height: 50,
+    width: 50,
+    borderRadius: 25,
+    borderColor: "black",
+    borderWidth: 3,
+    backgroundColor: "#808080"
+  },
   buttonContainer: {
     flex: 1,
     justifyContent: 'flex-end'
