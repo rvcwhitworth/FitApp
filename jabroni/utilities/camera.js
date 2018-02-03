@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, TouchableHighlight, Dimensions, Button, Image, AsyncStorage, StyleSheet } from 'react-native';
+import { Text, View, TouchableOpacity, TouchableHighlight, Dimensions, Button, Image, AsyncStorage, StyleSheet, Alert } from 'react-native';
 import { Camera, Permissions } from 'expo';
 // import * as firebase from 'firebase';
 // import TOKENS from '../../TOKENS.js';
@@ -26,6 +26,7 @@ export default class CameraExample extends React.Component {
       type: Camera.Constants.Type.front,
       userID: null,
       reviewMode: false,
+      saveMessageDisplay: false,
       pic: null
     }
     this.goBack = this.goBack.bind(this);
@@ -80,6 +81,18 @@ export default class CameraExample extends React.Component {
 
   save(e) {
     e.preventDefault();
+    this.setState({saveMessageDisplay: true}, () => {
+      setTimeout(() => {
+        this.setState({saveMessageDisplay: false})
+      }, 2000);
+    });
+    // Alert.alert('photo saved!');
+
+    this.setState({
+      reviewMode: false,
+      pic: null
+    });
+
     // use id to set up path in firebase storage for this user's pictures
     let folder = imageStore.child(this.state.userID.toString());
     let fileName = this.state.pic.exif.DateTimeOriginal; // timestamp
@@ -92,10 +105,6 @@ export default class CameraExample extends React.Component {
         name: fileName
       });
 
-      this.setState({
-        reviewMode: false,
-        pic: null
-      });
     }).catch(err => {
       console.log('firebase save error: ', err);
     })
@@ -110,19 +119,22 @@ export default class CameraExample extends React.Component {
       return <Text>No access to camera</Text>;
     } else {
       return this.state.reviewMode ? (
-        <View style={{flex: 1, width: width, height: height, alignSelf: 'flex-end'}}>
-          <Image style={{flex: 1, width: width, height: width}} source={{uri:this.state.pic.uri}} />
-          <TouchableHighlight style={styles.deleteButtonContainer} onPress={this.cancel}>
-            <Image source={require('../../images/delete.png')} style={styles.deleteButton} />
-          </TouchableHighlight>
-          <TouchableHighlight onPress={this.save} style={styles.saveButtonContainer}>
-            <Image style={styles.saveButton} source={require('../../images/save.png')} color="green" />
-          </TouchableHighlight>
+        <View style={{flex: 2, width: width, height: height}}>
+          <View style={styles.buttonContainer}>
+            <Image style={{flex: 1, width: width, height: width}} source={{uri:this.state.pic.uri}} />
+            <TouchableHighlight style={styles.deleteButtonContainer} onPress={this.cancel}>
+              <Image source={require('../../images/delete.png')} style={styles.deleteButton} />
+            </TouchableHighlight>
+            <TouchableHighlight onPress={this.save} style={styles.saveButtonContainer}>
+              <Image style={styles.saveButton} source={require('../../images/save.png')} color="green" />
+            </TouchableHighlight>
+          </View>
         </View>
         )
       : (
         <View style={{ flex: 1, width: width, height: height }}>
           <Camera style={{ flex: 1 }} type={this.state.type} ref={ref => {this.camera = ref;}} >
+            {this.state.saveMessageDisplay ? <Text style={{flex: 0, fontSize: 15, color: 'white'}}>Saved! </Text> : null }
             <Button onPress={this.goBack} title="back" />
             <View
               style={{
@@ -158,6 +170,10 @@ export default class CameraExample extends React.Component {
 }
 
 styles = StyleSheet.create({
+  buttonContainer: {
+    flex: 1,
+    justifyContent: 'flex-end'
+  },
   saveButtonContainer: {
     flex: 0,
     position: 'absolute', 
