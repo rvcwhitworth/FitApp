@@ -12,7 +12,8 @@ class Profile extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      profPic: require('../../images/tearingMeApart.jpeg')
+      profPic: require('../../images/muscle.gif'),
+      userInfo: {},
     }
     this.downloadPic = this.downloadPic.bind(this);
   }
@@ -23,6 +24,7 @@ class Profile extends React.Component {
       if ( err ) console.log('error retrieving UserInfo from AsyncStorage.');
       else {
         let id = JSON.parse(val).id;
+        this.setState({userInfo: JSON.parse(val)}); // store info for rendering
         // use id to download profile picture
         imageStore.ref('/images/'+id+'/profilePicture').getDownloadURL().then((url) => {
           this.downloadPic(url);
@@ -56,14 +58,13 @@ class Profile extends React.Component {
         <View style={{flex:1}}>
           <SVG />
         </View>  
+        <Text style={styles.fullName}>{this.state.userInfo.fullName}</Text>
         <TouchableOpacity style={styles.circleContainer} onPress={this.onPress}>
-          {/*<View style={styles.circle}/>*/}
           <Image style={styles.circle} source={this.state.profPic} />
         </TouchableOpacity>
           <View style={{flex: 2}}>
-            <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center'}}>PROFILE</Text>
-            <Text style={{padding: 5, textAlign:'center'}}>Swipe left for your diet!</Text>
-            <Text style={{padding: 5, textAlign:'center'}}>Swipe right for your daily inputs and progress stuff!</Text>
+            <Text style={styles.textBox}>Swipe left for your diet!</Text>
+            <Text style={styles.textBox}>Swipe right for your daily inputs and progress stuff!</Text>
             <Chat nav={this.props.nav}/>
           </View>
           <FooterNav nav={this.props.nav} index={0} />
@@ -94,9 +95,22 @@ const styles = StyleSheet.create({
     borderRadius: 250/2
   },
   circleContainer: {
-    flex: 1,
+    flex: 3,
     flexDirection: 'row',
-    justifyContent: 'center'
+    justifyContent: 'center',
+  },
+  fullName:  {
+    flex: 0,
+    fontSize: 30,
+    marginBottom: 15, 
+    textAlign:'center'
+  },
+  textBox: {
+    flexDirection: 'row',
+    flex: 0,
+    textAlign:'center',
+    marginBottom: 5,
+    fontSize: 20
   }
 });
 
