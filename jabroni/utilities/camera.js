@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, Dimensions, Button, Image, AsyncStorage } from 'react-native';
+import { Text, View, TouchableOpacity, TouchableHighlight, Dimensions, Button, Image, AsyncStorage, StyleSheet } from 'react-native';
 import { Camera, Permissions } from 'expo';
 // import * as firebase from 'firebase';
 // import TOKENS from '../../TOKENS.js';
@@ -110,14 +110,14 @@ export default class CameraExample extends React.Component {
       return <Text>No access to camera</Text>;
     } else {
       return this.state.reviewMode ? (
-        <View style={{flex: 1, width: width, height: height}}>
+        <View style={{flex: 1, width: width, height: height, alignSelf: 'flex-end'}}>
           <Image style={{flex: 1, width: width, height: width}} source={{uri:this.state.pic.uri}} />
-          <View style={{position: 'absolute', flexDirection: 'row', alignSelf: 'flex-start'}}>
-            <Button onPress={this.cancel} title="Delete" color="red"/>
-          </View>
-          <View style={{position: 'absolute', flexDirection: 'row', alignSelf: 'flex-end'}}>
-            <Button onPress={this.save} title="Save" color="green"/>
-          </View>
+          <TouchableHighlight style={styles.deleteButtonContainer} onPress={this.cancel}>
+            <Image source={require('../../images/delete.png')} style={styles.deleteButton} />
+          </TouchableHighlight>
+          <TouchableHighlight onPress={this.save} style={styles.saveButtonContainer}>
+            <Image style={styles.saveButton} source={require('../../images/save.png')} color="green" />
+          </TouchableHighlight>
         </View>
         )
       : (
@@ -156,3 +156,32 @@ export default class CameraExample extends React.Component {
     }
   }
 }
+
+styles = StyleSheet.create({
+  saveButtonContainer: {
+    flex: 0,
+    position: 'absolute', 
+    flexDirection: 'row',
+    alignSelf: 'flex-end',
+    width: 50,
+    height: 50,
+  },
+  saveButton: {
+    resizeMode: 'contain',
+    width: "100%",
+    height: "100%"
+  },
+  deleteButtonContainer: {
+    flex: 0,
+    position: 'absolute', 
+    flexDirection: 'row',
+    alignSelf: 'flex-start',
+    width: 50,
+    height: 50,
+  },
+  deleteButton: {
+    resizeMode: 'contain',
+    width: "100%",
+    height: "100%"
+  }
+})

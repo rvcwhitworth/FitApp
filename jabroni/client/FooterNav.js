@@ -24,12 +24,8 @@ class FooterNav extends React.Component {
       })
       }
     }
-  }
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      selectedIndex: nextProps.index
-    });
-  }
+  
+
   render() {
     const buttons = ["Home", "Plan", "Data", "Photos", "Team"];
 
