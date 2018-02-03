@@ -16,6 +16,7 @@ import gql from 'graphql-tag';
 import Chat from '../utilities/chatIcon'
 import FooterNav from './FooterNav.js'
 import SVG from '../SVG/svg5Left.js'
+import { exercisePlans, user } from '../utilities/dataStore.js';
 const { width, height } = Dimensions.get('window');
 
 class WorkoutScreen extends React.Component {
@@ -23,11 +24,15 @@ class WorkoutScreen extends React.Component {
     super(props)
 
     this.state = {
+      user: user,
       color: 'white',
       selectedDay: new Date().getDay(),
-      workoutData: {},
-      loading: true
+      loading: true,
+      data: exercisePlans
     }
+
+    this.state.regimen = JSON.parse(this.state.data.slice().pop().regimen);
+    this.state.dailyWorkout =this.state.regimen[this.state.selectedDay];
     this.setupWorkoutData = this.setupWorkoutData.bind(this);
     this.updateWorkoutDisplay = this.updateWorkoutDisplay.bind(this);
     this.handleWorkoutSubmission = this.handleWorkoutSubmission.bind(this);
@@ -35,23 +40,10 @@ class WorkoutScreen extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
-  componentWillMount () {
-    AsyncStorage.getItem('@FitApp:UserInfo')
-    .then((userInfoString) => {
-      this.state.user = JSON.parse(userInfoString);
-      console.log('USER IN STATE', this.state.user);
-      this.props.client.query({
-        query: planQuery,
-        variables: {
-          id: this.state.user.id
-        }
-      })
-      .then(({data}) => {
-        console.log('DATA IN WILL MOUNT', data)
-        this.setState({data, loading: false})
-      })
-    })
-    .catch((err) => console.error('Error retrieving user info from storage!', err));
+  componentDidMount () {
+    if (this.state.dailyWorkout !== "OFF") {
+      this.setupWorkoutData(this.state.dailyWorkout, () => this.setState({loading: false})); 
+    }
   }
 
   handleInputChange (newData, workoutType, dataField) {
@@ -61,8 +53,7 @@ class WorkoutScreen extends React.Component {
     });
   }
 
-  setupWorkoutData (workout) {
-    console.log('HERE WITH', workout);
+  setupWorkoutData (workout, cb) {
     var workoutData = {};
     Object.keys(workout).forEach((workoutType) => {
       workoutData[workoutType] = {
@@ -70,7 +61,7 @@ class WorkoutScreen extends React.Component {
         frequency: ''
       };
     });
-    this.setState({workoutData})
+    this.setState({workoutData}, cb)
   }
 
   handleWorkoutSubmission () {
@@ -111,17 +102,6 @@ class WorkoutScreen extends React.Component {
           <SVG />
         </View>
       </Animated.View>)
-    }
-
-    const { getExercisePlans } = this.state.data;
-    console.log('l123 GOT HERE WITH', getExercisePlans)
-    if (getExercisePlans && !this.state.dailyWorkout && !this.state.displaySet) {
-      this.state.regimen = JSON.parse(getExercisePlans.slice().pop().regimen);
-      this.state.dailyWorkout =this.state.regimen[this.state.selectedDay];
-      if (this.state.dailyWorkout !== "OFF") {
-        this.setupWorkoutData(this.state.dailyWorkout); 
-      }
-      this.state.displaySet = true;
     }
 
     return (
@@ -213,13 +193,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   }
 })
-
-const planQuery = gql`
-query getExercisePlans($id: Int!){
-  getExercisePlans(id: $id, type: "client") {
-    regimen
-  }
-}`
 
 const planMutation = gql`
 mutation setDailyRecord($user_id: Int!, $data: String!) {

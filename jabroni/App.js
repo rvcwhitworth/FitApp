@@ -1,11 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, StatusBar, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View, Button, StatusBar } from 'react-native';
 import { StackNavigator, TabNavigator } from 'react-navigation';
 import { ApolloProvider } from 'react-apollo'
-import { ApolloClient } from 'apollo-client';
-import { HttpLink } from 'apollo-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
 import LandingScreen from './LandingPage';
+import { client } from './utilities/dataStore.js';
 import ClientLogInScreen from './client/ClientLogIn.js';
 import TrainerLogInScreen from './trainer/TrainerLogIn.js'
 import SignUpScreen from './SignUp';
@@ -17,8 +15,6 @@ import Home from './Navigator.js'
 
 const TrainerHome = Home('test')
 const ClientHome = Home('client')
-
-const HOST_URI = 'http://ec2-18-219-7-36.us-east-2.compute.amazonaws.com:4000/graphql';
 
 const AuthUser = () => {
   AsyncStorage.getItem('Test:key', (err, val) => {
@@ -65,12 +61,6 @@ App.router = Home.router;
 class AppView extends React.Component {
   constructor (props) {
     super(props)
-
-    /** GraphQL Client */
-    this.client = new ApolloClient({
-      link: new HttpLink({ uri: HOST_URI}),
-      cache: new InMemoryCache()
-    });
   } 
 
   componentWillMount () {

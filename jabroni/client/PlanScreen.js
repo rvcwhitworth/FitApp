@@ -7,6 +7,7 @@ import gql from 'graphql-tag';
 import ProgressCircle from '../utilities/progressCircle'
 import FooterNav from './FooterNav.js'
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import { dietPlans, exercisePlans, user } from '../utilities/dataStore.js';
 
 const { width, height } = Dimensions.get('window');
 const today = new Date();
@@ -16,6 +17,9 @@ class PlanScreen extends React.Component {
     super(props);
 
     this.state = {
+      user: user,
+      dietData: JSON.parse(dietPlans[dietPlans.length - 1].diet),
+      workoutData: JSON.parse(exercisePlans[exercisePlans.length - 1].regimen),
       progress: 0,
       loading: true,
       selectedDay: today.getDay(),
@@ -69,7 +73,7 @@ class PlanScreen extends React.Component {
       })
       .then(({data}) => {     
         this.setState(prevState => {
-          prevState.data.workoutData = JSON.parse(data.getExercisePlans[data.getExercisePlans.length - 1].regimen);
+          prevState.data.workoutData = ;
           prevState.loading = false;
           return prevState;
         }, () => Promise.resolve())

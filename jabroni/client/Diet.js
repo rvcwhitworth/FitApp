@@ -7,6 +7,7 @@ import FooterNav from './FooterNav.js'
 import Chat from '../utilities/chatIcon'
 import axios from 'axios';
 import config from '../../TOKENS';
+import { dietPlans, user } from '../utilities/dataStore.js';
 
 axios.defaults.headers.post['x-app-id'] = config.nutritionixConfig.appId;
 axios.defaults.headers.post['x-app-key'] = config.nutritionixConfig.apiKey;
@@ -22,14 +23,18 @@ class DietScreen extends React.Component {
     this.state = {
       color: 'transparent',
       dietInput: '',
+      user: user,
       foods: [],
       carbs: 0,
       fat: 0,
       protein: 0,
       calories: 0,
       loading: true,
-      selectedDay: new Date().getDay()
+      selectedDay: new Date().getDay(),
+      dietPlan: JSON.parse(dietPlans[dietPlans.length - 1].diet)
     }
+
+    this.state.dailyDiet = this.state.dietPlan[this.state.selectedDay]
 
     this.handleDietChange = this.handleDietChange.bind(this);
     this.handleDietSubmit = this.handleDietSubmit.bind(this);
@@ -77,23 +82,6 @@ class DietScreen extends React.Component {
         this.setState({color: '#9575CD'})
       }
     })
-
-    AsyncStorage.getItem('@FitApp:UserInfo')
-    .then((userInfoString) => {
-      this.state.user = JSON.parse(userInfoString);
-      this.props.client.query({
-        query: dietQuery,
-        variables: {
-          id: this.state.user.id
-        }
-      })
-      .then(({data}) => {
-        this.setState({dietPlan: JSON.parse(data.getDietPlans[data.getDietPlans.length - 1].diet)}, () => {
-          this.setState({dailyDiet: this.state.dietPlan[this.state.selectedDay], loading: false})
-        })
-      })
-    })
-    .catch((err) => console.error('Error retrieving user info from storage!', err));
   }
 
   componentWillUnmount() {
@@ -243,16 +231,5 @@ const styles = StyleSheet.create({
     fontSize: 18
   }
 })
-
-const dietQuery = gql`
-query getDietPlans($id: Int!){
-  getDietPlans(id: $id, type: "client") {
-    diet
-    trainer {
-      fullName
-    }
-  }
-}
-`
 
 export default withApollo(DietScreen);
