@@ -12,7 +12,7 @@ class Profile extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      profPic: require('../../images/tearingMeApart.jpeg')
+      profPic: require('../../images/muscle.gif')
     }
     this.downloadPic = this.downloadPic.bind(this);
   }
@@ -51,6 +51,7 @@ class Profile extends React.Component {
   }
 
   render() {
+    console.log('did we get the props we want 22', this.props)
     return ( 
       <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>
         <View style={{flex:1}}>
