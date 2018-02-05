@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TextInput, StyleSheet, TouchableHighlight, AsyncStorage, ScrollView } from 'react-native'
+import { View, ScrollView, Text, TextInput, StyleSheet, TouchableHighlight, AsyncStorage } from 'react-native'
 import { graphql, ApolloProvider, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Button, Divider } from 'react-native-elements'
@@ -10,140 +10,163 @@ import firebase from './firebase.js'
 var t = require('tcomb-form-native');
 var Form = t.form.Form;
 
-// const firebaseConfig = {
-//   apiKey: TOKENS.firebaseConfig.apiKey,
-//   authDomain: TOKENS.firebaseConfig.authDomain,
-//   databaseURL: TOKENS.firebaseConfig.databaseURL,
-//   projectId: TOKENS.firebaseConfig.projectId,
-//   storageBucket: TOKENS.firebaseConfig.storageBucket,
-//   messagingSenderId: TOKENS.firebaseConfig.messagingSenderId,
-// };
-
-// const firebaseApp = firebase.initializeApp(firebaseConfig);
-
 var database = firebase.database();
-
 
 class Chat extends React.Component {
   constructor(props){
     super(props);
     this.state = {
+      propsReady: false,
       showRoom : "none",
       showRooms : "flex",
+      // rooms: [],
       messages : [],
-      rooms: [],
-      roomID: '',
-      Person: t.struct({
+      presentUser: '',
+      presentUserID: '',
+      currentRoom: '',
+       Person: t.struct({
           Message: t.String,
         }),
+        
     }
     this.touch = this.touch.bind(this)
-    this.backToRooms = this.backToRooms.bind(this)
-    this.sendMessage = this.sendMessage.bind(this)
-    this.getId = this.getId.bind(this)
-    this.sendMessage = this.sendMessage.bind(this)
+    this.send = this.send.bind(this)
+    // this.getStore = this.getStore.bind(this)
+    // this.backToRooms = this.backToRooms(this)
+    
   }
+  componentWillMount(){
+    // console.log("WILL MOUNT")
+    // AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
+    //   if (err) console.log(err);
+    //     else {console.log("STORE STORE STORE STORE +++>>><+++===>>>",val, JSON.parse(val))}
+  
+    //     var storeVals = JSON.parse(val);
+
+    //       this.state.presentUser = storeVals.username;
+    //       this.state.presentUserID = 1; 
+    //        // Based Async Store Changes For ID
+    //         this.props.client.query({
+    //           query: getChatRooms,
+    //           variables: {
+    //             id: 1
+    //           }
+    //         }).then((data)=>{
+    //           this.state.rooms = data;
+    //           this.state.propsReady = true;
+    //           console.log("WILL MOUNT",this.state.rooms)
+    //         })
+    //   })  
+    }
+
   componentDidMount() {
-    const { nav } = this.props;
+    console.log("DID MOUNT", this.state.rooms)
+ 
+  AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
+    if (err) console.log(err);
+      else {console.log("STORE STORE STORE STORE +++>>><+++===>>>",val, JSON.parse(val))}
 
-    // console.log('this ,bdfwhkfwejfkfnjounted roigjht')
-    this.props.client.query({
-      query: getChatRooms,
-      variables: {
-        id: 2
-      }
-  }).then((val) => {
-    console.log(val, typeof val)
-    this.setState({
-      rooms: val.data.getChatRooms
-    }, () => this.getId())
-  })
-}
+      var storeVals = JSON.parse(val);
 
-  getId(){
-      AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
-      if (err) console.log(err);
-      else {
-        if(val){
-        var obj = JSON.parse(val)
-        this.setState({user: obj})
-        }
-      }
-    })
-}
+        this.state.presentUser = storeVals.username;
+        this.state.presentUserID = storeVals.id; 
+         // Based Async Store Changes For ID
+          this.props.client.query({
+            query: getChatRooms,
+            variables: {
+              id: this.state.presentUserID
+            }
+          }).then((data)=>{
+            console.log("DDATTATTAA+++>>>>",data)
+            this.setState({rooms: data.data.getChatRooms, propsReady: true}) 
+          })
+    })  
+  console.log("DID MOUNT+++>>>>", this.state.rooms)
+
+  }
 
   touch(room_id){
-    database.ref('/rooms/' + room_id + '/messages').on("value", (snapshot)=>{
-      console.log('hey you', snapshot.val())
-      this.setState({messages: Object.values(snapshot.val())}, ()=>{
-        this.setState({showRooms: "none", showRoom: "flex", roomID: room_id})
-      })
-    }, 
-    function(errorObject){
+    this.setState({currentRoom: room_id }, ()=>{
+      database.ref('/rooms/' + this.state.currentRoom + '/messages').on("child_added", (snapshot)=>{
+        this.state.messages.push(snapshot.val())
+        this.setState({showRooms: "none", showRoom: "flex"})
+      },
+      function(errorObject){
         console.log("the read failed: " + errorObject.code);
+      })
     })
-  }
 
-  sendMessage(text){
-    var value = this.refs.form.getValue();
-    console.log(this.state.roomID)
-    var obj = {
-      "message" : value["Message"],
-      "user" : this.state.user.fullName
-    }
-    var ref = database.ref('/rooms/' + this.state.roomID + '/messages').push(obj)
   }
-
-  backToRooms(){
-    this.setState({
-      messages: []
-    })
+  send(){
+    var value = this.refs.message.getValue();
+    database.ref('/rooms/' + this.state.currentRoom + '/messages').push({user: this.state.presentUser , message: value.Message})
   }
 
   render() {
-    console.log('this is the state', this.state)
-
-   if(this.state.messages.length < 1){
-
-    return (
-      <View style={styles.container}>
-        <View style={{marginTop: 50, display: this.state.showRooms}}>
-          {this.state.rooms.map( (room, idx)=>{
-            if(room.user.fullName){
-              return <Button
-              key={idx}
-              title={room.user.fullName} 
-              onPress={
-                
-                ()=>{this.touch(room.room_id)}
-
-              } />
-            }
-          } )}
-        <Button title='Go Back' onPress={() => this.props.nav.navigateBack()} />
-        </View>
-        </View>
-        )} 
-
-      else{
-      return(     
-       <ScrollView style={styles.container}>
-        <View style={{display: this.state.showRoom}}>
-          {this.state.messages.map( (message, idx)=>{
-            return <Text key={idx} style={styles.message}> {message.user} :     {message.message}</Text>
-          } )}
-
-          <Form
-            ref="form"
-            type={this.state.Person} />
-          <TouchableHighlight style={styles.button} onPress={()=>{this.sendMessage()}} underlayColor='red'>
-            <Text style={styles.buttonText}>Send</Text>
-          </TouchableHighlight>
-          <Button title='Go Back' onPress={() => this.backToRooms()} />
-        </View>
-      </ScrollView>
-    );
+    if(!this.state.propsReady){
+      return (<Text>Loading....</Text>)
     }
+    return (
+
+      <View style={styles.container}>
+        {/* <Text>HELLOOHHELLELOOOOOOO</Text> */}
+        <View style={{ display: this.state.showRooms}}>
+          <TouchableHighlight style={styles.button} onPress={()=>{console.log("press"); this.props.nav.navigateBack()}} underlayColor='red'>
+                <Text style={styles.buttonText}>BACK</Text>
+          </TouchableHighlight>
+          
+          <View >
+            {console.log("COMP",this.state.rooms)}
+            {this.state.rooms.map( (room, idx)=>{
+              // console.log(room)
+              if(room.user.fullName){
+                return <Button
+                key={idx}
+                title={room.user.fullName}
+                onPress={ ()=>{this.touch(room.room_id)}  }
+                />
+              }
+            } )}
+          </View> 
+        </View>
+          
+
+        <View style={{display: this.state.showRoom, flex: 1}}>
+          <TouchableHighlight style={styles.button} onPress={ ()=>{ this.setState({showRooms: "flex", showRoom: "none"}) } } underlayColor='red'>
+                <Text style={styles.buttonText}>Back To Rooms</Text>
+          </TouchableHighlight>
+
+          <ScrollView ref={ref => this.scrollView = ref}
+              onContentSizeChange={(contentWidth, contentHeight)=>{ this.scrollView.scrollToEnd({animated: true})}}>
+              {
+              // console.log("MESSAGES=>", this.state.messages)
+
+              }
+            {
+              this.state.messages.map( (message, idx)=>{
+                if(this.state.messages.length > 0){
+                  return <Text key={idx} style={styles.message}> <Text style={styles.user}>{message.user}</Text> :     {message.message}</Text>
+                }
+              })
+            }
+            
+            
+          </ScrollView>
+
+           <View style={{display: this.state.showRoom, paddingBottom: 10}}>
+           <Form
+              ref="message"
+              type={this.state.Person}
+            />
+          <TouchableHighlight style={styles.button} onPress={()=>{this.send(), console.log("press")}} underlayColor='red'>
+              <Text style={styles.buttonText}>Send</Text>
+          </TouchableHighlight>
+          </View>
+
+        </View>        
+
+      </View>
+    );
   }
 }
 
@@ -151,10 +174,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     flex: 1,
-    paddingVertical: 20
-  },
-  contentContainer: {
-    paddingVertical: 20
   },
   message: {
     borderColor: "red",
@@ -175,14 +194,18 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
     alignSelf: 'center'
+  },
+  user: {
+    flex: 1,
+    backgroundColor: "cyan",
+    paddingTop: 200
   }
-  
+
 })
 
-
-const getChatRooms = gql`
-{
-  getChatRooms(id: 2) {
+var getChatRooms = gql`
+query getChatRooms($id: Int!){
+  getChatRooms(id: $id) {
     id
     room_id
     user{
@@ -192,4 +215,32 @@ const getChatRooms = gql`
   }
 }`
 
+
+
 export default withApollo(Chat);
+// export default graphql(getChatRooms)(Chat)
+
+
+
+  // getStore(){
+  //   AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
+  //   // if (err) console.log(err);
+  //   //   else {console.log("STORE STORE STORE STORE +++>>><+++===>>>",val, JSON.parse(val))
+
+  //     var storeVals = JSON.parse(val);
+  //       this.state.presentUser = storeVals.username;
+  //       this.state.presentUserID = 1; 
+  //       ()=>{ // Based Async Store Changes For ID
+  //         this.props.client.query({
+  //           query: getChatRooms,
+  //           variables: {
+  //             id: 2
+  //           }
+  //         }).then((data)=>{
+  //           console.log("DDATTATTAA+++>>>>",data)
+  //           this.state.rooms = data
+  //         })
+  //       }
+  //     }
+  //   })
+  // }

@@ -4,8 +4,8 @@ import { FloatingAction } from 'react-native-floating-action';
 import Chat from '../utilities/chatIcon'
 import { withApollo, graphql, ApolloProvider, compose } from 'react-apollo';
 import gql from 'graphql-tag';
-import ProgressCircle from '../utilities/progressCircle'
 import FooterNav from './FooterNav.js'
+import ProgressCircle from '../utilities/progressCircle'
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 
 const { width, height } = Dimensions.get('window');
@@ -140,6 +140,21 @@ class PlanScreen extends React.Component {
       <View style={styles.item}>
         <Text>Workout: {JSON.stringify(workout)}</Text>
         <Text>Diet: {JSON.stringify(diet)}</Text>
+      
+        
+    <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>
+    <View style={styles.container}>
+      <Text>
+        Your diet:
+        {/* {data.getDietPlans[data.getDietPlans.length-1].diet} */}
+        Your trainer:
+        {/* {data.getDietPlans[data.getDietPlans.length-1].trainer.fullName} */}
+      </Text>
+      <Button onPress={this.submit} title="submit" />
+      <Chat nav={this.props.nav} />
+      </View>
+      </View>
+      
       </View>
     );
   }
