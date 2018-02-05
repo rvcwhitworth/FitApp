@@ -12,7 +12,7 @@ import {
 import NavFooter from "./FooterNav.js";
 import Chat from "../utilities/chatIcon.js";
 import firebase from "../utilities/firebase.js";
-var moment = require('moment');
+var moment = require("moment");
 
 const imageStore = firebase.storage();
 const database = firebase.database();
@@ -23,7 +23,8 @@ class Photos extends React.Component {
 		this.state = {
 			userID: null,
 			photos: [],
-			index: 0
+			index: 0,
+			loading: true
 		};
 		this.downloadPic = this.downloadPic.bind(this);
 		this.next = this.next.bind(this);
@@ -54,8 +55,8 @@ class Photos extends React.Component {
 									.ref("images/" + this.state.userID.toString() + "/" + name)
 									.getDownloadURL()
 									.then(url => {
-										this.downloadPic(url, name);
-									});
+										this.downloadPic(url, name, fileNames.length);
+									})
 							});
 						});
 				});
@@ -63,17 +64,20 @@ class Photos extends React.Component {
 		});
 	}
 
-	downloadPic(url, name) {
+	downloadPic(url, name, length) {
 		var xhr = new XMLHttpRequest();
 		xhr.responseType = "text";
 		xhr.onload = event => {
 			let photos = this.state.photos;
-			photos.push([name, xhr.response]);
-			// sort chronologically (name is a timestamp):
+			photos.push([name, xhr.response]); // [timestamp, base64 string]
 			photos = photos.sort((a, b) => {
-				return a[0].localeCompare(b[0]) * -1;
+				return a[0].localeCompare(b[0]) * -1; // newest photo should appear first
 			});
-			this.setState({ photos: photos });
+			this.setState({ photos: photos }, () => {
+				if ( this.state.photos.length === length ) {
+					this.setState({loading: false});
+				} 
+			});
 		};
 		xhr.open("GET", url);
 		xhr.send();
@@ -82,33 +86,44 @@ class Photos extends React.Component {
 	setProfPic(e) {
 		e.preventDefault();
 		let pic = this.state.photos[this.state.index]; // a tuple - idx 1 is the base64 string
-		imageStore.ref('images/'+this.state.userID.toString()).child('profilePicture').putString(pic[1]).then(() => {
-			console.log('saved profile picture to firebase storage.');
-			// save pic to async storage as well to improve load time later:
-			// AsyncStorage.setItem('@FitApp:profilePicture', pic[1]); // there were problems reading from asyncStorage, so scrapping for now.
-		});
+		imageStore
+			.ref("images/" + this.state.userID.toString())
+			.child("profilePicture")
+			.putString(pic[1])
+			.then(() => {
+				console.log("saved profile picture to firebase storage.");
+				// save pic to async storage as well to improve load time later:
+				// AsyncStorage.setItem('@FitApp:profilePicture', pic[1]); // there were problems reading from asyncStorage, so scrapping for now.
+			});
 	}
 
 	delete(e) {
 		e.preventDefault();
 		// remove photo from firebase storage:
 		let fileName = this.state.photos[this.state.index][0];
-		imageStore.ref('images/'+this.state.userID.toString()+'/'+fileName).delete().then(() => {
-			// remove reference to photo from imgURLs:
-			database.ref('imgURLs/'+this.state.userID.toString()+'/'+fileName).remove().then(() => {
-				Alert.alert('photo deleted.');
-				// remove the photo from component state:
-				let p = this.state.photos;
-				p.splice(this.state.index, 1);
-				let i = this.state.index === 0 ? 0 : -1;
-				this.setState({photos: p, index: i});
-			}).catch((err) => {
-				console.error('firebase database delete error: ', err);
+		imageStore
+			.ref("images/" + this.state.userID.toString() + "/" + fileName)
+			.delete()
+			.then(() => {
+				// remove reference to photo from imgURLs:
+				database
+					.ref("imgURLs/" + this.state.userID.toString() + "/" + fileName)
+					.remove()
+					.then(() => {
+						Alert.alert("photo deleted.");
+						// remove the photo from component state:
+						let p = this.state.photos;
+						p.splice(this.state.index, 1);
+						let i = this.state.index === 0 ? 0 : -1;
+						this.setState({ photos: p, index: i });
+					})
+					.catch(err => {
+						console.error("firebase database delete error: ", err);
+					});
 			})
-		}).catch((err) => {
-			console.error('firebase storage delete error: ', err);
-		});
-
+			.catch(err => {
+				console.error("firebase storage delete error: ", err);
+			});
 	}
 
 	next(e) {
@@ -143,18 +158,32 @@ class Photos extends React.Component {
 			>
 				<View style={{ flexDirection: "row", flex: 1 }}>
 					<Button onPress={this.prev} title="prev" />
-					{this.state.photos.length === 0 ? (
+					{this.state.loading ? <View><Text>Loading!</Text></View> : this.state.photos.length === 0 ? (
 						<View>
 							<Text>No photos to display.</Text>
 						</View>
 					) : (
-						<View style={{width: "50%", height: "50%", justifyContent: 'center'}}>
-							<Button onPress={this.setProfPic} title="set as profile picture" />
+						<View
+							style={{ width: "50%", height: "50%", justifyContent: "center" }}
+						>
+							<Button
+								onPress={this.setProfPic}
+								title="set as profile picture"
+							/>
 							<Image
 								source={{ uri: `data:image/jpg;base64,${curr[1]}` }}
-								style={{ flex: 1, width: "100%", height: "100%", resizeMode: "contain" }}
+								style={{
+									flex: 1,
+									width: "100%",
+									height: "100%",
+									resizeMode: "contain"
+								}}
 							/>
-							<Text>{moment(curr[0], 'YYYY:MM:DD HH:mm:ss').format('dddd, MMMM Do YYYY, h:mm a')}</Text>
+							<Text>
+								{moment(curr[0], "YYYY:MM:DD HH:mm:ss").format(
+									"dddd, MMMM Do YYYY, h:mm a"
+								)}
+							</Text>
 						</View>
 					)}
 					<Button onPress={this.next} title="next" />
