@@ -12,6 +12,7 @@ import {
 import NavFooter from "./FooterNav.js";
 import Chat from "../utilities/chatIcon.js";
 import firebase from "../utilities/firebase.js";
+var moment = require('moment');
 
 const imageStore = firebase.storage();
 const database = firebase.database();
@@ -31,7 +32,7 @@ class Photos extends React.Component {
 		this.delete = this.delete.bind(this);
 	}
 
-	async componentWillMount() {
+	componentDidMount() {
 		AsyncStorage.getItem("@FitApp:UserInfo", (err, val) => {
 			if (err) {
 				console.log("async storage error: ", err);
@@ -149,7 +150,7 @@ class Photos extends React.Component {
 								source={{ uri: `data:image/jpg;base64,${curr[1]}` }}
 								style={{ flex: 1, width: "100%", height: "100%", resizeMode: "contain" }}
 							/>
-							<Text>Timestamp: {curr[0]}</Text>
+							<Text>{moment(curr[0], 'YYYY:MM:DD HH:mm:ss').format('dddd, MMMM Do YYYY, h:mm a')}</Text>
 						</View>
 					)}
 					<Button onPress={this.next} title="next" />
