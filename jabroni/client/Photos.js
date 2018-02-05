@@ -69,6 +69,10 @@ class Photos extends React.Component {
 		xhr.onload = event => {
 			let photos = this.state.photos;
 			photos.push([name, xhr.response]);
+			// sort chronologically (name is a timestamp):
+			photos = photos.sort((a, b) => {
+				return a[0].localeCompare(b[0]) * -1;
+			});
 			this.setState({ photos: photos });
 		};
 		xhr.open("GET", url);
