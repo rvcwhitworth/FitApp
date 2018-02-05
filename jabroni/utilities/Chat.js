@@ -139,7 +139,7 @@ class Chat extends React.Component {
           <TouchableHighlight style={styles.button} onPress={()=>{this.sendMessage()}} underlayColor='red'>
             <Text style={styles.buttonText}>Send</Text>
           </TouchableHighlight>
-          <Button title='Go Back' onPress={() => this.backToRooms()} />
+          <Button title='Go Back' onPress={() => this.props.nav.navigateBack()} />
         </View>
       </ScrollView>
     );

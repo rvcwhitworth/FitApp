@@ -17,13 +17,14 @@ class Template extends React.Component{
       }
       this.testingForms = this.testingForms.bind(this)
       this.testingInputs = this.testingInputs.bind(this)
+      this.tester123 = this.tester123.bind(this)
+      this.saveMe = this.saveMe.bind(this)
   }
 
   testingForms(e){
   	var x = this.state.WorkoutName
-  	console.log('what is x??', this.state)
     this.setState({
-    	template: this.state.template.concat(x),
+    	template: [...this.state.template, x],
     	WorkoutName: ''
     }, () => {
     	console.log(this.state)
@@ -31,22 +32,57 @@ class Template extends React.Component{
   }
 
   testingInputs(e){
-  	console.log('what is the target', e.target)
   	this.setState({WorkoutName: e.target.value},
   		() => console.log(this.state.WorkoutName))
   }
 
-  render() {
+  tester123(key, childState){
+    if(this.state[key]){
+      var x = Object.keys(this.state[key])
+      var y = Object.keys(childState())
+      var temp = childState()
+    var state = () => {
+      var obj = {}
+      obj[key] = {}
+      x.forEach((val) => {
+        obj[key][val] = this.state[key][val]
+      })
+      y.forEach((val) => {
+        obj[key][val] = temp[val]
+      })
+      console.log('here is the obj', obj)
+      return obj
+      }
+    } 
+    else {
+      var state = () => {
+        var obj = {}
+        obj[key] = childState()
+        return obj
+      }
+    }
+      this.setState(state)
+  }
 
+  saveMe(){
+    var obj = {}
+    this.state.template.map((val, key) => {
+      obj[val] = this.state[key]
+    })
+    console.log('can we save this?', obj)
+  }
+
+  render() {
+    console.log('this is the state', this.state)
       return(
-        <div>
+        <div key={this.state.key}>
         {this.state.template.map((val, key)=>{
         	console.log('what is val?', val)
-        	return(<Workout name={val} />)
+        	return(<Workout name={val} key={key} number={key} parent={this.tester123}/>)
         })}
         <button value='tester' onClick={(e) =>{ this.testingForms(e)}}> Add workouts! </button>
         <input onChange={this.testingInputs} placeholder='Workout Name' value={this.state.WorkoutName} /> 
-        <button onClick={() => {this.props.save(this.state.template)} } className="btn btn-lg btn-block" type='button' >Save Template</button>
+        <button onClick={() => {this.saveMe()} } className="btn btn-lg btn-block" type='button' >Save Template</button>
 
         </div>
         )

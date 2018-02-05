@@ -53,6 +53,7 @@ class Profile extends React.Component {
   }
 
   render() {
+    console.log('did we get the props we want 22', this.props)
     return ( 
       <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>
         <View style={{flex:1}}>
