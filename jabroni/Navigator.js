@@ -20,6 +20,10 @@ import WorkoutPlans from './trainer/trainerPlans.js'
 import Roster from './trainer/trainerRoster.js'
 import DataDailyWorkouts from './client/dataDailyWorkouts.js'
 import Photos from './client/Photos.js'
+import RosterClientDiet from './trainer/clientDiet.js'
+import RosterClientPlan from './trainer/clientPlans.js'
+import RosterClientWorkout from './trainer/clientWorkouts.js'
+import RosterClientBodyComposition from './trainer/clientBodyComp.js'
 
 
 
@@ -200,6 +204,30 @@ return new SwipeNavigator({
     screen: Chat,
     type: 'over',
     color: '#FFFFFF'
+  },
+
+  ClientDiet: {
+    screen: RosterClientDiet,
+    type: 'over',
+    top: 'LogOut'
+  },
+
+  ClientPlan: {
+    screen: RosterClientPlan,
+    type: 'over',
+    top: 'LogOut'
+  },
+
+  ClientWorkout: {
+    screen: RosterClientWorkout,
+    type: 'over',
+    top: 'LogOut'
+  },
+
+  ClientBodyComp: {
+    screen: RosterClientBodyComposition,
+    type: 'over',
+    top: 'LogOut'
   },
 
   Video: {

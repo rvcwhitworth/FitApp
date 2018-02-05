@@ -13,6 +13,7 @@ class FooterNav extends React.Component {
     }
 
     updateIndex (selectedIndex) {
+      this.props.nav.clearStack()
        const buttons = ['Home', 'Plans', 'Roster']
       if(this.state.selectedIndex !== selectedIndex){
       this.setState({selectedIndex}, () => {

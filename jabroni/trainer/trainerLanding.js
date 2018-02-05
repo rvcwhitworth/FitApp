@@ -54,12 +54,6 @@ const styles = StyleSheet.create({
   nav: {
     position: 'absolute',
     bottom:0,
-  },
-
-  button: {
-    padding: 10,
-    backgroundColor: 'blue',
-    marginBottom: 15,
   }
 })
 

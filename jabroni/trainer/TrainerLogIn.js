@@ -93,14 +93,14 @@ class TrainerlogInScreen extends React.Component {
 
   componentDidMount(){
     console.log(this.props)
-    AsyncStorage.getItem('Test:key', (err, val) => {
+    AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
       if (err) console.log(err);
       else{
         console.log(val)
         if(JSON.parse(val)){
-          if(JSON.parse(val).type === 'trainer'){
+          // if(JSON.parse(val).type === 'trainer'){
             this.props.navigation.dispatch(resetAction)
-          }
+          // }
         }
       }
   })
@@ -114,7 +114,7 @@ class TrainerlogInScreen extends React.Component {
     // axios.get('/users', {u: e.target..., p: e.target....}).then...
     let values = this.refs.form.getValue();
     var payload = JSON.stringify({username: values.username, type: 'trainer'})
-    AsyncStorage.setItem('Test:key', payload)
+    AsyncStorage.setItem('@FitApp:UserInfo', payload)
     console.log('logging in with values: ', values);
     this.props.client.query({
       query: q,
