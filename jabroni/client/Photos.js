@@ -7,6 +7,7 @@ import {
 	Image,
 	StyleSheet,
 	Button,
+	Alert
 } from "react-native";
 import NavFooter from "./FooterNav.js";
 import Chat from "../utilities/chatIcon.js";
@@ -27,6 +28,7 @@ class Photos extends React.Component {
 		this.next = this.next.bind(this);
 		this.prev = this.prev.bind(this);
 		this.setProfPic = this.setProfPic.bind(this);
+		this.delete = this.delete.bind(this);
 	}
 
 	async componentWillMount() {
@@ -43,7 +45,7 @@ class Photos extends React.Component {
 							let obj = snapshot.val();
 							let fileNames = [];
 							for (var key in obj) {
-								fileNames.push(obj[key].name);
+								fileNames.push(key);
 							}
 							// download files from the imageStore and store them in state.
 							fileNames.forEach(name => {
@@ -80,6 +82,28 @@ class Photos extends React.Component {
 			// save pic to async storage as well to improve load time later:
 			// AsyncStorage.setItem('@FitApp:profilePicture', pic[1]); // there were problems reading from asyncStorage, so scrapping for now.
 		});
+	}
+
+	delete(e) {
+		e.preventDefault();
+		// remove photo from firebase storage:
+		let fileName = this.state.photos[this.state.index][0];
+		imageStore.ref('images/'+this.state.userID.toString()+'/'+fileName).delete().then(() => {
+			// remove reference to photo from imgURLs:
+			database.ref('imgURLs/'+this.state.userID.toString()+'/'+fileName).remove().then(() => {
+				Alert.alert('photo deleted.');
+				// remove the photo from component state:
+				let p = this.state.photos;
+				p.splice(this.state.index, 1);
+				let i = this.state.index === 0 ? 0 : -1;
+				this.setState({photos: p, index: i});
+			}).catch((err) => {
+				console.error('firebase database delete error: ', err);
+			})
+		}).catch((err) => {
+			console.error('firebase storage delete error: ', err);
+		});
+
 	}
 
 	next(e) {
@@ -129,6 +153,7 @@ class Photos extends React.Component {
 						</View>
 					)}
 					<Button onPress={this.next} title="next" />
+					<Button onPress={this.delete} title="delete" />
 				</View>
 				<Chat nav={this.props.nav} />
 				<NavFooter nav={this.props.nav} index={3} />

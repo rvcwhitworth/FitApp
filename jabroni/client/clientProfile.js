@@ -28,6 +28,9 @@ class Profile extends React.Component {
         // use id to download profile picture
         imageStore.ref('/images/'+id+'/profilePicture').getDownloadURL().then((url) => {
           this.downloadPic(url);
+        }).catch((err) => {
+          // no profile picture set yet - set default
+          this.setState({profPic: require('../../images/tearingMeApart.jpeg')})
         });
       }
     })
