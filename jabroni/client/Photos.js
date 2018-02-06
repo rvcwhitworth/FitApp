@@ -7,7 +7,8 @@ import {
 	Image,
 	StyleSheet,
 	Button,
-	Alert
+	Alert,
+	TouchableHighlight
 } from "react-native";
 import NavFooter from "./FooterNav.js";
 import Chat from "../utilities/chatIcon.js";
@@ -24,13 +25,15 @@ class Photos extends React.Component {
 			userID: null,
 			photos: [],
 			index: 0,
-			loading: true
+			loading: true,
+			showButtons: false
 		};
 		this.downloadPic = this.downloadPic.bind(this);
 		this.next = this.next.bind(this);
 		this.prev = this.prev.bind(this);
 		this.setProfPic = this.setProfPic.bind(this);
 		this.delete = this.delete.bind(this);
+		this.toggleButtons = this.toggleButtons.bind(this);
 	}
 
 	componentDidMount() {
@@ -97,6 +100,11 @@ class Photos extends React.Component {
 			});
 	}
 
+	toggleButtons(e) {
+		e.preventDefault();
+		this.setState({showButtons: !this.state.showButtons});
+	}
+
 	delete(e) {
 		e.preventDefault();
 		// remove photo from firebase storage:
@@ -148,54 +156,62 @@ class Photos extends React.Component {
 		const { width, height } = Dimensions.get("window");
 		const curr = this.state.photos[this.state.index]; // a tuple representing the [timestamp,image] currently being displayed
 		return (
-			<View
-				style={{
-					width: width,
-					height: height,
-					backgroundColor: "white",
-					flexDirection: "column"
-				}}
-			>
-				<View style={{ flexDirection: "row", flex: 1 }}>
-					<Button onPress={this.prev} title="prev" />
-					{this.state.loading ? <View><Text>Loading!</Text></View> : this.state.photos.length === 0 ? (
-						<View>
+				<View style={styles.galleryContainer}>
+					{this.state.loading ? <View style={styles.galleryContainer}><Text>Loading!</Text></View> : this.state.photos.length === 0 ? (
+						<View style={styles.galleryContainer}>
 							<Text>No photos to display.</Text>
 						</View>
 					) : (
-						<View
-							style={{ width: "50%", height: "50%", justifyContent: "center" }}
-						>
+						<View>
+						{this.state.showButtons ? 
+						<View style={styles.buttonContainer}>
+							<Button onPress={this.prev} title="prev" />
 							<Button
 								onPress={this.setProfPic}
-								title="set as profile picture"
+								title="set profile picture"
 							/>
-							<Image
-								source={{ uri: `data:image/jpg;base64,${curr[1]}` }}
-								style={{
-									flex: 1,
-									width: "100%",
-									height: "100%",
-									resizeMode: "contain"
-								}}
-							/>
-							<Text>
-								{moment(curr[0], "YYYY:MM:DD HH:mm:ss").format(
-									"dddd, MMMM Do YYYY, h:mm a"
-								)}
-							</Text>
+							<Button onPress={this.next} title="next" />
+							<Button onPress={this.delete} title="delete" />
+						</View> : null}
+						<View style={{ width: "100%", height: "100%"}}>
+							<TouchableHighlight style={styles.imageContainer} onPress={this.toggleButtons}>
+								<Image source={{ uri: `data:image/jpg;base64,${curr[1]}` }} style={styles.image} />
+							</TouchableHighlight>
 						</View>
+					</View>
 					)}
-					<Button onPress={this.next} title="next" />
-					<Button onPress={this.delete} title="delete" />
-				</View>
-				<Chat nav={this.props.nav} />
 				<NavFooter nav={this.props.nav} index={3} />
 			</View>
 		);
 	}
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+	galleryContainer: {
+		width: Dimensions.get("window").width,
+		height: Dimensions.get("window").height-50,
+		backgroundColor: "white",
+		flexDirection: "column"
+	},
+	imageContainer: {
+		flex: 3,
+		width: "100%",
+		height: "100%"
+	},
+	textContainer: {
+
+	},
+	buttonContainer: {
+		flex: 2,
+		zIndex: 2,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+	},
+	image: {
+		resizeMode: "contain",
+		width: "100%",
+		height: "100%"
+	}
+});
 
 export default Photos;
