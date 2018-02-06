@@ -218,6 +218,11 @@ return new SwipeNavigator({
     top: 'LogOut'
   },
 
+  Camera: {
+    screen: Camera,
+    type: 'push',
+  },
+
   ClientWorkout: {
     screen: RosterClientWorkout,
     type: 'over',
