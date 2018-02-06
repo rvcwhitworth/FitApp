@@ -8,6 +8,8 @@ import ClientProfile from './Client/ClientProfile.jsx'
 import Logout from '../actions/userLogout.jsx'
 import TrainerProfile from './Trainer/TrainerProfile.jsx'
 import WorkoutPlans from './Trainer/WorkoutPlans.jsx'
+import Roster from './Trainer/TrainerRoster.jsx'
+import NewsFeed from './Trainer/NewsFeed.jsx'
 
 import {
   HashRouter as Router,
@@ -90,10 +92,10 @@ class Header extends React.Component{
         <div style={{textAlign:'left', backgroundColor: 'rgba(0,0,0, 0.3)'}}>
         <ul>
         <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to="/">Profile</Link></button>
-        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/signUp'>News Feed</Link></button>
-        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/signUp'>Roster</Link></button>
+        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/Updates'>News Feed</Link></button>
+        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/Roster'>Roster</Link></button>
         <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/WorkoutPlans'>Workout Plans</Link></button>
-        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/signUp'>Chat</Link></button>
+        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/Chat'>Chat</Link></button>
         <button className="btn btn-secondary btn-lg" onClick={this.handleClick} style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}>Log out</button>
 
         </ul>
@@ -103,6 +105,8 @@ class Header extends React.Component{
 
         <Route exact path='/' component={TrainerProfile}/>
         <Route exact path='/WorkoutPlans' component={WorkoutPlans}/>
+        <Route exact path='/Roster' component={Roster}/>
+        <Route exact path='/Updates' component={NewsFeed}/>
 
 
 
