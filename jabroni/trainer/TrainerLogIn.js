@@ -126,7 +126,7 @@ class TrainerlogInScreen extends React.Component {
       if (!data.loginUser) {
         Alert.alert('Invalid username or password!', 'Please try again.');
       } else {
-        AsyncStorage.setItem('@sseleFitApp:UserInfo', JSON.stringify(data.loginUser))
+        AsyncStorage.setItem('@FitApp:UserInfo', JSON.stringify(data.loginUser))
         .then(() => this.props.navigation.dispatch(resetAction))
         .catch((err) => console.error('Error writing user info to storage', err))
       }
