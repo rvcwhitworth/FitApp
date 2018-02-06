@@ -4,6 +4,7 @@ import Chat from '../utilities/chatIcon'
 import FooterNav from './FooterNav.js'
 import SVG from '../SVG/svg5Center.js'
 import firebase from '../utilities/firebase.js'
+var {getPhotos} = require('../utilities/getPhotos');
 
 const { width, height } = Dimensions.get('window');
 const imageStore = firebase.storage();
@@ -20,21 +21,22 @@ class Profile extends React.Component {
 
   componentWillMount() {
     // read profile picture from firebase storage:
-    AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
-      if ( err ) console.log('error retrieving UserInfo from AsyncStorage.');
-      else {
-        let id = JSON.parse(val).id;
-        this.setState({userInfo: JSON.parse(val)}); // store info for rendering
-        // use id to download profile picture
-        imageStore.ref('/images/'+id+'/profilePicture').getDownloadURL().then((url) => {
-          this.downloadPic(url);
-        }).catch((err) => {
-          // no profile picture set yet - set default
-          console.log('error in getting profile picture!');
-          this.setState({profPic: require('../../images/tearingMeApart.jpeg')})
-        });
-      }
-    })
+    // AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
+    //   if ( err ) console.log('error retrieving UserInfo from AsyncStorage.');
+    //   else {
+    //     let id = JSON.parse(val).id;
+    //     this.setState({userInfo: JSON.parse(val)}); // store info for rendering
+    //     // use id to download profile picture
+    //     imageStore.ref('/images/'+id+'/profilePicture').getDownloadURL().then((url) => {
+    //       this.downloadPic(url);
+    //     }).catch((err) => {
+    //       // no profile picture set yet - set default
+    //       console.log('error in getting profile picture!');
+    //       this.setState({profPic: require('../../images/tearingMeApart.jpeg')})
+    //     });
+    //   }
+    // })
+    getPhotos();
   }
 
   downloadPic(url, name) {
