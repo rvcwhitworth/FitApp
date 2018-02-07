@@ -23,7 +23,7 @@ class FooterNav extends React.Component {
       if(this.state.selectedIndex !== selectedIndex){
       this.setState({selectedIndex}, () => {
         this.props.nav.navigate(buttons[selectedIndex])
-      })
+      });
       }
     }
   
