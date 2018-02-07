@@ -20,7 +20,7 @@ class BodyComposition extends React.Component {
     return (
       <View style={styles.container}>
       <SVG />
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, alignSelf: 'center'}}>
         <Graph />
       <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
       </View>
@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     flexDirection: 'column',
+    justifyContent: 'space-between',
     width:width, 
     height:height
   },
