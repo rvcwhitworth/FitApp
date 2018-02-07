@@ -183,17 +183,10 @@ class Photos extends React.Component {
 
 					<Button onPress={this.next} title="next" />
 					<Chat nav={this.props.nav} TopNav={this.props.topNav}/>
-<<<<<<< HEAD
-
-					<NavFooter nav={this.props.nav} index={3} />
-				</View>
-		);
-=======
 	
 					<NavFooter nav={this.props.nav} index={3} />
 				</View>
 		)
->>>>>>> add basic trainer feed
 	}
 }
 
