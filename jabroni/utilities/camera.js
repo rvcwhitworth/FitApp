@@ -101,7 +101,7 @@ export default class CameraExample extends React.Component {
     let address = folder.child(fileName);
     address.putString(this.state.pic.base64).then((snapshot) => {
       // save reference to file in firebase database so it can be downloaded later:
-      database.ref('imgURLs').child(this.state.userID.toString()).push().set({
+      database.ref('imgURLs').child(this.state.userID.toString()+'/'+fileName).set({
         name: fileName
       });
 

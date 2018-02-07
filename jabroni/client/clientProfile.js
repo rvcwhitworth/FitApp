@@ -28,6 +28,10 @@ class Profile extends React.Component {
         // use id to download profile picture
         imageStore.ref('/images/'+id+'/profilePicture').getDownloadURL().then((url) => {
           this.downloadPic(url);
+        }).catch((err) => {
+          // no profile picture set yet - set default
+          console.log('error in getting profile picture!');
+          this.setState({profPic: require('../../images/tearingMeApart.jpeg')})
         });
       }
     })
@@ -53,6 +57,7 @@ class Profile extends React.Component {
   }
 
   render() {
+    console.log('did we get the props we want 22', this.props)
     return ( 
       <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>
         <View style={{flex:1}}>

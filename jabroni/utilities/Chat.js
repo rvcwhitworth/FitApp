@@ -94,6 +94,7 @@ class Chat extends React.Component {
 
                 <Text style={styles.buttonText}>BACK</Text>
           </TouchableHighlight>
+
           
           <View >
             {console.log("COMP")}
@@ -108,6 +109,7 @@ class Chat extends React.Component {
               }
             } )}
           </View> 
+
         </View>
           
 
