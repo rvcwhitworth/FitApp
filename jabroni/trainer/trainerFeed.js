@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, AsyncStorage, Text, TextInput, StyleSheet, TouchableOpacity, Button, Dimensions, ScrollView, Image } from 'react-native'
-import {Card, List, ListItem} from 'react-native-elements'
+import {Card, List, ListItem, Badge} from 'react-native-elements'
 import Chat from '../utilities/chatIcon'
 import Nav from './trainerNav.js'
 import SVG from '../SVG/svg4Right.js'
@@ -25,7 +25,6 @@ class TrainerFeed extends React.Component {
       keys: []
     }
   }
-
 
   componentDidMount() {
     this.props.nav.cleanUp()
@@ -61,38 +60,72 @@ class TrainerFeed extends React.Component {
     }
     return (
       <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>  
+        
         <View style={{flex:1}}>
           <SVG />
         </View> 
        
-        <View style={{flex:1}}>
-          {
-            this.state.feed.map((ele, idx)=>{
-              console.log("MAPPER",ele)
-              if(ele.diet){
-                return <Text key={idx}>{ele.diet.name + ': ' + 'Calories: ' + ele.diet.calories + ', Carbs: ' + ele.diet.carbs + ', Fat: ' + ele.diet.fat + ', Protein: ' + ele.diet.protein}</Text>
-              }else{
-                var keys = Object.keys(ele.workout)
+        <ScrollView ref={ref => this.scrollView = ref} onContentSizeChange={(contentWidth, contentHeight)=>{ this.scrollView.scrollToEnd({animated: true})}}>
+        {
+          this.state.feed.map((ele, i)=>{
+            if(ele.diet){
+              return (
+                <Card 
+                  avatar={{url: "https://img00.deviantart.net/f161/i/2005/120/e/1/_superman_kal_el__by_quintessentialmorose.jpg"}}
+                  title={ele.user}>
+                  {
+                    <View key={i} style={styles.user}>
+                      <Image
+                        style={styles.image}
+                        resizeMode="cover"
+                        source={{ url: "https://img00.deviantart.net/f161/i/2005/120/e/1/_superman_kal_el__by_quintessentialmorose.jpg"}}
+                      />
 
-                return keys.map((key, idx)=>{
-                  // console.log("KEY", key, "OBJECT ",ele.workout)
-                  // console.log("AHH HAA", ele.workout[key].weight)
-                  return <Text key={idx}>{key + " Freq:" + ele.workout[key].weight + ' Weight: ' + ele.workout[key].weight}</Text>
-                })
-              }
-            })
-          }
-        </View>  
+                      <Badge
+                        value={ele.diet.name}
+                      />
 
+                      <Text style={styles.name}>{'Calories: ' + ele.diet.calories + ', Carbs: ' + ele.diet.carbs + ', Fat: ' + ele.diet.fat + ', Protein: ' + ele.diet.protein}</Text>
+                    </View>
+                  }
+                </Card>
+              )
+            }else{
+              var keys = Object.keys(ele.workout)
+              return(
+                <Card title={ele.user}>
+                  {
+                    keys.map((key, idx)=>{
+                      return( 
+                        // <ListItem
+                        //   rightIcon={{ style: { color:"white" } }}
+                        //   key={idx}
+                        //   // roundAvatar
+                          
+                        //   title={key + ": Freq" + ele.workout[key].frequency + ', Weight ' + ele.workout[key].weight}
+                        //   // avatar={{uri:u.avatar}}
+                        // />
+                        <View>
+                        <Badge value={key}/>
+                        <Text key={idx}>{" Freq:" + ele.workout[key].frequency + ' Weight: ' + ele.workout[key].weight}</Text>
+                        </View>
+                      )
+                    })
+                  }
+                </Card>
+              )
+            }
+          })
+
+        }
+      </ScrollView>
 
         <View style={{flex: 2}}>
-            <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center'}}>This is our trainer news feed for our guy</Text>
-            <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
-          </View>
-          <Nav nav={this.props.nav} index={0}/>
+          <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center'}}>This is our trainer news feed for our guy</Text>
+          <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
         </View>
-    );
-
+        <Nav nav={this.props.nav} index={0}/>
+    </View>);
   }
 }
 const styles = StyleSheet.create({
@@ -124,42 +157,21 @@ query getSpotters($id: Int!){
 
 export default withApollo(TrainerFeed);
 
+{/* <View style={{flex:1}}>
+  {
+    this.state.feed.map((ele, idx)=>{
+      console.log("MAPPER",ele)
+      if(ele.diet){
+        return <Text key={idx}>{ele.diet.name + ': ' + 'Calories: ' + ele.diet.calories + ', Carbs: ' + ele.diet.carbs + ', Fat: ' + ele.diet.fat + ', Protein: ' + ele.diet.protein}</Text>
+      }else{
+        var keys = Object.keys(ele.workout)
 
-  // return 
-                  // console.log("HERE==>>", ele)
-                  // <ListItem
-                  //   rightIcon={{ style: { color:"white" } }}
-                  //   roundAvatar
-                  //   // avatar={{uri:l.avatar_url}}
-                  //   key={i}
-                  //   title={ele.user + ' WORKOUT ' + ele.date}
-                  //   subtitle={'Barbell Squat: ' + ele.diet.calories + ', Carbs: ' + ele.diet.carbs + ', Fat: ' + ele.diet.fat + ', Protein: ' + ele.diet.protein}
-                  // />
-
-
-
-                  {/* 
-        <List containerStyle={{marginBottom: 20, flex: 1}}>
-          {
-            this.state.feed.map((ele, i) => {
-              console.log(ele);
-              if(ele.diet){
-                console.log('In HERE')
-                return (
-                  <ListItem
-                    rightIcon={{ style: { color:"white" } }}
-                    roundAvatar
-                    // avatar={{uri:l.avatar_url}}F
-                    key={i}
-                    title={ele.user + ' DIET  ' + ele.date}
-                    subtitle={'Calories: ' + ele.diet.calories + ', Carbs: ' + ele.diet.carbs + ', Fat: ' + ele.diet.fat + ', Protein: ' + ele.diet.protein}
-                  />
-                )
-              }else{
-               
-              
-              }
-              
-            })
-          }
-        </List> */}
+        return keys.map((key, idx)=>{
+          // console.log("KEY", key, "OBJECT ",ele.workout)
+          // console.log("AHH HAA", ele.workout[key].weight)
+          return <Text key={idx}>{key + " Freq:" + ele.workout[key].frequency + ' Weight: ' + ele.workout[key].weight}</Text>
+        })
+      }
+    })
+  }
+</View>   */}
