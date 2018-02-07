@@ -103,6 +103,7 @@ if(type === 'client'){
         <Photos topNav={topNav} nav={nav.nav}/>
       )
     }
+    
 return new SwipeNavigator({
 
   //FIRST TAB SET (Inputs/Profile)

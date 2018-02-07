@@ -54,12 +54,9 @@ class Chat extends React.Component {
               id: this.state.presentUserID
             }
           }).then((data)=>{
-            // console.log("DDATTATTAA+++>>>>",data)
             this.setState({rooms: data.data.getChatRooms, propsReady: true}) 
           })
     })  
-  console.log("DID MOUNT+++>>>>", this.state.rooms)
-
   }
 
   touch(room_id){
@@ -193,29 +190,3 @@ query getChatRooms($id: Int!){
 
 
 export default withApollo(Chat);
-// export default graphql(getChatRooms)(Chat)
-
-
-
-  // getStore(){
-  //   AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
-  //   // if (err) console.log(err);
-  //   //   else {console.log("STORE STORE STORE STORE +++>>><+++===>>>",val, JSON.parse(val))
-
-  //     var storeVals = JSON.parse(val);
-  //       this.state.presentUser = storeVals.username;
-  //       this.state.presentUserID = 1; 
-  //       ()=>{ // Based Async Store Changes For ID
-  //         this.props.client.query({
-  //           query: getChatRooms,
-  //           variables: {
-  //             id: 2
-  //           }
-  //         }).then((data)=>{
-  //           console.log("DDATTATTAA+++>>>>",data)
-  //           this.state.rooms = data
-  //         })
-  //       }
-  //     }
-  //   })
-  // }

@@ -24,6 +24,7 @@ class DietScreen extends React.Component {
     this.state = {
       color: 'transparent',
       dietInput: '',
+      foodName: '',
       foods: [],
       carbs: 0,
       fat: 0,
@@ -139,7 +140,7 @@ class DietScreen extends React.Component {
     }, ()=>{
       var date = new Date().toDateString();
       database.ref('UserData/' + this.state.trainer).push({id: this.state.user.id, order: new Date().valueOf(), date: date, user: this.state.user.fullName, 
-        diet: {carbs: this.state.carbs, calories: this.state.calories, fat: this.state.fat, protein: this.state.protein}});
+        diet: {name: this.state.foodName, carbs: this.state.carbs, calories: this.state.calories, fat: this.state.fat, protein: this.state.protein}});
     })
   }
 
@@ -170,6 +171,7 @@ class DietScreen extends React.Component {
       .then(({data}) => {
         console.log('PLEASE WHAT IS TEH DATA ++===>>>',data.foods)
         this.setState({
+          foodName: this.state.dietInput,
           dietInput: '',
           foods: this.state.foods.concat(data.foods)
         }, () => this.updateMacros())

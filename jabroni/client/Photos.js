@@ -156,37 +156,37 @@ class Photos extends React.Component {
 		const { width, height } = Dimensions.get("window");
 		const curr = this.state.photos[this.state.index]; // a tuple representing the [timestamp,image] currently being displayed
 		return (
-				<View style={styles.galleryContainer}>
-					{this.state.loading ? <View style={styles.galleryContainer}><Text>Loading!</Text></View> : this.state.photos.length === 0 ? (
-						<View style={styles.galleryContainer}>
-							<Text>No photos to display.</Text>
-						</View>
-					) : (
-						<View>
-						{this.state.showButtons ? 
-						<View style={styles.buttonContainer}>
-							<Button onPress={this.prev} title="prev" />
-							<Button
-								onPress={this.setProfPic}
-								title="set profile picture"
-							/>
-							<Button onPress={this.next} title="next" />
-							<Button onPress={this.delete} title="delete" />
-						</View> : null}
-						<View style={{ width: "100%", height: "100%"}}>
-							<TouchableHighlight style={styles.imageContainer} onPress={this.toggleButtons}>
-								<Image source={{ uri: `data:image/jpg;base64,${curr[1]}` }} style={styles.image} />
-							</TouchableHighlight>
-						</View>
+			<View style={styles.galleryContainer}>
+				{this.state.loading ? <View style={styles.galleryContainer}><Text>Loading!</Text></View> : this.state.photos.length === 0 ? (
+					<View style={styles.galleryContainer}>
+						<Text>No photos to display.</Text>
 					</View>
-					)}
-
-					<Button onPress={this.next} title="next" />
-					<Chat nav={this.props.nav} TopNav={this.props.topNav}/>
-
-					<NavFooter nav={this.props.nav} index={3} />
+				) : (
+					<View>
+					{this.state.showButtons ? 
+					<View style={styles.buttonContainer}>
+						<Button onPress={this.prev} title="prev" />
+						<Button
+							onPress={this.setProfPic}
+							title="set profile picture"
+						/>
+						<Button onPress={this.next} title="next" />
+						<Button onPress={this.delete} title="delete" />
+					</View> : null}
+					<View style={{ width: "100%", height: "100%"}}>
+						<TouchableHighlight style={styles.imageContainer} onPress={this.toggleButtons}>
+							<Image source={{ uri: `data:image/jpg;base64,${curr[1]}` }} style={styles.image} />
+						</TouchableHighlight>
+					</View>
 				</View>
-		);
+				)}
+
+				<Button onPress={this.next} title="next" />
+				<Chat nav={this.props.nav} TopNav={this.props.topNav}/>
+
+				<NavFooter nav={this.props.nav} index={3} />
+			</View>
+		)
 	}
 }
 
