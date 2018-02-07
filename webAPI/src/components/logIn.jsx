@@ -5,14 +5,27 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import ChangeUser from '../actions/example.jsx'
 import Bypass from '../actions/bypass.jsx'
-import axios from 'axios'
+import { graphql, ApolloProvider, withApollo } from 'react-apollo';
 import auth from '../actions/authorize.jsx'
 import {
   HashRouter as Router,
   Route,
   Link
  } from 'react-router-dom';
+import gql from 'graphql-tag';
 
+const q = gql`
+  query loginUser($username: String!, $password: String!){
+    loginUser(username: $username, password: $password) {
+      id
+      fullName
+      username
+      type
+      email
+      profile_data
+    }
+  }
+`
 
 //login
 class LogIn extends React.Component{
@@ -30,6 +43,7 @@ class LogIn extends React.Component{
       this.onTrainerPasswordChange = this.onTrainerPasswordChange.bind(this);
       this.onTrainerUsernameChange = this.onTrainerUsernameChange.bind(this);
       this.handleTrainerButtonClick = this.handleTrainerButtonClick.bind(this);
+      this.logIn = this.logIn.bind(this)
   }
 
   componentDidMount() {
@@ -76,19 +90,35 @@ class LogIn extends React.Component{
     console.log('THIS IS THE PAYLOAD', payload)
     this.props.dispatch(Bypass(payload))
     // this.props.dispatch(ChangeUser(payload))
+  }
 
-    // axios.post('/server/userLogIn', payload).then((response) =>{
-    //   console.log('got back :', response)
-    //   if(response.data){
-    //     this.props.dispatch(auth(response.data))
-    //   } else{
-    //     this.props.history.push('/signUp')  
-    //   }
+  logIn(e){
+    e.preventDefault();
+    let values = {
+      username: this.state.TrainerUsername,
+      password: this.state.TrainerPassword
+    }
+    console.log('what is values', values)
 
-    // }).catch((err) => {
-    //   throw err
-    // })
-
+    this.props.client.query({
+      query: q,
+      variables: {
+        username: values.username.toLowerCase(),
+        password: values.password
+      }
+    }).then(({data}) => {
+      if (!data.loginUser) {
+        alert('Invalid username or password!', 'Please try again.');
+      } else {
+        console.log('what did we get back', data)
+      }
+    }).catch((err) => {
+      console.log('log in error: ', err);
+      alert('error logging in!', 'Check console for details');
+      this.setState({
+        error: true
+      });
+    })
   }
 
 
@@ -102,19 +132,6 @@ class LogIn extends React.Component{
     console.log('THIS IS THE PAYLOAD', payload)
     this.props.dispatch(Bypass(payload))
     // this.props.dispatch(ChangeUser(payload))
-
-    // axios.post('/server/userLogIn', payload).then((response) =>{
-    //   console.log('got back :', response)
-    //   if(response.data){
-    //     this.props.dispatch(auth(response.data))
-    //   } else{
-    //     this.props.history.push('/signUp')  
-    //   }
-
-    // }).catch((err) => {
-    //   throw err
-    // })
-
   }
 
   render() {
@@ -127,7 +144,7 @@ class LogIn extends React.Component{
             <h2> Trainer? </h2>
             <input onChange={this.onTrainerUsernameChange} placeholder="Username" value={this.state.TrainerUsername} style={{backgroundColor:'rgba(255,255,255,0.6)', fontFamily: 'Sans-Serif'}} />
             <input onChange={this.onTrainerPasswordChange} placeholder='Password' type='password' value={this.state.TrainerPassword} style={{backgroundColor:'rgba(255,255,255,0.6)', fontFamily: 'Sans-Serif'}} />
-            <button onClick={this.handleTrainerButtonClick} className="btn btn-lg btn-block" type='button' style={{backgroundColor:'rgba(255,255,255,0.4)', fontFamily: 'Sans-Serif'}}>
+            <button onClick={this.logIn} className="btn btn-lg btn-block" type='button' style={{backgroundColor:'rgba(255,255,255,0.4)', fontFamily: 'Sans-Serif'}}>
               <span className="glyphicon glyphicon-search">Enter</span>
             </button>
           </div>
@@ -135,7 +152,7 @@ class LogIn extends React.Component{
             <h2> Client? </h2>
             <input onChange={this.onClientUsernameChange} placeholder="Username" value={this.state.ClientUsername} style={{backgroundColor:'rgba(255,255,255,0.6)', fontFamily: 'Sans-Serif'}} />
             <input onChange={this.onClientPasswordChange} placeholder='Password' type='password' value={this.state.ClientPassword} style={{backgroundColor:'rgba(255,255,255,0.6)', fontFamily: 'Sans-Serif'}} />
-            <button onClick={this.handleClientButtonClick} className="btn btn-lg btn-block" type='button' style={{backgroundColor:'rgba(255,255,255,0.4)', fontFamily: 'Sans-Serif'}}>
+            <button onClick={this.logIn} className="btn btn-lg btn-block" type='button' style={{backgroundColor:'rgba(255,255,255,0.4)', fontFamily: 'Sans-Serif'}}>
               <span className="glyphicon glyphicon-search">Enter</span>
             </button>
           </div>
@@ -156,4 +173,4 @@ const mapStoreToProps = (store) => {
 
 export default withRouter(connect(
   mapStoreToProps
-)(LogIn));
+)(withApollo(LogIn)));
