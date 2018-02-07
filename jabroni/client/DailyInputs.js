@@ -78,10 +78,10 @@ class DailyInputs extends React.Component {
           }
         }).then(({data}) => {
           console.log('graphQL success!', data);
+          this.reset();
         }).catch(err => {
           console.log('apollo error: ', err);
         })
-        this.reset();
       }
     })
 
