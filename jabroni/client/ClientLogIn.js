@@ -106,8 +106,6 @@ class logInScreen extends React.Component {
 
   logIn(e){
     e.preventDefault();
-    // make axios request to server to get userID
-    // axios.get('/users', {u: e.target..., p: e.target....}).then...
     let values = this.refs.form.getValue();
     this.props.client.query({
       query: q,
