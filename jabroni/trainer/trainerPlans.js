@@ -18,7 +18,7 @@ class TrainerPlans extends React.Component {
     return (
       <View style={styles.container}>
         <View style={{flex: 1}}>
-          <Chat nav={this.props.nav} />
+          <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
           <Text> This is where we will list his plans **DONT ALLOW CONSTRUCTION** just viewing of each of his plans </Text>
         </View>
         <Nav nav={this.props.nav} index={1}/>

@@ -27,9 +27,9 @@ module.exports = {
 					// console.log("in Map", ele)
 					return db.getChatRoomsByRoomId(ele.room_id)
 				}))
-			}).then((we)=>{
-				// console.log("here", we[0])
-				return we[0];
+			}).then((rooms)=>{
+				// console.log("here", rooms)
+				return rooms;
 			});
 		},
 		getUsersByFullName: (parent, {fullName}, db) => {

@@ -18,7 +18,7 @@ class logInScreen extends React.Component {
     <SVG />
     <View style={{flex:1}}>
       <Text> Dynamic Infographic summarazing your overall progress??</Text>
-      <Chat nav={this.props.nav} />
+      <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
     </View>
       <FooterNav nav={this.props.nav} index={2}/>
     </View>);

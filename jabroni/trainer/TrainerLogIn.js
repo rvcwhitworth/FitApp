@@ -88,11 +88,11 @@ class TrainerlogInScreen extends React.Component {
       error: false
     }
     this.logIn = this.logIn.bind(this);
-    console.log('login props: ', this.props);
+    // console.log('login props: ', this.props);
   }
 
   componentDidMount(){
-    console.log(this.props)
+
     AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
       if (err) console.log(err);
       else{
@@ -115,7 +115,7 @@ class TrainerlogInScreen extends React.Component {
     let values = this.refs.form.getValue();
     var payload = JSON.stringify({username: values.username, type: 'trainer'})
     AsyncStorage.setItem('@FitApp:UserInfo', payload)
-    console.log('logging in with values: ', values);
+
     this.props.client.query({
       query: q,
       variables: {

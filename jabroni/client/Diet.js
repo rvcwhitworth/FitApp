@@ -7,7 +7,9 @@ import FooterNav from './FooterNav.js'
 import Chat from '../utilities/chatIcon'
 import axios from 'axios';
 import config from '../../TOKENS';
+import firebase from '../utilities/firebase.js'
 
+const database = firebase.database();
 axios.defaults.headers.post['x-app-id'] = config.nutritionixConfig.appId;
 axios.defaults.headers.post['x-app-key'] = config.nutritionixConfig.apiKey;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -28,6 +30,7 @@ class DietScreen extends React.Component {
       protein: 0,
       calories: 0,
       loading: true,
+      trainer: '',
       selectedDay: new Date().getDay()
     }
 
@@ -37,6 +40,7 @@ class DietScreen extends React.Component {
   }
 
   componentDidMount() {
+
     this.props.nav.cleanUp()
     const { nav } = this.props;
 
@@ -88,6 +92,19 @@ class DietScreen extends React.Component {
         }
       })
       .then(({data}) => {
+        // console.log('USER INFO +++===>>', this.state.user)
+
+        this.props.client.query({
+          query: getSpotters,
+          variables: {
+            id: this.state.user.id
+          }
+        })
+        .then(({data}) => {
+          this.setState({trainer: data.getSpotters[0].trainer.id})
+          // this.setState({data, loading: false})
+        })
+
         this.setState({dietPlan: JSON.parse(data.getDietPlans[data.getDietPlans.length - 1].diet)}, () => {
           this.setState({dailyDiet: this.state.dietPlan[this.state.selectedDay], loading: false})
         })
@@ -119,6 +136,10 @@ class DietScreen extends React.Component {
       calories: nutrition.calories,
       fat: nutrition.fat,
       protein: nutrition.protein
+    }, ()=>{
+      var date = new Date().toDateString();
+      database.ref('UserData/' + this.state.trainer).push({id: this.state.user.id, order: new Date().valueOf(), date: date, user: this.state.user.fullName, 
+        diet: {carbs: this.state.carbs, calories: this.state.calories, fat: this.state.fat, protein: this.state.protein}});
     })
   }
 
@@ -147,6 +168,7 @@ class DietScreen extends React.Component {
         query: this.state.dietInput
       })
       .then(({data}) => {
+        console.log('PLEASE WHAT IS TEH DATA ++===>>>',data.foods)
         this.setState({
           dietInput: '',
           foods: this.state.foods.concat(data.foods)
@@ -163,7 +185,7 @@ class DietScreen extends React.Component {
         </View>
         <View>
         <Text>Loading!</Text>
-        <Chat nav={this.props.nav}/>
+        <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
         </View>
         <FooterNav nav={this.props.nav} index={0}/>
       </View>)
@@ -189,7 +211,7 @@ class DietScreen extends React.Component {
             <Picker.Item label="Wednesday" value={3} />
             <Picker.Item label="Thursday" value={4} />
             <Picker.Item label="Friday" value={5} />
-            <Picker.Item label="Sunday" value={6} />
+            <Picker.Item label="Saturday" value={6} />
           </Picker>
 
           <TextInput
@@ -212,7 +234,7 @@ class DietScreen extends React.Component {
             <Text style={styles.item}>{(this.state.dailyDiet.fat - this.state.fat).toFixed(2)} grams of fat</Text>
           </View>
 
-          <Chat nav={this.props.nav}/>
+          <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
         </View>
         <FooterNav nav={this.props.nav} index={0}/>
       </View>
@@ -254,5 +276,15 @@ query getDietPlans($id: Int!){
   }
 }
 `
+
+const getSpotters = gql`
+query getSpotters($id: Int!){
+  getSpotters(id: $id, type: "client") {
+    id
+    trainer{
+      id
+    }
+  }
+}`
 
 export default withApollo(DietScreen);

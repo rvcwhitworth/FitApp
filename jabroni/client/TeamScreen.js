@@ -164,11 +164,15 @@ class TeamScreen extends React.Component {
                   </View>
                   <Button title={'  +  '} onPress={() => this.addSpotter(user)}/>
                 </View>
+
                 )
               }
             )
           )}
+          <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
         </ScrollView>
+
+
       </View>
       {/* <View style={{flex: 1}}> */}
         <Chat nav={this.props.nav}/>

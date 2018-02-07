@@ -31,17 +31,83 @@ const ProfileNavigator = (type) => {
 
 if(type === 'client'){
   return (topNav) => {
+
     const logOutFactory = () => {
       return (
         <LogOut topNav={topNav} />
       )
     }
 
+    const ProfileFactory = (nav) => {
+      return (
+        <Profile topNav={topNav} nav={nav.nav}/>
+      )
+    }
+
+    const DailyInputsFactory = (nav) => {
+      return (
+        <DailyInputs topNav={topNav} nav={nav.nav}/>
+      )
+    }
+
+    const DailyWorkoutsFactory = (nav) => {
+      return (
+        <DailyWorkouts topNav={topNav} nav={nav.nav}/>
+      )
+    }
+
+    const DailyDietFactory = (nav) => {
+      return (
+        <Diet topNav={topNav} nav={nav.nav}/>
+      )
+    }
+
+    const DataDietFactory = (nav) => {
+      return (
+        <DataDiet topNav={topNav} nav={nav.nav}/>
+      )
+    }
+
+    const BodyCompositionFactory = (nav) => {
+      return (
+        <BodyComposition topNav={topNav} nav={nav.nav}/>
+      )
+    }
+    
+    const DataFactory = (nav) => {
+      return (
+        <Data topNav={topNav} nav={nav.nav}/>
+      )
+    }
+
+    const DataDailyWorkoutsFactory = (nav) => {
+      return (
+        <DataDailyWorkouts topNav={topNav} nav={nav.nav}/>
+      )
+    }
+
+    const PlanScreenFactory = (nav) => {
+      return (
+        <PlanScreen topNav={topNav} nav={nav.nav}/>
+      )
+    }
+    
+    const TeamScreenFactory = (nav) => {
+      return (
+        <TeamScreen topNav={topNav} nav={nav.nav}/>
+      )
+    }
+    
+    const PhotosFactory = (nav) => {
+      return (
+        <Photos topNav={topNav} nav={nav.nav}/>
+      )
+    }
 return new SwipeNavigator({
 
   //FIRST TAB SET (Inputs/Profile)
   Home: {
-    screen: Profile,
+    screen: ProfileFactory,
     right: 'DailyDiet',
     left: 'DailyWorkouts',
     top: 'LogOut',
@@ -55,7 +121,7 @@ return new SwipeNavigator({
   },
 
   DailyInputs: {
-    screen: DailyInputs,
+    screen: DailyInputsFactory,
     // right: 'DailyDiet',
     top: 'Profile',
     // left: 'DailyWorkouts',
@@ -64,7 +130,7 @@ return new SwipeNavigator({
   },
 
   DailyWorkouts: {
-    screen: DailyWorkouts,
+    screen: DailyWorkoutsFactory,
     // bottom: 'DailyInputs',
     // top: 'LogOut',
     right: 'Profile',
@@ -73,7 +139,7 @@ return new SwipeNavigator({
   },
 
   DailyDiet: {
-    screen: Diet,
+    screen: DailyDietFactory,
     // bottom: 'DailyInputs',
     left: 'Profile',
     // top: 'LogOut',
@@ -88,19 +154,19 @@ return new SwipeNavigator({
 
   //SECOND TAB SET (Data)
   DataDiet: {
-    screen: DataDiet,
+    screen: DataDietFactory,
     type: 'over',
     color: '#FFFFFF'
   },
 
   DataBodyComposition:{
-    screen: BodyComposition,
+    screen: BodyCompositionFactory,
     type: 'over',
     color: '#FFFFFF'
   },
 
   Data: {
-    screen: Data,
+    screen: DataFactory,
     color: '#FFFFFF',
     type: 'over',
     right: 'DataDiet',
@@ -110,18 +176,18 @@ return new SwipeNavigator({
   },
 
   DataDailyWorkouts: {
-    screen: DataDailyWorkouts,
+    screen: DataDailyWorkoutsFactory,
     color: '#FFFFFF',
     type: 'over'
   },
   //THIRD TAB SET (PLAN)
   Plan: {
-    screen: PlanScreen,
+    screen: PlanScreenFactory,
     type: 'over'
   },
   //FOUTH TAB SET (TEAM)
   Team: {
-    screen: TeamScreen,
+    screen: TeamScreenFactory,
     type: 'over'
   },
   //CHAT MESSAGING AND VIDEO ROUTES
@@ -143,7 +209,7 @@ return new SwipeNavigator({
   },
 
   Photos: {
-    screen: Photos,
+    screen: PhotosFactory,
     type: 'over'
   }
 
@@ -159,11 +225,40 @@ return new SwipeNavigator({
       )
   }
 
+  const TrainerLandingFactory = (nav) => {
+    return (
+      <TrainerLanding topNav={topNav} nav={nav.nav}/>
+      )
+  }
+
+  const ProfileFactory = (nav) => {
+    return (
+      <TrainerProfile topNav={topNav} nav={nav.nav}/>
+      )
+  }
+
+  const TrainerFeedFactory = (nav) => {
+    return (
+      <TrainerFeed topNav={topNav} nav={nav.nav}/>
+      )
+  }
+  
+  const RosterFactory = (nav) => {
+    return (
+      <Roster topNav={topNav} nav={nav.nav}/>
+      )
+  }
+
+  const WorkoutPlansFactory = (nav) => {
+    return (
+      <WorkoutPlans topNav={topNav} nav={nav.nav}/>
+      )
+  }
   return new SwipeNavigator({
 
   //FIRST TAB TEST SET (Inputs/Profile)
   Home: {
-    screen: TrainerLanding,
+    screen: TrainerLandingFactory,
     type: 'over',
     top: 'LogOut',
     left: 'Profile',
@@ -171,13 +266,13 @@ return new SwipeNavigator({
   },
 
   Profile: {
-    screen: TrainerProfile,
+    screen: ProfileFactory,
     top: 'LogOut',
     type: 'over'
   },
 
   Feed: {
-    screen: TrainerFeed,
+    screen: TrainerFeedFactory,
     top: 'LogOut',
     type: 'over'
   },
@@ -189,13 +284,13 @@ return new SwipeNavigator({
   },
 
   Roster: {
-    screen: Roster,
+    screen: RosterFactory,
     type: 'over',
     top: 'LogOut'
   },
 
   Plans: {
-    screen: WorkoutPlans,
+    screen: WorkoutPlansFactory,
     type: 'over',
     top: 'LogOut'
   },

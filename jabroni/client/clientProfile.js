@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Button, Dimensions, Image, AsyncStorage } from 'react-native'
+import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, Button, Dimensions, AsyncStorage } from 'react-native'
 import Chat from '../utilities/chatIcon'
 import FooterNav from './FooterNav.js'
 import SVG from '../SVG/svg5Center.js'
@@ -70,7 +70,7 @@ class Profile extends React.Component {
           <View style={{flex: 2}}>
             <Text style={styles.textBox}>Swipe left for your diet!</Text>
             <Text style={styles.textBox}>Swipe right for your daily inputs and progress stuff!</Text>
-            <Chat nav={this.props.nav}/>
+            <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
           </View>
           <FooterNav nav={this.props.nav} index={0} />
       </View>

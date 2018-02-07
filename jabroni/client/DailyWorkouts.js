@@ -16,6 +16,9 @@ import gql from 'graphql-tag';
 import Chat from '../utilities/chatIcon'
 import FooterNav from './FooterNav.js'
 import SVG from '../SVG/svg5Left.js'
+import firebase from '../utilities/firebase.js'
+
+const database = firebase.database();
 const { width, height } = Dimensions.get('window');
 
 class WorkoutScreen extends React.Component {
@@ -26,7 +29,8 @@ class WorkoutScreen extends React.Component {
       color: 'white',
       selectedDay: new Date().getDay(),
       workoutData: {},
-      loading: true
+      loading: true,
+      trainer: ''
     }
     this.setupWorkoutData = this.setupWorkoutData.bind(this);
     this.updateWorkoutDisplay = this.updateWorkoutDisplay.bind(this);
@@ -39,7 +43,7 @@ class WorkoutScreen extends React.Component {
     AsyncStorage.getItem('@FitApp:UserInfo')
     .then((userInfoString) => {
       this.state.user = JSON.parse(userInfoString);
-      console.log('USER IN STATE', this.state.user);
+      // console.log('USER IN STATE', this.state.user);
       this.props.client.query({
         query: planQuery,
         variables: {
@@ -47,11 +51,27 @@ class WorkoutScreen extends React.Component {
         }
       })
       .then(({data}) => {
-        console.log('DATA IN WILL MOUNT', data)
-        this.setState({data, loading: false})
+        // console.log('DATA IN DID MOUNT', data)
+        this.setState({data, loading: false}, ()=>{
+
+          this.props.client.query({
+            query: getSpotters,
+            variables: {
+              id: this.state.user.id
+            }
+          })
+          .then(({data}) => {
+            this.setState({trainer: data.getSpotters[0].trainer.id})
+            // this.setState({data, loading: false})
+          })
+
+
+        })
       })
     })
     .catch((err) => console.error('Error retrieving user info from storage!', err));
+    
+
   }
 
   handleInputChange (newData, workoutType, dataField) {
@@ -62,7 +82,7 @@ class WorkoutScreen extends React.Component {
   }
 
   setupWorkoutData (workout) {
-    console.log('HERE WITH', workout);
+    // console.log('HERE WITH', workout);
     var workoutData = {};
     Object.keys(workout).forEach((workoutType) => {
       workoutData[workoutType] = {
@@ -74,6 +94,9 @@ class WorkoutScreen extends React.Component {
   }
 
   handleWorkoutSubmission () {
+    var date = new Date().toDateString()
+    database.ref('UserData/' + this.state.trainer)
+    .push({date: date, order: new Date().valueOf(), user: this.state.user.fullName, workout: this.state.workoutData});
     let dataString = JSON.stringify({workout: this.state.workoutData})
     this.props.client.mutate({
       mutation: planMutation,
@@ -114,10 +137,10 @@ class WorkoutScreen extends React.Component {
     }
 
     const { getExercisePlans } = this.state.data;
-    console.log('l123 GOT HERE WITH', getExercisePlans)
+    // console.log('l123 GOT HERE WITH', getExercisePlans)
     if (getExercisePlans && !this.state.dailyWorkout && !this.state.displaySet) {
       this.state.regimen = JSON.parse(getExercisePlans.slice().pop().regimen);
-      this.state.dailyWorkout =this.state.regimen[this.state.selectedDay];
+      this.state.dailyWorkout = this.state.regimen[this.state.selectedDay];
       if (this.state.dailyWorkout !== "OFF") {
         this.setupWorkoutData(this.state.dailyWorkout); 
       }
@@ -147,7 +170,7 @@ class WorkoutScreen extends React.Component {
             <Picker.Item label="Wednesday" value={3} />
             <Picker.Item label="Thursday" value={4} />
             <Picker.Item label="Friday" value={5} />
-            <Picker.Item label="Sunday" value={6} />
+            <Picker.Item label="Saturday" value={6} />
           </Picker>
 
           {this.state.dailyWorkout !== "OFF" ? Object.keys(this.state.dailyWorkout).map((workoutType, i) => {
@@ -185,7 +208,7 @@ class WorkoutScreen extends React.Component {
               title={'Submit Workout'}
               onPress={this.handleWorkoutSubmission}
             />}
-          <Chat nav={this.props.nav}/>
+          <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
 
         </View>)}
       <FooterNav nav={this.props.nav} index={0}/>
@@ -231,5 +254,15 @@ mutation setDailyRecord($user_id: Int!, $data: String!) {
   }
 }
 `
+
+const getSpotters = gql`
+query getSpotters($id: Int!){
+  getSpotters(id: $id, type: "client") {
+    id
+    trainer{
+      id
+    }
+  }
+}`
 
 export default withApollo(WorkoutScreen);

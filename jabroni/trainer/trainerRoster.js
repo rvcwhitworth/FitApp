@@ -84,6 +84,7 @@ class TrainerRoster extends React.Component {
     if(!this.state.selected){
     return (
       <View style={styles.container}>
+
         <View style={{flex:1, flexDirection:'column'}}>
         {this.state.clients.map((val, key) => {
           return(<View key={key} style={{flex:1, flexDirection:'column'}}>
@@ -94,7 +95,7 @@ class TrainerRoster extends React.Component {
             </View>
             )
         })}
-          <Chat nav={this.props.nav} />
+          <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
         </View>
         <Nav nav={this.props.nav} index={2}/>
       </View>

@@ -22,7 +22,7 @@ class BodyComposition extends React.Component {
       <SVG />
       <View style={{flex: 1}}>
         <Graph />
-      <Chat nav={this.props.nav} />
+      <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
       </View>
         <FooterNav nav={this.props.nav} index={2}/>
        
