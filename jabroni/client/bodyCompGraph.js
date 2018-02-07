@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-
+import { View, Text, StyleSheet, AsyncStorage } from 'react-native';
+import { withApollo } from 'react-apollo';
 import { SmoothLine } from 'react-native-pathjs-charts'
+
+const getDailyInput = require('../utilities/queries.js').getDailyInput;
 
 const styles = StyleSheet.create({
   container: {
@@ -13,9 +15,37 @@ const styles = StyleSheet.create({
 });
 
 class SmoothLineChartRegions extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true
+    }
+  }
   static navigationOptions = ({ navigation }) => ({
     title: `SmoothLine - Regions`,
   });
+
+  componentDidMount(){
+    AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
+      if ( err ) {
+        console.log(err);
+      } else {
+        let id = JSON.parse(val).id;
+        this.props.client.query({
+          query: getDailyInput,
+          variables: {
+            id: id
+          }
+        }).then((results) => {
+          this.setState({
+            loading: false
+          });
+          console.log('data for graph: ', results);
+        });
+      }
+    })
+  }
+
   render() {
     let data = [ 
     [{
@@ -128,7 +158,7 @@ class SmoothLineChartRegions extends Component {
       }
     }
 
-    return (
+    return this.state.loading ? <View><Text>Loading...</Text></View>: (
       <View style={styles.container}>
         <SmoothLine data={data}
           options={options} regions={regions} regionStyling={regionStyling} xKey='x' yKey='y' />
@@ -137,4 +167,4 @@ class SmoothLineChartRegions extends Component {
   }
 }
 
-export default SmoothLineChartRegions;
+export default withApollo(SmoothLineChartRegions);
