@@ -5,7 +5,7 @@ import { withRouter } from 'react-router';
 import ChangeUser from '../../actions/example.jsx'
 import axios from 'axios'
 
-class NewsFeed extends React.Component{
+class ChatRooms extends React.Component{
   constructor(props){
       super(props)
       this.state = {
@@ -24,7 +24,7 @@ class NewsFeed extends React.Component{
       return(
         <div>
         <img src={this.state.backgroundImage} style={{zIndex: -1, width:'100%', height:'100%', position: 'absolute'}} />
-        <h2>This is where our updates will go</h2>
+        <h2> put roster here =} </h2>
         </div>
         )
   }
@@ -36,10 +36,10 @@ const mapStoreToProps = (store) => {
     id: store.auth.auth,
     user: store.auth.username,
     goals: store.auth.goals,
-    backgroundImage: store.branding.backgroundImg
+    backgroundImage: store.branding.backgroundImg,
   };
 };
 
 export default withRouter(connect(
   mapStoreToProps
-)(NewsFeed));
+)(ChatRooms));

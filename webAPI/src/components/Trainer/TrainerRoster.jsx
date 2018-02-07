@@ -11,7 +11,8 @@ class Roster extends React.Component{
       this.state = {
         id : this.props.id || null,
         username : this.props.user || null,
-        goals : this.props.goals || null
+        goals : this.props.goals || null,
+        backgroundImage: this.props.backgroundImage
       }
   }
 
@@ -21,7 +22,10 @@ class Roster extends React.Component{
   render() {
 
       return(
-        <div> put roster here =} </div>
+        <div>
+        <img src={this.state.backgroundImage} style={{zIndex: -1, width:'100%', height:'100%', position: 'absolute'}} />
+        <h2> put roster here =} </h2>
+        </div>
         )
   }
 }
@@ -31,7 +35,8 @@ const mapStoreToProps = (store) => {
   return {
     id: store.auth.auth,
     user: store.auth.username,
-    goals: store.auth.goals
+    goals: store.auth.goals,
+    backgroundImage: store.branding.backgroundImg,
   };
 };
 

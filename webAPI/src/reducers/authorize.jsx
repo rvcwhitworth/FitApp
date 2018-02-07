@@ -1,8 +1,9 @@
 export default function authReducer (state={
 	auth: null,
-	user: 'Bob',
-	password: 'NotPassword',
+	user: '',
+	id: '',
 	fetching: false,
+	email: '',
 	fetched: false,
 	error: null,
 	goals: []
@@ -12,14 +13,11 @@ export default function authReducer (state={
 	switch (action.type) {
 		case 'AUTH_USER' : {
 			return {
-				user: action.payload.username,
-				password: action.payload.password,
-				auth: action.payload.id,
+				...state,
+				auth: action.payload.type,
 				type: action.payload.type,
-				fetching: true,
-				fetched: state.fetched,
-				error: state.error,
-				goals: JSON.parse(action.payload.goals)
+				user: action.payload.fullName,
+				goals: action.payload.goals
 			}
 		}
 
@@ -38,14 +36,14 @@ export default function authReducer (state={
 		case 'AUTH_LOGOUT' : {
 			console.log('are we loging out??')
 			return {
-				user: null,
-				password: null,
 				auth: null,
-				fetching: true,
-				type: null,
-				fetched: state.fetched,
-				error: state.error,
-				goals: null
+	            user: '',
+	            id: '',
+	            fetching: false,
+	            email: '',
+	            fetched: false,
+	            error: null,
+	            goals: []
 			}
 		}
 		case 'AUTH_USER_REJECTED' : {
