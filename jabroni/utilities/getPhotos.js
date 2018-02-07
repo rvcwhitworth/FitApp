@@ -20,6 +20,7 @@ let downloadPic = function(url, name) {
 }
 
 async function getPhotos(){
+	console.log('getting photos');
 	AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
 		if ( err ) {
 			console.log('error retrieving UserInfo from AsyncStorage.');
@@ -27,8 +28,9 @@ async function getPhotos(){
 	  else {
 	    let id = JSON.parse(val).id.toString();
 	    // use id to download photo files from firebase:
-	    database.ref("imgURLs/" + id).once("value", function(snapshot) {
-					// snapshot.val() is an object. iterate throgh object to get all the names of img files in imageStore:
+	    database.ref("imgURLs/" + id).once("value", (snapshot) => {
+	    	console.log('snapshot: ', snapshot);
+				// snapshot.val() is an object. iterate throgh object to get all the names of img files in imageStore:
 				for (var fileName in snapshot.val()) {
 					// download files from the imageStore and push into array.
 					let url = imageStore.ref("images/" + id + "/" + fileName).getDownloadURL()
@@ -39,7 +41,7 @@ async function getPhotos(){
 					    if ( pics.length === Object.keys(snapshot.val()).length ) {
 					    	AsyncStorage.setItem('@FitApp:UserPhotos', JSON.stringify(pics)).then(() => {
 					    		console.log('saved photos to async storage.');
-					    	})
+					    	});
 					    }
 						});
 				}
@@ -48,4 +50,6 @@ async function getPhotos(){
 	});
 }
 
-module.exports = {getPhotos: getPhotos}
+module.exports = {
+	getPhotos: getPhotos,
+}
