@@ -1,10 +1,12 @@
 import React from 'react'
-import { View, Text, TextInput, StyleSheet, Dimensions, Button } from 'react-native'
+import { View, Text, TextInput, StyleSheet, Dimensions, Button, Alert, AsyncStorage } from 'react-native'
 import Chat from '../utilities/chatIcon'
 import FooterNav from './FooterNav.js'
 import SVG from '../SVG/svg5Bottom.js'
+import { graphql, withApollo } from 'react-apollo';
 
 const { width, height } = Dimensions.get('window');
+const submitDailyInput = require('../utilities/mutations.js').submitDailyInput;
 
 class DailyInputs extends React.Component {
   constructor(props) {
@@ -15,13 +17,15 @@ class DailyInputs extends React.Component {
       weight: '',
       BodyFatPer: '',
       height: '',
-      wasit: '',
+      waist: '',
       hip: '',
       neck: ''
     }
-    this.handleInputs = this.handleInputs.bind(this)
-    this.Calculate = this.Calculate.bind(this)
-    this.fakeItTillYouMakeIt = this.fakeItTillYouMakeIt.bind(this)
+
+    this.handleInputs = this.handleInputs.bind(this);
+    this.Calculate = this.Calculate.bind(this);
+    this.submitData = this.submitData.bind(this);
+    this.reset = this.reset.bind(this);
   }
 
   componentDidMount() {
@@ -31,8 +35,7 @@ class DailyInputs extends React.Component {
     nav.onNavigateShouldAllow(() => {
        return true;
     });
-      this.props.nav.cleanUp()
-
+    this.props.nav.cleanUp()
   }
 
   componentWillUnmount() {
@@ -57,13 +60,40 @@ class DailyInputs extends React.Component {
     })
   }
 
-  fakeItTillYouMakeIt(){
+  submitData(){
+    // send data to graphQL using imported mutation
+    AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
+      if ( err ) {
+        console.log('asyncStorage error in dailyInputs component');
+        Alert.alert('something went wrong...');
+      } else {
+        console.log('submitting daily input');
+        let id = JSON.parse(val).id;
+        let data = Object.assign({}, this.state, {color: undefined});
+        this.props.client.mutate({
+          mutation: submitDailyInput,
+          variables: {
+            user_id: id,
+            data: JSON.stringify(data)
+          }
+        }).then(({data}) => {
+          console.log('graphQL success!', data);
+        }).catch(err => {
+          console.log('apollo error: ', err);
+        })
+        this.reset();
+      }
+    })
+
+  }
+
+  reset(){
     this.setState({
       color: '#9575CD',
       weight: '',
       BodyFatPer: '',
       height: '',
-      wasit: '',
+      waist: '',
       hip: '',
       neck: ''
     })
@@ -86,7 +116,7 @@ class DailyInputs extends React.Component {
           onChangeText={(text) => this.handleInputs(text, 'BodyFatPer')}
           value={this.state.BodyFatPer} />
 
-          <Button style={{marginTop: 10}}title="Save your measurments" onPress={this.fakeItTillYouMakeIt}/>
+          <Button style={{marginTop: 10}}title="Save your measurments" onPress={this.submitData}/>
 
           <View> 
           <Text style={{margin: 10, height: 50, paddingLeft: 5, paddingTop: 20}}>Body Fat Percentage Calculator</Text>
@@ -140,4 +170,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default DailyInputs
+export default withApollo(DailyInputs)
