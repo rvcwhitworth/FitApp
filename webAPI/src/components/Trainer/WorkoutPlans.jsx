@@ -12,7 +12,8 @@ class WorkoutPlans extends React.Component{
       this.state = {
         id : this.props.id || null,
         username : this.props.user || null,
-        creating: false
+        creating: false,
+        backgroundImage: this.props.backgroundImage
       }
       this.createTemplate = this.createTemplate.bind(this)
       this.finishedTemplate = this.finishedTemplate.bind(this)
@@ -39,11 +40,17 @@ class WorkoutPlans extends React.Component{
   render() {
     console.log('how many times???')
     if(this.state.creating){
-      return(<Template save={this.finishedTemplate} />)
+      return(
+        <div>
+          <img src={this.state.backgroundImage} style={{zIndex: -1, width:'100%', height:'100%', position: 'absolute'}} />
+          <Template save={this.finishedTemplate} />
+        </div>)
     } else{
       return(
-        <button onClick={() => {this.createTemplate()}} className="btn btn-lg btn-block" type='button' >Create a new Template</button>
-        )
+        <div>
+          <button onClick={() => {this.createTemplate()}} className="btn btn-lg btn-block" type='button' >Create a new Template</button>
+          <img src={this.state.backgroundImage} style={{zIndex: -1, width:'100%', height:'100%', position: 'absolute'}} />
+        </div>)
     }
   }
 }
@@ -53,6 +60,7 @@ const mapStoreToProps = (store) => {
   return {
     id: store.auth.auth,
     user: store.auth.username,
+    backgroundImage: store.branding.backgroundImg,
   };
 };
 
