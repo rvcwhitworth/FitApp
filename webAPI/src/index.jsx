@@ -31,10 +31,10 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <Provider store={Store}>
-  <ApolloProvider client={client}>
-      <Router history={history}>
-      <Header />
-      </Router>
-  </ApolloProvider>
+    <ApolloProvider client={client}>
+        <Router history={history}>
+            <Header/>
+        </Router>
+    </ApolloProvider>
   </Provider> , 
   document.getElementById('mount'));

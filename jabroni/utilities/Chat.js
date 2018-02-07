@@ -88,8 +88,7 @@ class Chat extends React.Component {
         
           <TouchableHighlight style={styles.button} onPress={()=>{console.log("press", this.props); this.props.navigation.goBack()}} underlayColor='red'>
           {/* <TouchableHighlight style={styles.button} onPress={()=>{console.log("press"); this.props.nav.navigateBack()}} underlayColor='red'> */}
-
-                <Text style={styles.buttonText}>BACK</Text>
+            <Text style={styles.buttonText}>BACK</Text>
           </TouchableHighlight>
 
           
@@ -99,9 +98,9 @@ class Chat extends React.Component {
               // console.log(room)
               if(room.user.fullName){
                 return <Button
-                key={idx}
-                title={room.user.fullName}
-                onPress={ ()=>{this.touch(room.room_id)}  }
+                  key={idx}
+                  title={room.user.fullName}
+                  onPress={ ()=>{this.touch(room.room_id)}  }
                 />
               }
             } )}
@@ -126,13 +125,13 @@ class Chat extends React.Component {
           </ScrollView>
 
            <View style={{display: this.state.showRoom, paddingBottom: 10}}>
-           <Form
+            <Form
               ref="message"
               type={this.state.Person}
             />
-          <TouchableHighlight style={styles.button} onPress={()=>{this.send(), console.log("press")}} underlayColor='red'>
+            <TouchableHighlight style={styles.button} onPress={()=>{this.send(), console.log("press")}} underlayColor='red'>
               <Text style={styles.buttonText}>Send</Text>
-          </TouchableHighlight>
+            </TouchableHighlight>
           </View>
 
         </View>        
