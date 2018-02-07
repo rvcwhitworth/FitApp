@@ -32,13 +32,14 @@ class Chat extends React.Component {
   }
 
   render() {
+    console.log('whats in this chatIcon', this.props)
     return (
       <FloatingAction
         actions={actions}
         overlayColor={'transparent'}
         onPressItem={
           (name) => {
-            this.props.nav.navigate(`${name}`)
+            this.props.TopNav.navigation.navigate(`${name}`)
           }
         } />
     )

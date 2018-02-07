@@ -35,7 +35,7 @@ class Profile extends React.Component {
       </View>  
         <View style={{flex: 2}}>
           <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center'}}>YOU'RE A TRAINER HARRRYYYYY</Text>
-          <Chat nav={this.props.nav}/>
+          <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
         </View>
         <Nav nav={this.props.nav} index={0}/>
       </View>

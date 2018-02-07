@@ -159,7 +159,7 @@ class TeamScreen extends React.Component {
               </View>
           )}}
         />}
-        <Chat nav={this.props.nav}/>
+        <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
       </View>
     <FooterNav nav={this.props.nav} index={4} />
   </View>);

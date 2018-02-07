@@ -130,7 +130,7 @@ class Photos extends React.Component {
 					)}
 					<Button onPress={this.next} title="next" />
 				</View>
-				<Chat nav={this.props.nav} />
+				<Chat nav={this.props.nav} TopNav={this.props.topNav}/>
 				<NavFooter nav={this.props.nav} index={3} />
 			</View>
 		);

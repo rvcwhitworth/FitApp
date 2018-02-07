@@ -65,7 +65,7 @@ class Profile extends React.Component {
           <View style={{flex: 2}}>
             <Text style={styles.textBox}>Swipe left for your diet!</Text>
             <Text style={styles.textBox}>Swipe right for your daily inputs and progress stuff!</Text>
-            <Chat nav={this.props.nav}/>
+            <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
           </View>
           <FooterNav nav={this.props.nav} index={0} />
       </View>

@@ -52,7 +52,7 @@ const App = StackNavigator({
     screen: TrainerHome
   },
 
-  chat:{
+  Messages:{
     screen: Chat
   }
 },  

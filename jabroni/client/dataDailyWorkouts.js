@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, Text, TextInput, StyleSheet, Dimensions } from 'react-native'
+import Chat from '../utilities/chatIcon.js'
 const { width, height } = Dimensions.get('window');
 import SVG from '../SVG/svg5Left.js'
 
@@ -19,6 +20,7 @@ class Weekly extends React.Component {
       <SVG />
         <View style={{marginTop: 5, flex:1}}>
           <Text> So this is where we would show lifting data over time ect ect....</Text>
+          <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
         </View>
       </View>
     )

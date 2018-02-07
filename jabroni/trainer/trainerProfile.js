@@ -21,11 +21,6 @@ class TrainerProfile extends React.Component {
   componentDidMount() {
     this.props.nav.cleanUp()
     const { nav } = this.props;
-
-    // nav.onNavigateDownShouldAllow(() => {
-    //   return false;
-    // });
-
   }
 
   componentWillUnmount() {
@@ -33,6 +28,7 @@ class TrainerProfile extends React.Component {
   }
 
   render() {
+    console.log('what is love', this.props)
     return (
       <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>  
       <View style={{flex:1}}>
@@ -40,9 +36,9 @@ class TrainerProfile extends React.Component {
       </View>  
         <View style={{flex: 2}}>
           <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center'}}>I AM THE TRAIIINNNAAAAAAA NAAAOOOWWWW</Text>
-          <Chat nav={this.props.nav}/>
+          <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
         </View>
-        <Nav nav={this.props.nav} index={0}/>
+        <Nav nav={this.props.nav} TopNav={this.props.topNav} index={0}/>
       </View>
     );
 

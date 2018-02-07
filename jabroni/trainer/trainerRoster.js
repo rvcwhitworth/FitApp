@@ -18,7 +18,7 @@ class TrainerRoster extends React.Component {
     return (
       <View style={styles.container}>
         <View style={{flex:1}}>
-          <Chat nav={this.props.nav} />
+          <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
           <Text> This is where we will put the roster at for the trainer to view and make each person a touchable component to render </Text>
         </View>
         <Nav nav={this.props.nav} index={2}/>

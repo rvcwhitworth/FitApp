@@ -4,8 +4,8 @@ import { FloatingAction } from 'react-native-floating-action';
 import Chat from '../utilities/chatIcon'
 import { withApollo, graphql, ApolloProvider, compose } from 'react-apollo';
 import gql from 'graphql-tag';
-import FooterNav from './FooterNav.js'
 import ProgressCircle from '../utilities/progressCircle'
+import FooterNav from './FooterNav.js'
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 
 const { width, height } = Dimensions.get('window');
@@ -140,8 +140,6 @@ class PlanScreen extends React.Component {
       <View style={styles.item}>
         <Text>Workout: {JSON.stringify(workout)}</Text>
         <Text>Diet: {JSON.stringify(diet)}</Text>
-      
-        
     <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>
     <View style={styles.container}>
       <Text>
@@ -151,10 +149,9 @@ class PlanScreen extends React.Component {
         {/* {data.getDietPlans[data.getDietPlans.length-1].trainer.fullName} */}
       </Text>
       <Button onPress={this.submit} title="submit" />
-      <Chat nav={this.props.nav} />
+      <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
       </View>
       </View>
-      
       </View>
     );
   }
@@ -207,7 +204,7 @@ class PlanScreen extends React.Component {
             maxDate={today.getFullYear + '-' + today.getMonth + '-' + '31'}
           /> */}
 
-          <Chat nav={this.props.nav} />
+          <Chat nav={this.props.nav} TopNav={this.props.topNav} />
         </View>
       <FooterNav nav={this.props.nav} index={1} /> 
     </View>

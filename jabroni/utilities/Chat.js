@@ -5,12 +5,10 @@ import gql from 'graphql-tag';
 import { Button, Divider } from 'react-native-elements'
 import firebase from './firebase.js'
 
-// import * as firebase from 'firebase';
-// import TOKENS from './../TOKENS.js';
 var t = require('tcomb-form-native');
 var Form = t.form.Form;
 
-var database = firebase.database();
+const database = firebase.database();
 
 class Chat extends React.Component {
   constructor(props){
@@ -36,31 +34,10 @@ class Chat extends React.Component {
     
   }
   componentWillMount(){
-    // console.log("WILL MOUNT")
-    // AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
-    //   if (err) console.log(err);
-    //     else {console.log("STORE STORE STORE STORE +++>>><+++===>>>",val, JSON.parse(val))}
-  
-    //     var storeVals = JSON.parse(val);
-
-    //       this.state.presentUser = storeVals.username;
-    //       this.state.presentUserID = 1; 
-    //        // Based Async Store Changes For ID
-    //         this.props.client.query({
-    //           query: getChatRooms,
-    //           variables: {
-    //             id: 1
-    //           }
-    //         }).then((data)=>{
-    //           this.state.rooms = data;
-    //           this.state.propsReady = true;
-    //           console.log("WILL MOUNT",this.state.rooms)
-    //         })
-    //   })  
-    }
+  }
 
   componentDidMount() {
-    console.log("DID MOUNT", this.state.rooms)
+    console.log("DID MOUNT")
  
   AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
     if (err) console.log(err);
@@ -77,7 +54,7 @@ class Chat extends React.Component {
               id: this.state.presentUserID
             }
           }).then((data)=>{
-            console.log("DDATTATTAA+++>>>>",data)
+            // console.log("DDATTATTAA+++>>>>",data)
             this.setState({rooms: data.data.getChatRooms, propsReady: true}) 
           })
     })  
@@ -99,7 +76,7 @@ class Chat extends React.Component {
   }
   send(){
     var value = this.refs.message.getValue();
-    database.ref('/rooms/' + this.state.currentRoom + '/messages').push({user: this.state.presentUser , message: value.Message})
+    database.ref('/rooms/' + this.state.currentRoom + '/messages').push({user: this.state.presentUser, message: value.Message})
   }
 
   render() {
@@ -111,12 +88,15 @@ class Chat extends React.Component {
       <View style={styles.container}>
         {/* <Text>HELLOOHHELLELOOOOOOO</Text> */}
         <View style={{ display: this.state.showRooms}}>
-          <TouchableHighlight style={styles.button} onPress={()=>{console.log("press"); this.props.nav.navigateBack()}} underlayColor='red'>
+        
+          <TouchableHighlight style={styles.button} onPress={()=>{console.log("press", this.props); this.props.navigation.goBack()}} underlayColor='red'>
+          {/* <TouchableHighlight style={styles.button} onPress={()=>{console.log("press"); this.props.nav.navigateBack()}} underlayColor='red'> */}
+
                 <Text style={styles.buttonText}>BACK</Text>
           </TouchableHighlight>
           
           <View >
-            {console.log("COMP",this.state.rooms)}
+            {console.log("COMP")}
             {this.state.rooms.map( (room, idx)=>{
               // console.log(room)
               if(room.user.fullName){
@@ -138,19 +118,12 @@ class Chat extends React.Component {
 
           <ScrollView ref={ref => this.scrollView = ref}
               onContentSizeChange={(contentWidth, contentHeight)=>{ this.scrollView.scrollToEnd({animated: true})}}>
-              {
-              // console.log("MESSAGES=>", this.state.messages)
-
-              }
-            {
-              this.state.messages.map( (message, idx)=>{
+              {/* console.log("MESSAGES=>", this.state.messages)*/}
+            {this.state.messages.map( (message, idx)=>{
                 if(this.state.messages.length > 0){
                   return <Text key={idx} style={styles.message}> <Text style={styles.user}>{message.user}</Text> :     {message.message}</Text>
                 }
-              })
-            }
-            
-            
+              })}
           </ScrollView>
 
            <View style={{display: this.state.showRoom, paddingBottom: 10}}>

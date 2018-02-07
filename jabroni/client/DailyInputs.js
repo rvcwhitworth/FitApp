@@ -119,7 +119,7 @@ class DailyInputs extends React.Component {
 
           <Button style={{marginTop: 10}}title="Calculate Your Body Composition!" onPress={this.Calculate}/>
 
-          <Chat nav={this.props.nav}/>
+          <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
         </View>
         <FooterNav nav={this.props.nav} index={0}/>
       </View>
