@@ -4,6 +4,7 @@ import Chat from '../utilities/chatIcon'
 import FooterNav from './FooterNav.js'
 import SVG from '../SVG/svg5Center.js'
 import firebase from '../utilities/firebase.js'
+var {getPhotos} = require('../utilities/getPhotos');
 
 const { width, height } = Dimensions.get('window');
 const imageStore = firebase.storage();
@@ -15,41 +16,46 @@ class Profile extends React.Component {
       profPic: require('../../images/muscle.gif'),
       userInfo: {},
     }
-    this.downloadPic = this.downloadPic.bind(this);
-  }
-
-  componentWillMount() {
-    // read profile picture from firebase storage:
-    AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
-      if ( err ) console.log('error retrieving UserInfo from AsyncStorage.');
-      else {
-        let id = JSON.parse(val).id;
-        this.setState({userInfo: JSON.parse(val)}); // store info for rendering
-        // use id to download profile picture
-        imageStore.ref('/images/'+id+'/profilePicture').getDownloadURL().then((url) => {
-          this.downloadPic(url);
-        }).catch((err) => {
-          // no profile picture set yet - set default
-          console.log('error in getting profile picture!');
-          this.setState({profPic: require('../../images/tearingMeApart.jpeg')})
-        });
-      }
-    })
-  }
-
-  downloadPic(url, name) {
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = "text";
-    xhr.onload = event => {
-      this.setState({ profPic: { uri: `data:image/jpg;base64,${xhr.response}` }});
-    };
-    xhr.open("GET", url);
-    xhr.send();
   }
 
   componentDidMount() {
+    console.log('componentDidMount.');
     this.props.nav.cleanUp()
     const { nav } = this.props;
+    getPhotos().then((err, val) => {
+      if ( err ) {
+        console.log('getPhotos error: ', err);
+      } else {
+        console.log('getPhotos success!');
+        
+        console.log('getPhotos finished.')
+        // use AsyncStorage to grab prof pic:
+        AsyncStorage.getItem('@FitApp:UserPhotos', (err, val) => {
+          if ( err ) {
+            console.log('async storage error in componentDidMount:', err)
+          } else {
+            console.log('got photos from async storage in component did mount.');
+            if ( !val ) {
+              console.log('no pics yet.');
+              return;
+            }
+            let pics = JSON.parse(val);
+            // pics is an array of tuples -> [fileName, base64]
+            // iterate through and look for the profilePicture:
+            pics.forEach(tuple => {
+              console.log('pic name: ', tuple[0]);
+              if ( tuple[0] === 'profilePicture') {
+                this.setState({
+                  profPic: { uri: `data:image/jpg;base64,${tuple[1]}` }
+                }, () => {
+                  console.log('set state of profile picture.')
+                });
+              }
+            });
+          }
+        });
+      }
+    });
   }
 
   componentWillUnmount() {
