@@ -35,7 +35,7 @@ class TrainerFeed extends React.Component {
       this.setState({trainer: JSON.parse(userInfoString)}, ()=>{
         database.ref('UserData/' + this.state.trainer.id).on("child_added", (snapshot)=>{
           this.state.feed.push(snapshot.val())
-          console.log('STATE FEED',this.state.feed)
+          // console.log('STATE FEED',this.state.feed)
         });
       }) 
 
@@ -70,7 +70,7 @@ class TrainerFeed extends React.Component {
           this.state.feed.map((ele, i)=>{
             if(ele.diet){
               return (
-                <Card 
+                <Card key={i}
                   avatar={{url: "https://img00.deviantart.net/f161/i/2005/120/e/1/_superman_kal_el__by_quintessentialmorose.jpg"}}
                   title={ele.user}>
                   {
@@ -106,7 +106,7 @@ class TrainerFeed extends React.Component {
                         //   // avatar={{uri:u.avatar}}
                         // />
                         <View>
-                        <Badge value={key}/>
+                        <Badge value={key} key={idx}/>
                         <Text key={idx}>{" Freq:" + ele.workout[key].frequency + ' Weight: ' + ele.workout[key].weight}</Text>
                         </View>
                       )
