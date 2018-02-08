@@ -50,8 +50,7 @@ export default class CameraExample extends React.Component {
   }
 
   goBack() {
-    console.log('go back!');
-    this.props.nav.navigateBack();
+    this.props.navigation.goBack();
   }
 
   snap() {
