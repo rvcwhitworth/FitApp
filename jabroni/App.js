@@ -10,6 +10,7 @@ import ClientLogInScreen from './client/ClientLogIn.js';
 import TrainerLogInScreen from './trainer/TrainerLogIn.js'
 import SignUpScreen from './SignUp';
 import Plan from './client/PlanScreen';
+import Camera from './utilities/camera.js';
 import TeamScreen from './client/TeamScreen';
 import DataScreen from './client/DataScreen';
 import Chat from './utilities/Chat'
@@ -54,6 +55,9 @@ const App = StackNavigator({
 
   Messages:{
     screen: Chat
+  },
+  Camera:{
+    screen: Camera
   }
 },  
 {
