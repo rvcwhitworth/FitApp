@@ -13,7 +13,8 @@ class WorkoutPlans extends React.Component{
         id : this.props.id || null,
         username : this.props.user || null,
         creating: false,
-        backgroundImage: this.props.backgroundImage
+        backgroundImage: this.props.backgroundImage,
+        plans: this.props.plans
       }
       this.createTemplate = this.createTemplate.bind(this)
       this.finishedTemplate = this.finishedTemplate.bind(this)
@@ -30,15 +31,18 @@ class WorkoutPlans extends React.Component{
     })
   }
 
+  divClick(){
+    console.log('YESSSS')
+  }
+
   finishedTemplate(obj){
     this.setState({
       creating: false,
-      workout: obj
     })
   }
 
   render() {
-    console.log('how many times???')
+    console.log(this.state)
     if(this.state.creating){
       return(
         <div>
@@ -47,9 +51,23 @@ class WorkoutPlans extends React.Component{
         </div>)
     } else{
       return(
+        <div style={{flexDirection:'Column'}}>
+        <img src={this.state.backgroundImage} style={{zIndex: -1, width:'100%', height:'100%', position: 'absolute'}} />
         <div>
+        {this.state.plans.map((val, key) =>{
+          return(
+            <div className="card" key ={key} onClick={this.divClick}style={{width: "12rem", maxheight:'20rem', padding:'10px', float:'left', cursor:'pointer'}}>
+              <img className="card-img-top" src={val.photo} alt="Card image cap" />
+              <div className="card-block">
+                <h4 className="card-title">{val.name}</h4>
+                <p className="card-text">{val.description}</p>
+              </div>
+            </div>
+          )
+        }
+        )}
+        </div>
           <button onClick={() => {this.createTemplate()}} className="btn btn-lg btn-block" type='button' >Create a new Template</button>
-          <img src={this.state.backgroundImage} style={{zIndex: -1, width:'100%', height:'100%', position: 'absolute'}} />
         </div>)
     }
   }
@@ -61,6 +79,7 @@ const mapStoreToProps = (store) => {
     id: store.auth.auth,
     user: store.auth.username,
     backgroundImage: store.branding.backgroundImg,
+    plans: store.branding.template
   };
 };
 

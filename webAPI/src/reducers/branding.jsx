@@ -6,6 +6,7 @@ export default function exampleReducer (state={
 	fetched: false,
 	error: null,
 	goals: [],
+	template: [{name: 'Dwight Howard Shoulder Day', description:'A killer shoulder workout that makes Jon Yuen cry Jabroni tears', photo:'https://www.webpagefx.com/blog/images/cdn.designinstruct.com/files/582-how-to-image-placeholders/generic-image-placeholder.png'}],
 	backgroundImg: 'https://www.webpagefx.com/blog/images/cdn.designinstruct.com/files/582-how-to-image-placeholders/generic-image-placeholder.png',
 	profileImg: 'https://www.webpagefx.com/blog/images/cdn.designinstruct.com/files/582-how-to-image-placeholders/generic-image-placeholder.png'
 }, action){
@@ -25,12 +26,10 @@ export default function exampleReducer (state={
 				profileImg: action.payload
 			}
 		}
-		case 'FETCH_EXAMPLE_FULFILLED' : {
+		case 'ADD_TEMPLATE' : {
 			return {
-				error: state.error,
-				fetching: false,
-				fetched: true,
-				foo: action.payload
+				...state,
+				template: state.template.concat(action.payload)
 			}
 		}
 		default : {

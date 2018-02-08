@@ -14,7 +14,7 @@ class DietAnalytics extends React.Component{
       }
       this.testChange = this.testChange.bind(this)
       this.updateMacro = this.updateMacro.bind(this)
-      this.updateWeight = this.updateWeight.bind(this)
+      this.updateCaloric = this.updateCaloric.bind(this)
   }
 //WILL NEED TO ADD MORE GRAPHS HERE
   componentDidMount () {
@@ -24,7 +24,7 @@ class DietAnalytics extends React.Component{
   testChange(e){
   	console.log(e.target.value)
   	if(e.target.value === 'Caloric'){
-  		this.updateBodyFatPer()
+  		this.updateCaloric()
   	} else if(e.target.value === 'Macro'){
   		this.updateMacro()
   	} else{
@@ -66,22 +66,20 @@ var chart = c3.generate({
 });
   }
 
-  updateGraphBodyComp() {
+  updateCaloric() {
     var chart = c3.generate({
     bindto: '#chart',
     data: {
+      selection: {
+          enabled: true
+        },
         x: 'x',
         columns: [
-            ['x', 1, 7, 14, 21, 28, 35],
-            ['FatMass', 30, 27, 25, 24, 22, 20],
-            ['LeanMass', 165, 166, 170, 173, 178, 182]
-        ],
-        types: {
-          FatMass: 'area',
-          LeanMass: 'area'
-          // 'line', 'spline', 'step', 'area', 'area-step' are also available to stack
-        },
-        groups: [['FatMass', 'LeanMass']]
+            ['x', 1, 2, 3, 4, 5, 6],
+            ['Goal', 2.5, 2.5, 2.5, 2.2, 2.5, 2.2],
+            ['Actual', 2.4, 2.6, 2.2 , 2.5, 2.5, 2.0]
+        ]
+        // groups: [['Goal', 'Actual']]
     }
 });
   }

@@ -5,10 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import ChangeUser from '../actions/example.jsx'
 import Bypass from '../actions/bypass.jsx'
-<<<<<<< HEAD
 import Auth from '../actions/authorize.jsx'
-=======
->>>>>>> a8813ce51a2fbded4b8f48da8a341fe7b1e73243
 import { graphql, ApolloProvider, withApollo } from 'react-apollo';
 import auth from '../actions/authorize.jsx'
 import {
