@@ -14,40 +14,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class SmoothLineChartRegions extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: true
-    }
-  }
-  static navigationOptions = ({ navigation }) => ({
-    title: `SmoothLine - Regions`,
-  });
-
-  componentDidMount(){
-    AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
-      if ( err ) {
-        console.log(err);
-      } else {
-        let id = JSON.parse(val).id;
-        this.props.client.query({
-          query: getDailyInput,
-          variables: {
-            id: id
-          }
-        }).then((results) => {
-          this.setState({
-            loading: false
-          });
-          console.log('data for graph: ', results);
-        });
-      }
-    })
-  }
-
-  render() {
-    let data = [ 
+const dummyData = [ 
     [{
       'x': 0,
       'y': 220
@@ -91,7 +58,60 @@ class SmoothLineChartRegions extends Component {
         "x": 5,
         "y": 178
       }]
-    ]
+    ];
+
+class SmoothLineChartRegions extends Component {
+  constructor(props) {
+    super(props);
+    // graphData[0] is an array where y vals represent weight
+    // graphData[1] is an array where y vals represent weight - (bodyFatPer * weight) i.e. "lean mass"
+    this.state = {
+      graphData: dummyData,
+      loading: true
+    }
+  }
+  static navigationOptions = ({ navigation }) => ({
+    title: `SmoothLine - Regions`,
+  });
+
+  componentDidMount(){
+    AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
+      if ( err ) {
+        console.log(err);
+      } else {
+        let id = JSON.parse(val).id;
+        this.props.client.query({
+          query: getDailyInput,
+          variables: {
+            id: id
+          }
+        }).then(({data}) => {
+          // currently, the Daily_Records table stores workout data and weight/measurements...
+          // so need to iterate through results and select the measurement data to display:
+          let graphData = [[], []];
+          data.getDailyRecords.forEach(record => {
+            let entry = JSON.parse(record.data);
+            let date = record.created_at;
+            if ( entry ) {
+              let weight = entry.weight;
+              let bfp = entry.BodyFatPer;
+              console.log('data for graphing: ', weight, bfp, date);
+              graphData[0].push([{'x': date, 'y': weight}]);
+              graphData[1].push([{'x': date, 'y': weight - (bfp * weight)}]);
+            }
+          });
+
+          this.setState({
+            graphData: graphData,
+            loading: false
+          });
+
+        });
+      }
+    })
+  }
+
+  render() {
 
     let regions = [{
       label: 'Normal weight',
@@ -160,7 +180,7 @@ class SmoothLineChartRegions extends Component {
 
     return this.state.loading ? <View><Text>Loading...</Text></View>: (
       <View style={styles.container}>
-        <SmoothLine data={data}
+        <SmoothLine data={this.state.graphData}
           options={options} regions={regions} regionStyling={regionStyling} xKey='x' yKey='y' />
       </View>
     )

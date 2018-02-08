@@ -37,11 +37,11 @@ class Chat extends React.Component {
   }
 
   componentDidMount() {
-    console.log("DID MOUNT")
+    // console.log("DID MOUNT")
  
   AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
     if (err) console.log(err);
-      else {console.log("STORE STORE STORE STORE +++>>><+++===>>>",val, JSON.parse(val))}
+      // else {console.log("STORE STORE STORE STORE +++>>><+++===>>>",val, JSON.parse(val))}
 
       var storeVals = JSON.parse(val);
 
@@ -58,7 +58,7 @@ class Chat extends React.Component {
             this.setState({rooms: data.data.getChatRooms, propsReady: true}) 
           })
     })  
-  console.log("DID MOUNT+++>>>>", this.state.rooms)
+  // console.log("DID MOUNT+++>>>>", this.state.rooms)
 
   }
 
@@ -97,7 +97,7 @@ class Chat extends React.Component {
 
           
           <View >
-            {console.log("COMP")}
+            {/*console.log("COMP")*/}
             {this.state.rooms.map( (room, idx)=>{
               // console.log(room)
               if(room.user.fullName){
