@@ -19,13 +19,12 @@ class BodyComposition extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-      <SVG />
-      <View style={{flex: 1, alignSelf: 'center'}}>
-        <Graph />
-      <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
-      </View>
+        <SVG />
+        <View style={styles.graphContainer}>
+          <Graph style={styles.graph} />
+          <Chat style={styles.chat} nav={this.props.nav} TopNav={this.props.topNav}/>
+        </View>
         <FooterNav nav={this.props.nav} index={2}/>
-       
       </View>
     )
 
@@ -36,10 +35,25 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     width:width, 
     height:height
   },
+  graphContainer: {
+    flex: 3,
+    flexDirection: 'column',
+    height: "50%",
+    marginBottom: "20%" 
+  },
+  chat: {
+    marginTop: '20%',
+    borderWidth: 2,
+    borderColor: "green"
+  },
+  graph: {
+    borderWidth: 2,
+    borderColor: "red"
+  }
 })
 
 export default BodyComposition
