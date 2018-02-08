@@ -26,8 +26,8 @@ class WorkoutPlans extends React.Component{
       this.handleTemplateMenu = this.handleTemplateMenu.bind(this)
   }
 
-  componentWillReceiveProps(nextProps) {
-
+  componentDidMount() {
+    //here is where we will query??? or should we pull from redux that hopefully loaded everything
   }
 
   createTemplate(e){
