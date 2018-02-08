@@ -1,0 +1,49 @@
+.example-enter {
+  opacity: 0.1;
+  transform:  scale(1,1) translate(0px, 0%);
+}
+.example-enter.example-enter-active {
+  opacity: 1;
+  background-color: 'black';
+  transform: scale(2,2) translate(100px, 0%);
+  transition-property: transform, opacity;
+  transition-duration: 1000ms;
+  transition-timing-function: cubic-bezier(0.175, 0.665, 0.320, 1), linear;
+}
+
+.example-exit {
+	opacity: 1;
+	transform: scale(2,2) translate(100px, 0%);
+}
+.example-exit.example-exit-active {
+	opacity: 0;
+	transform: scale(1,1) translate(0px, 0%);
+	transition-property: transform, opacity;
+	transition-duration: 500ms;
+	transition-timing-function: cubic-bezier(0.175, 0.665, 0.320, 1), linear;
+}
+
+.fade-exit {
+   animation: slideIn 1.5s ease;
+}
+
+
+@keyframes slideIn {
+    0% {
+       opacity:1
+    }
+
+       100% {
+         
+       transform: translateX(500px);
+    }
+}
+
+.greeting {
+  padding: 20px;
+  background-color: plum;
+  width: 200px;
+  margin: auto;
+  text-align: center;
+  border-radius: 4px;
+}

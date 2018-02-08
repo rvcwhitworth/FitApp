@@ -11,7 +11,7 @@ import WorkoutPlans from './Trainer/WorkoutPlans.jsx'
 import Roster from './Trainer/TrainerRoster.jsx'
 import NewsFeed from './Trainer/NewsFeed.jsx'
 import ClientAnalytics from './Client/ClientAnalytics.jsx'
-
+import ClientTeam from './Client/ClientTeam.jsx'
 import {
   HashRouter as Router,
   Route,
@@ -75,7 +75,7 @@ class Header extends React.Component{
         <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/signUp'>Photos</Link></button>
         <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/Analytics'>Analytics</Link></button>
         <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/signUp'>Planner</Link></button>
-        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/signUp'>Team</Link></button>
+        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/Team'>Team</Link></button>
         <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/signUp'>Chat</Link></button>
         <button className="btn btn-secondary btn-lg" onClick={this.handleClick} style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}>Log out</button>
         </ul>
@@ -85,6 +85,7 @@ class Header extends React.Component{
 
         <Route exact path='/' component={ClientProfile}/>
         <Route exact path='/Analytics' component={ClientAnalytics}/>
+        <Route exact path='/Team' component={ClientTeam}/>
 
       </div>
       )

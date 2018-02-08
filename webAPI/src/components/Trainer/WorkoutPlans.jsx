@@ -5,6 +5,8 @@ import { withRouter } from 'react-router';
 import ChangeUser from '../../actions/example.jsx'
 import axios from 'axios'
 import Template from './WorkoutTemplate.jsx'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
+// import Styles from '../../www/ReactCSSAnimation.css'
 
 class WorkoutPlans extends React.Component{
   constructor(props){
@@ -14,10 +16,14 @@ class WorkoutPlans extends React.Component{
         username : this.props.user || null,
         creating: false,
         backgroundImage: this.props.backgroundImage,
-        plans: this.props.plans
+        plans: this.props.plans,
+        popOut: null,
+        show: false
       }
       this.createTemplate = this.createTemplate.bind(this)
       this.finishedTemplate = this.finishedTemplate.bind(this)
+      this.popOutMenu = this.popOutMenu.bind(this)
+      this.handleTemplateMenu = this.handleTemplateMenu.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -31,13 +37,58 @@ class WorkoutPlans extends React.Component{
     })
   }
 
-  divClick(){
-    console.log('YESSSS')
+  divClick(i){
+    console.log('what is love?', this.state)
+    if(i !== this.state.popOut){
+    this.setState({
+      popOut: i,
+      show: !this.state.show
+    })}
+  }
+
+  handleTemplateMenu(e){
+    if(e.target.id === 'close'){
+      console.log('are we closing?')
+      this.setState({
+        show:false,
+      }, () => {
+        this.setState({
+          popOut: null
+        })
+      })
+    } else{
+      console.log('What did you click?', e.target.id)
+    }
+  }
+
+  popOutMenu(i) {
+    if(this.state.popOut === i){
+      return (
+        <CSSTransition 
+          classNames="example"
+          in={this.state.show}>
+         <div key={i} style={{backgroundColor:'rgba(0,0,0,0.5'}}>
+         <button onClick={this.handleTemplateMenu} id='View/Edit' className="btn btn-lg btn-block" type='button' >View/Edit</button>
+         <button onClick={this.handleTemplateMenu} id='SendToClient' className="btn btn-lg btn-block" type='button' >Send to a client</button>
+         <button onClick={this.handleTemplateMenu} id='close' className="btn btn-lg btn-block" type='button' >Close</button>
+         </div>
+       </CSSTransition>
+      )
+    } else{
+      return(            
+        <CSSTransition 
+            classNames="example"
+            in={this.state.show}>
+            <div key={i}>
+            </div>
+        </CSSTransition>)
+    }
   }
 
   finishedTemplate(obj){
     this.setState({
       creating: false,
+      plans: this.state.plans.concat(obj)
     })
   }
 
@@ -56,12 +107,15 @@ class WorkoutPlans extends React.Component{
         <div>
         {this.state.plans.map((val, key) =>{
           return(
-            <div className="card" key ={key} onClick={this.divClick}style={{width: "12rem", maxheight:'20rem', padding:'10px', float:'left', cursor:'pointer'}}>
+            <div>
+            <div className="card" key={key} onClick={() => this.divClick(key)}style={{width: "12rem", maxheight:'20rem', padding:'10px', float:'left', cursor:'pointer'}}>
               <img className="card-img-top" src={val.photo} alt="Card image cap" />
               <div className="card-block">
+                    {this.popOutMenu(key)}
                 <h4 className="card-title">{val.name}</h4>
                 <p className="card-text">{val.description}</p>
               </div>
+            </div>
             </div>
           )
         }

@@ -92,7 +92,7 @@ class Template extends React.Component{
       obj[val] = this.state[key]
     })
     this.props.dispatch(AddTemplate(obj))
-    this.props.save()
+    this.props.save(obj)
   }
 
   picUpload(e){
@@ -100,7 +100,6 @@ class Template extends React.Component{
     var file = document.getElementById('file').files;
     // console.log(file)
     if (file) {
-      console.log('what is FIlereader???', FileReader)
       var BackReader = new FileReader
       BackReader.onload = (e) => {
         var payload = { uri: e.target.result }
