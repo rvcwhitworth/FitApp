@@ -5,6 +5,7 @@ import { withRouter } from 'react-router';
 import c3 from 'c3';
 import BodyCompGraphs from './Graphs/bodyComp.jsx'
 import DietAnalytcis from './Graphs/dietAnalytics.jsx'
+import { graphql, ApolloProvider, withApollo } from 'react-apollo';
 
 class Analytics extends React.Component{
   constructor(props){
@@ -101,4 +102,4 @@ const mapStoreToProps = (store) => {
 
 export default withRouter(connect(
   mapStoreToProps
-)(Analytics));
+)(withApollo(Analytics)));

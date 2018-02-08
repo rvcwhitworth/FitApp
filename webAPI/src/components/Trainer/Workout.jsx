@@ -93,7 +93,6 @@ class Workout extends React.Component{
         })}
         <button value='tester' onClick={(e) =>{ this.testingForms(e)}}> Add Sets! </button>
         <input placeholder='notes' name='notes' val={this.state.notes} onChange={this.handleInputs} />
-        <button value='tester' onClick={(e) =>{this.grabEverything(e)}}> Grab everything </button>
 
         </div>
         )
