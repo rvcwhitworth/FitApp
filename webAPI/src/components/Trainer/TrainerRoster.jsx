@@ -4,6 +4,35 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import ChangeUser from '../../actions/example.jsx'
 import axios from 'axios'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
+const Fade = ({ children, ...props }) => (
+  <CSSTransition
+    {...props}
+    timeout={500}
+    classNames="example"
+  >
+    {children}
+  </CSSTransition>
+);
+
+class FadeInAndOut extends React.Component {
+  constructor(...args) {
+    super(...args);
+    this.state = { show: false };
+
+    setInterval(() => {
+      this.setState({ show: !this.state.show })
+    }, 500)
+  }
+  
+  render() {
+    return (
+      <Fade in={this.state.show}>
+        <div className='greeting'>Hello world</div>
+      </Fade>
+    )
+  }
+}
 
 class Roster extends React.Component{
   constructor(props){
@@ -22,10 +51,7 @@ class Roster extends React.Component{
   render() {
 
       return(
-        <div>
-        <img src={this.state.backgroundImage} style={{zIndex: -1, width:'100%', height:'100%', position: 'absolute'}} />
-        <h2> put roster here =} </h2>
-        </div>
+        <FadeInAndOut />
         )
   }
 }
