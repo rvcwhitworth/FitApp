@@ -88,7 +88,7 @@ class logInScreen extends React.Component {
       error: false
     }
     this.logIn = this.logIn.bind(this);
-    console.log('login props: ', this.props);
+    // console.log('login props: ', this.props);
   }
 
   componentDidMount(){

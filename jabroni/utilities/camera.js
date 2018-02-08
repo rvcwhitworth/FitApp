@@ -111,6 +111,7 @@ export default class CameraExample extends React.Component {
   }
 
   render() {
+    console.log('in camera!');
     const { hasCameraPermission } = this.state;
     const { width, height } = Dimensions.get('window');
     if (hasCameraPermission === null) {

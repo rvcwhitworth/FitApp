@@ -19,31 +19,31 @@ class Profile extends React.Component {
   }
 
   componentDidMount() {
-    console.log('componentDidMount.');
+    // console.log('componentDidMount.');
     this.props.nav.cleanUp()
     const { nav } = this.props;
     getPhotos().then((err, val) => {
       if ( err ) {
         console.log('getPhotos error: ', err);
       } else {
-        console.log('getPhotos success!');
+        // console.log('getPhotos success!');
         
-        console.log('getPhotos finished.')
+        // console.log('getPhotos finished.')
         // use AsyncStorage to grab prof pic:
         AsyncStorage.getItem('@FitApp:UserPhotos', (err, val) => {
           if ( err ) {
             console.log('async storage error in componentDidMount:', err)
           } else {
-            console.log('got photos from async storage in component did mount.');
+            // console.log('got photos from async storage in component did mount.');
             if ( !val ) {
-              console.log('no pics yet.');
+              // console.log('no pics yet.');
               return;
             }
             let pics = JSON.parse(val);
             // pics is an array of tuples -> [fileName, base64]
             // iterate through and look for the profilePicture:
             pics.forEach(tuple => {
-              console.log('pic name: ', tuple[0]);
+              // console.log('pic name: ', tuple[0]);
               if ( tuple[0] === 'profilePicture') {
                 this.setState({
                   profPic: { uri: `data:image/jpg;base64,${tuple[1]}` }
@@ -63,7 +63,7 @@ class Profile extends React.Component {
   }
 
   render() {
-    console.log('did we get the props we want 22', this.props)
+    // console.log('did we get the props we want 22', this.props)
     return ( 
       <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>
         <View style={{flex:1}}>
