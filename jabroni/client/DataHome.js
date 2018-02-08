@@ -12,7 +12,7 @@ class logInScreen extends React.Component {
   }
 
   render(){
-    console.log('logInScreen props: ', this.props.navigation);
+    // console.log('logInScreen props: ', this.props.navigation);
     return (
     <View style={{flexDirection:'column', backgroundColor: 'white', height:height, width:width}}>
     <SVG />
