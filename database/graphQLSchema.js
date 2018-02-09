@@ -7,6 +7,12 @@ module.exports = `
 		type: String!
 		email: String
 		profile_data: String
+		Exercise_Plan: [Exercise_Plan]
+		Diet_Plan: [Diet_Plan]
+		Daily_Record: [Daily_Record]
+		Spotter: [Spotter]
+		Personal_Record: [Personal_Record]
+		Chat_Room: [Chat_Room]
 	}
 
 	type Exercise_Plan {

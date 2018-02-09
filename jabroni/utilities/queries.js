@@ -45,8 +45,8 @@ mutation setSpotter($trainer_id: Int!, $client_id: Int!){
       username
     }
   }
-}`
-
+}
+`
 
 
 const getDietPlans = gql`

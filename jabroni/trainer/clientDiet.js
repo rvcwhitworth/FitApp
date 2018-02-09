@@ -17,6 +17,7 @@ class ClientDiet extends React.Component {
     this.state ={
       client: 'Loading'
     }
+    this.reset = this.reset.bind(this)
   }
 
 
@@ -38,6 +39,13 @@ class ClientDiet extends React.Component {
     }
   }
 
+    reset(){
+    this.setState({
+      client: '',
+      loaded: false
+    })
+  }
+
   componentWillUnmount() {
     this.props.nav.cleanUp()
   }
@@ -50,7 +58,7 @@ class ClientDiet extends React.Component {
         <View style={{flex: 2}}>
           <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center'}}>You are looking at {this.state.client} client diet</Text>
         </View>
-        <NavClient nav={this.props.nav} index={1}/>
+        <NavClient nav={this.props.nav} reset={this.reset} index={1}/>
       </View>
     );
 

@@ -47,11 +47,16 @@ app.use(cors({'Access-Control-Allow-Origin': '*'}))
 
 // var database = firebaseDb.database();
 
+
+
+
 app.use('/graphql', graphqlHTTP({
 	schema: graphqltools.makeExecutableSchema({typeDefs: graphQLSchema, resolvers: resolvers}),
 	graphiql: true,
-	context: collections
+	context: collections,
+	Connection: 'Keep-Alive'
 }));
+
 
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'

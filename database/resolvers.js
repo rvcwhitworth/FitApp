@@ -42,6 +42,7 @@ module.exports = {
 			return db.setUser(obj);
 		},
 		setExercisePlan: (parent, obj, db) => {
+			console.log('are we resoliving anyhting??')
 			return db.setExercisePlan(obj);
 		},
 		setDietPlan: (parent, obj, db) => {
@@ -59,6 +60,22 @@ module.exports = {
 		setChatRoom: (parent, obj, db) => {
 			return db.setChatRoom(obj);
 		}
+	},
+
+	User: {
+		Exercise_Plan: (parent, args, db) => {
+			return db.getExercisePlans(parent.id, parent.type)
+		},
+		Spotter: (parent, args, db) => {
+			return db.getSpotters(parent.id, parent.type)
+		},
+		Personal_Record: (parent, args, db) => {
+			return db.getPersonalRecord(parent.id, parent.type)
+		},
+		Chat_Room: (parent, args, db) => {
+			return db.getChatRooms(parent.id, parent.type)
+		}
+
 	},
 
 	Diet_Plan: {

@@ -24,9 +24,68 @@ const q = gql`
       type
       email
       profile_data
-    }
-  }
-`
+      Spotter {
+        id
+        trainer{
+          id
+          fullName
+        }
+        client{
+          id
+          fullName
+        }
+      }
+      Exercise_Plan {
+        id
+        name
+        regimen
+        trainer{
+          id
+          fullName
+        }
+        client{
+          id
+          fullName
+        }
+      }
+      Personal_Record {
+        id
+        data
+      }
+      Chat_Room {
+        id
+        room_id
+        user {
+          id
+          fullName
+        }
+      }
+    }}`
+
+
+  //   }
+  // }
+// query { loginUser(username: "test", password: "test") {
+//       id
+//       fullName
+//       username
+//       type
+//       email
+//       profile_data
+//       Spotter {
+//         id
+//         trainer {
+//           id
+//           fullName
+//         }
+//         client {
+//           id
+//           fullName
+//         }
+//       }
+// } }
+
+
 
 //login
 class LogIn extends React.Component{
@@ -123,9 +182,14 @@ class LogIn extends React.Component{
         console.log('what did we get back', data)
         let payload = {
           type: type,
+          PR: data.loginUser.Personal_Record,
+          id: data.loginUser.id,
+          Exercise_Plan: data.loginUser.Exercise_Plan,
+          Chat_Room: data.loginUser.Chat_Room,
           auth: data.loginUser.type,
           fullName: data.loginUser.fullName,
           email: data.loginUser.email,
+          spotters: data.loginUser.Spotter,
           goals: JSON.parse(data.loginUser.profile_data).goals
         }
         this.props.dispatch(Auth(payload))

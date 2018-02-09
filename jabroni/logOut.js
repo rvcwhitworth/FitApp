@@ -49,7 +49,7 @@ class LogOut extends React.Component{
     <View>
     </View>
       <Button title="Switch to Trainer Profile" onPress={() => {
-      console.log('hi1')
+      this.props.topNav.navigation.navigate('TrainerHome')
       }} />
       <Button title="Logout" style={styles.button} onPress={this.getOut} />
     </View>);
