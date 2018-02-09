@@ -6,6 +6,7 @@ import gql from 'graphql-tag';
 import { FormLabel, FormInput, FormValidationMessage, ButtonGroup } from 'react-native-elements'
 var t = require('tcomb-form-native');
 var Form = t.form.Form;
+let getPhotosList = require('../../s3_utilities.js').getPhotosList;
 
 var styles = StyleSheet.create({
   scrollView:{
@@ -117,6 +118,9 @@ class logInScreen extends React.Component {
       if (!data.loginUser) {
         Alert.alert('Invalid username or password!', 'Please try again.');
       } else {
+        getPhotosList(3).then((result) => {
+          console.log('data from AWS: ', result);
+        });
         AsyncStorage.setItem('@FitApp:UserInfo', JSON.stringify(data.loginUser))
         .then(() => this.props.navigation.dispatch(resetAction))
         .catch((err) => console.error('Error writing user info to storage', err))
@@ -127,7 +131,7 @@ class logInScreen extends React.Component {
       this.setState({
         error: true
       });
-    })
+    });
   }
 
   render(){

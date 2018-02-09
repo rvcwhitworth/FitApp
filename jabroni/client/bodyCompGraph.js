@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, AsyncStorage } from 'react-native';
 import { withApollo } from 'react-apollo';
 import { SmoothLine } from 'react-native-pathjs-charts'
 
-const getDailyInput = require('../utilities/queries.js').getDailyInput;
+import getDailyRecord from '../utilities/queries.js';
 
 const styles = StyleSheet.create({
   container: {
