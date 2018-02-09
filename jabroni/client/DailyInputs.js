@@ -6,7 +6,7 @@ import SVG from '../SVG/svg5Bottom.js'
 import { graphql, withApollo } from 'react-apollo';
 
 const { width, height } = Dimensions.get('window');
-const submitDailyInput = require('../utilities/mutations.js').submitDailyInput;
+import {setDailyRecord} from '../utilities/mutations.js';
 
 class DailyInputs extends React.Component {
   constructor(props) {
@@ -71,7 +71,7 @@ class DailyInputs extends React.Component {
         let id = JSON.parse(val).id;
         let data = Object.assign({}, this.state, {color: undefined});
         this.props.client.mutate({
-          mutation: submitDailyInput,
+          mutation: setDailyRecord,
           variables: {
             user_id: id,
             data: JSON.stringify(data)

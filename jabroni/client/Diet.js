@@ -17,6 +17,11 @@ const NIX_URL = 'https://trackapi.nutritionix.com/v2/natural/nutrients';
 
 const { width, height } = Dimensions.get('window');
 
+// graphQL queries and mutations:
+import {getDietPlans as dietQuery} from '../utilities/queries.js';
+import {getSpotters} from '../utilities/queries.js';
+import {setDailyRecord} from '../utilities/mutations.js';
+
 class DietScreen extends React.Component {
   constructor(props) {
     super(props)
@@ -138,14 +143,39 @@ class DietScreen extends React.Component {
       fat: nutrition.fat,
       protein: nutrition.protein
     }, ()=>{
-      var date = new Date().toDateString();
-      database.ref('UserData/' + this.state.trainer).push({id: this.state.user.id, order: new Date().valueOf(), date: date, user: this.state.user.fullName, 
-        diet: {name: this.state.foodName, carbs: this.state.carbs, calories: this.state.calories, fat: this.state.fat, protein: this.state.protein}});
-    })
+      AsyncStorage.getItem("@FitApp:UserInfo", (err, val) => {
+      if ( err ) {
+        console.log('error: ', err);
+      } else {
+          let id = JSON.parse(val).id;
+          let data = {
+            carbs: this.state.carbs,
+            calories: this.state.calories,
+            fat: this.state.fat,
+            protein: this.state.protein
+          }
+          this.props.client.mutate({
+            mutation: setDailyRecord,
+            variables: {
+              user_id: id,
+              data: JSON.stringify(data)
+            }
+          });
+        
+        }
+      });
+
+      // why use firebase?
+      // var date = new Date().toDateString();
+      // database.ref('UserData/' + this.state.trainer).push({id: this.state.user.id, order: new Date().valueOf(), date: date, user: this.state.user.fullName, 
+      //   diet: {name: this.state.foodName, carbs: this.state.carbs, calories: this.state.calories, fat: this.state.fat, protein: this.state.protein}});
+    });
   }
 
   handleDietChange (dietInput) {
-    this.setState({dietInput});
+    this.setState({dietInput}, () => {
+      console.log(this.state.dietInput);
+    });
   }
 
   handleSelectChange (selectedDay) {
@@ -222,6 +252,7 @@ class DietScreen extends React.Component {
             multiline={true}
             onChangeText={this.handleDietChange}
             value={this.state.dietInput}
+            onSubmitEditing={Keyboard.dismiss}
           />
           <Button
             title={'submit'}
@@ -266,27 +297,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18
   }
-})
-
-const dietQuery = gql`
-query getDietPlans($id: Int!){
-  getDietPlans(id: $id, type: "client") {
-    diet
-    trainer {
-      fullName
-    }
-  }
-}
-`
-
-const getSpotters = gql`
-query getSpotters($id: Int!){
-  getSpotters(id: $id, type: "client") {
-    id
-    trainer{
-      id
-    }
-  }
-}`
+});
 
 export default withApollo(DietScreen);
