@@ -61,12 +61,7 @@ const getDietPlans = gql`
 `;
 
 module.exports = {
-<<<<<<< HEAD
 	getDailyRecords,
-=======
-	getDailyInput,
-	searchQuery,
->>>>>>> Template save as well as full profile pull on login with redux storing
 	spotterQuery,
 	addSpotter,
 	getDietPlans,
