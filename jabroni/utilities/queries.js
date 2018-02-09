@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
 
-const getDailyInput = gql`
+
+const getDailyRecords = gql`
 	query getDailyRecords($id: Int!, $timestamp: String) {
 		getDailyRecords(id: $id, timestamp: $timestamp) {
 			id
@@ -44,12 +45,26 @@ mutation setSpotter($trainer_id: Int!, $client_id: Int!){
       username
     }
   }
-}
+}`
 
+
+
+const getDietPlans = gql`
+	query getDietPlans($id: Int!){
+	  getDietPlans(id: $id, type: "client") {
+	    diet
+	    trainer {
+	      fullName
+	    }
+	  }
+	}
+`;
 
 module.exports = {
-	getDailyInput,
 	getDailyRecords,
 	spotterQuery,
-	addSpotter
+	addSpotter,
+	getDietPlans,
+	spotterQuery,
+	searchQuery
 }

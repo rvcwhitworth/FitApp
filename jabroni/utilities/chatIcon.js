@@ -32,7 +32,7 @@ class Chat extends React.Component {
   }
 
   render() {
-    console.log('whats in this chatIcon', this.props.TopNav);
+    // console.log('whats in this chatIcon', this.props.TopNav);
     return (
       <FloatingAction
         actions={actions}
