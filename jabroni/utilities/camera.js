@@ -1,9 +1,11 @@
 import React from 'react';
 import { Text, View, TouchableOpacity, TouchableHighlight, Dimensions, Button, Image, AsyncStorage, StyleSheet, Alert } from 'react-native';
 import { Camera, Permissions } from 'expo';
+const upload = require('../../s3_utilities.js').upload;
+
 // import * as firebase from 'firebase';
 // import TOKENS from '../../TOKENS.js';
-import firebase from './firebase.js'
+// import firebase from './firebase.js'
 
 // const firebaseConfig = {
 //   apiKey: TOKENS.firebaseConfig.apiKey,
@@ -15,8 +17,8 @@ import firebase from './firebase.js'
 // };
 
 // const firebaseApp = firebase.initializeApp(firebaseConfig);
-const imageStore = firebase.storage().ref().child('images');
-const database = firebase.database();
+// const imageStore = firebase.storage().ref().child('images');
+// const database = firebase.database();
 
 export default class CameraExample extends React.Component {
   constructor(props) {
@@ -92,21 +94,23 @@ export default class CameraExample extends React.Component {
       pic: null
     });
 
-    // use id to set up path in firebase storage for this user's pictures
-    let folder = imageStore.child(this.state.userID.toString());
-    let fileName = this.state.pic.exif.DateTimeOriginal; // timestamp
+    upload(this.state.pic.exif.DateTimeOriginal, this.state.pic.base64, this.state.userID);
 
-    // save image to fireStore
-    let address = folder.child(fileName);
-    address.putString(this.state.pic.base64).then((snapshot) => {
-      // save reference to file in firebase database so it can be downloaded later:
-      database.ref('imgURLs').child(this.state.userID.toString()+'/'+fileName).set({
-        name: fileName
-      });
+    // // use id to set up path in firebase storage for this user's pictures
+    // let folder = imageStore.child(this.state.userID.toString());
+    // let fileName = this.state.pic.exif.DateTimeOriginal; // timestamp
 
-    }).catch(err => {
-      console.log('firebase save error: ', err);
-    })
+    // // save image to fireStore
+    // let address = folder.child(fileName);
+    // address.putString(this.state.pic.base64).then((snapshot) => {
+    //   // save reference to file in firebase database so it can be downloaded later:
+    //   database.ref('imgURLs').child(this.state.userID.toString()+'/'+fileName).set({
+    //     name: fileName
+    //   });
+
+    // }).catch(err => {
+    //   console.log('firebase save error: ', err);
+    // })
   }
 
   render() {
