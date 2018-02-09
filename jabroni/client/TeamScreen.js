@@ -217,8 +217,8 @@ class TeamScreen extends React.Component {
 //       username
 //     }
 //   }
-// }
-`
+// }`
+
 
 
 const styles = StyleSheet.create({

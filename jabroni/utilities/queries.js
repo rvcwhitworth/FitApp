@@ -45,9 +45,7 @@ mutation setSpotter($trainer_id: Int!, $client_id: Int!){
       username
     }
   }
-}`
-
-
+}`;
 
 const getDietPlans = gql`
 	query getDietPlans($id: Int!){
@@ -57,8 +55,7 @@ const getDietPlans = gql`
 	      fullName
 	    }
 	  }
-	}
-`;
+	}`;
 
 module.exports = {
 	getDailyRecords,
