@@ -14,8 +14,15 @@ export default function authReducer (state={
 		case 'AUTH_USER' : {
 			return {
 				...state,
-				auth: action.payload.type,
+				auth: action.payload.auth,
+				PR: action.payload.PR,
+				Exercie_Plan: action.payload.Exercie_Plan,
+				Chat_Room: action.payload.Chat_Room,
+				fullName: action.payload.fullName,
+				email: action.payload.email,
 				type: action.payload.type,
+				id: action.payload.id,
+				spotters : action.payload.spotters,
 				user: action.payload.fullName,
 				goals: action.payload.goals
 			}

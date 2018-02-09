@@ -35,11 +35,19 @@ class ClientWorkout extends React.Component {
       this.setState({
         client: JSON.parse(name).name
       })
+      this.reset = this.reset.bind(this)
     }
   }
 
   componentWillUnmount() {
     this.props.nav.cleanUp()
+  }
+
+  reset(){
+    this.setState({
+      client: '',
+      loaded: false
+    })
   }
 
   render() {
@@ -50,7 +58,7 @@ class ClientWorkout extends React.Component {
         <View style={{flex: 2}}>
           <Text style={{fontSize: 30, marginBottom: 50, textAlign:'center'}}>You are looking at {this.state.client} client workout data</Text>
         </View>
-        <NavClient nav={this.props.nav} index={2}/>
+        <NavClient nav={this.props.nav} reset={this.reset} index={2}/>
       </View>
     );
 

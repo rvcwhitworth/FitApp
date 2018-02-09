@@ -93,6 +93,7 @@ module.exports.loginUser = (username, password) => {
 }
 
 module.exports.setExercisePlan = (obj) => {
+	console.log('is this activating????')
 	return Exercise_Plans.create({
 		name: obj.name,
 		regimen: obj.regimen,

@@ -7,6 +7,10 @@ import AddTemplate from '../../actions/addTemplate.jsx'
 import axios from 'axios'
 import Workout from './Workout.jsx'
 import ImgHandler from './workoutTemplatePhotoUpload.jsx'
+import { graphql, ApolloProvider, withApollo } from 'react-apollo';
+import { createExercisePlan } from '../../../utilities/mutations.jsx'
+
+
 
 class Template extends React.Component{
   constructor(props){
@@ -25,6 +29,7 @@ class Template extends React.Component{
       this.saveMe = this.saveMe.bind(this)
       this.updateTemplateInfo = this.updateTemplateInfo.bind(this)
       this.picUpload = this.picUpload.bind(this)
+      console.log('createExercisePlan', createExercisePlan)
   }
 
   testingForms(e){
@@ -92,6 +97,16 @@ class Template extends React.Component{
       obj[val] = this.state[key]
     })
     this.props.dispatch(AddTemplate(obj))
+    this.props.client.mutate({
+      mutation: createExercisePlan,
+      variables: {
+        name: this.state.templateTitle,
+        regimen: JSON.stringify(obj),
+        trainer_id: this.state.id,
+        client_id: this.state.id
+      }
+    }).then((...args) => console.log('hey it worked', ...args))
+
     this.props.save(obj)
   }
 
@@ -133,7 +148,6 @@ class Template extends React.Component{
         <button value='tester' onClick={(e) =>{ this.testingForms(e)}}> Add workouts! </button>
         <input onChange={this.testingInputs} placeholder='Exercise Name' value={this.state.WorkoutName} /> 
         <button onClick={() => {this.saveMe()} } className="btn btn-lg btn-block" type='button' style={{position:'relative', bottom:'0'}}>Save Template</button>
-
         </div>
         )
   }
@@ -142,7 +156,7 @@ class Template extends React.Component{
 const mapStoreToProps = (store) => {
   console.log('store', store);
   return {
-    id: store.auth.auth,
+    id: store.auth.id,
     user: store.auth.username,
     goals: store.auth.goals
   };
@@ -150,4 +164,4 @@ const mapStoreToProps = (store) => {
 
 export default withRouter(connect(
   mapStoreToProps
-)(Template));
+)(withApollo(Template)));
