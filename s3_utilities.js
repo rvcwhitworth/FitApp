@@ -10,7 +10,7 @@ Amplify.configure({
 
 
 module.exports.getPhotosList = (id) => {
-	return Storage.list('3/').then((photo) => {
+	return Storage.list(id+'/').then((photo) => {
 		return photo;
 	}).catch((err) => {
 		console.log(err);
@@ -23,4 +23,12 @@ module.exports.upload = (timestamp, base64, user_id) => {
 	}).catch((err) => {
 		console.log('s3 bucket storage error: ', err);
 	})
+}
+
+module.exports.downloadPhoto = (key) => {
+	return Storage.get(key).then((url) => {
+		return url;
+	}).catch((err) => {
+		console.log('s3 bucket storage get error: ', err);
+	});
 }
