@@ -6,7 +6,7 @@ import gql from 'graphql-tag';
 import { FormLabel, FormInput, FormValidationMessage, ButtonGroup } from 'react-native-elements'
 var t = require('tcomb-form-native');
 var Form = t.form.Form;
-let getPhotosList = require('../../s3_utilities.js').getPhotosList;
+let { getPhotosList, getPhotoURL } = require('../../s3_utilities.js');
 
 var styles = StyleSheet.create({
   scrollView:{
@@ -118,8 +118,19 @@ class logInScreen extends React.Component {
       if (!data.loginUser) {
         Alert.alert('Invalid username or password!', 'Please try again.');
       } else {
-        getPhotosList(3).then((result) => {
-          console.log('data from AWS: ', result);
+        getPhotosList(data.loginUser.id).then((list) => {
+          let urlArray = [];
+          list.forEach((photoKey) => {
+            urlArray.push([photoKey, getPhotoURL(photoKey).then((url) => {
+              return url;
+            })]);
+          })
+
+          Promise.all(urlArray).then((tuples) => {
+            AsyncStorage.setItem('@FitApp:UserPics', JSON.stringify(tuples))
+            .then(() => console.log('Successfully stored pic list', tuples))
+            .catch((err) => console.error('Error writing pic list to storage', err))
+          })
         });
         AsyncStorage.setItem('@FitApp:UserInfo', JSON.stringify(data.loginUser))
         .then(() => this.props.navigation.dispatch(resetAction))

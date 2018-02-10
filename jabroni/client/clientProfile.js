@@ -4,6 +4,7 @@ import Chat from '../utilities/chatIcon'
 import FooterNav from './FooterNav.js'
 import SVG from '../SVG/svg5Center.js'
 import firebase from '../utilities/firebase.js'
+import { S3Image } from 'aws-amplify-react-native';
 var {getPhotos} = require('../utilities/getPhotos');
 
 const { width, height } = Dimensions.get('window');
@@ -22,40 +23,40 @@ class Profile extends React.Component {
     // console.log('componentDidMount.');
     this.props.nav.cleanUp()
     const { nav } = this.props;
-    getPhotos().then((err, val) => {
-      if ( err ) {
-        console.log('getPhotos error: ', err);
-      } else {
-        // console.log('getPhotos success!');
+    // getPhotos().then((err, val) => {
+    //   if ( err ) {
+    //     console.log('getPhotos error: ', err);
+    //   } else {
+    //     // console.log('getPhotos success!');
         
-        // console.log('getPhotos finished.')
-        // use AsyncStorage to grab prof pic:
-        AsyncStorage.getItem('@FitApp:UserPhotos', (err, val) => {
-          if ( err ) {
-            console.log('async storage error in componentDidMount:', err)
-          } else {
-            // console.log('got photos from async storage in component did mount.');
-            if ( !val ) {
-              // console.log('no pics yet.');
-              return;
-            }
-            let pics = JSON.parse(val);
-            // pics is an array of tuples -> [fileName, base64]
-            // iterate through and look for the profilePicture:
-            pics.forEach(tuple => {
-              // console.log('pic name: ', tuple[0]);
-              if ( tuple[0] === 'profilePicture') {
-                this.setState({
-                  profPic: { uri: `data:image/jpg;base64,${tuple[1]}` }
-                }, () => {
-                  console.log('set state of profile picture.')
-                });
-              }
-            });
-          }
-        });
-      }
-    });
+    //     // console.log('getPhotos finished.')
+    //     // use AsyncStorage to grab prof pic:
+    //     AsyncStorage.getItem('@FitApp:UserPhotos', (err, val) => {
+    //       if ( err ) {
+    //         console.log('async storage error in componentDidMount:', err)
+    //       } else {
+    //         // console.log('got photos from async storage in component did mount.');
+    //         if ( !val ) {
+    //           // console.log('no pics yet.');
+    //           return;
+    //         }
+    //         let pics = JSON.parse(val);
+    //         // pics is an array of tuples -> [fileName, base64]
+    //         // iterate through and look for the profilePicture:
+    //         pics.forEach(tuple => {
+    //           // console.log('pic name: ', tuple[0]);
+    //           if ( tuple[0] === 'profilePicture') {
+    //             this.setState({
+    //               profPic: { uri: `data:image/jpg;base64,${tuple[1]}` }
+    //             }, () => {
+    //               console.log('set state of profile picture.')
+    //             });
+    //           }
+    //         });
+    //       }
+    //     });
+    //   }
+    // });
   }
 
   componentWillUnmount() {
@@ -71,7 +72,8 @@ class Profile extends React.Component {
         </View>  
         <Text style={styles.fullName}>{this.state.userInfo.fullName}</Text>
         <TouchableOpacity style={styles.circleContainer} onPress={this.onPress}>
-          <Image style={styles.circle} source={this.state.profPic} />
+          { /*<Image style={styles.circle} source={this.state.profPic} /> */}
+          <S3Image imgKey={'3/profilePicture'} onLoad={url => console.log(url)/>
         </TouchableOpacity>
           <View style={{flex: 2}}>
             <Text style={styles.textBox}>Swipe left for your diet!</Text>
