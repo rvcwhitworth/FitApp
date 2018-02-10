@@ -12,6 +12,7 @@ import Roster from './Trainer/TrainerRoster.jsx'
 import NewsFeed from './Trainer/NewsFeed.jsx'
 import ClientAnalytics from './Client/ClientAnalytics.jsx'
 import ClientTeam from './Client/ClientTeam.jsx'
+import TrainerSettings from './Trainer/TrainerSettings.jsx'
 import {
   HashRouter as Router,
   Route,
@@ -77,6 +78,8 @@ class Header extends React.Component{
         <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/signUp'>Planner</Link></button>
         <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/Team'>Team</Link></button>
         <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/signUp'>Chat</Link></button>
+        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/Settings'>Settings</Link></button>
+
         <button className="btn btn-secondary btn-lg" onClick={this.handleClick} style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}>Log out</button>
         </ul>
         </div>
@@ -84,6 +87,7 @@ class Header extends React.Component{
         <hr/>
 
         <Route exact path='/' component={ClientProfile}/>
+        <Route exact path='/Settings' component={ClientProfile}/>
         <Route exact path='/Analytics' component={ClientAnalytics}/>
         <Route exact path='/Team' component={ClientTeam}/>
 
@@ -99,6 +103,7 @@ class Header extends React.Component{
         <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/Roster'>Roster</Link></button>
         <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/WorkoutPlans'>Workout Plans</Link></button>
         <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/Chat'>Chat</Link></button>
+        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/Settings'>Settings</Link></button>
         <button className="btn btn-secondary btn-lg" onClick={this.handleClick} style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}>Log out</button>
         <button className="btn btn-secondary btn-lg" onClick={this.handleClick} style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}>Switch to Client Profile</button>
 
@@ -111,6 +116,7 @@ class Header extends React.Component{
         <Route exact path='/WorkoutPlans' component={WorkoutPlans}/>
         <Route exact path='/Roster' component={Roster}/>
         <Route exact path='/Updates' component={NewsFeed}/>
+        <Route exact path='/Settings' component={TrainerSettings}/>
 
 
 

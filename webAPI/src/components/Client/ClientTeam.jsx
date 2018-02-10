@@ -7,42 +7,42 @@ import gql from 'graphql-tag';
 import { graphql, ApolloProvider, withApollo } from 'react-apollo';
 //import { searchQuery, spotterQuery, addSpotter } from '../utilities/queries.js'
 
-const searchQuery = gql`
-  query getUsersByFullName($fullName: String!){
-    getUsersByFullName(fullName: $fullName) {
-      id
-      fullName
-      email
-      profile_data
-      username
-    }
-  }
-`
-const spotterQuery = gql`
-query getSpotters($id: Int!){
-  getSpotters(id: $id, type: "client") {
-    trainer {
-      username
-      fullName
-      id
-    }
-  }
-}
-`
+// const searchQuery = gql`
+//   query getUsersByFullName($fullName: String!){
+//     getUsersByFullName(fullName: $fullName) {
+//       id
+//       fullName
+//       email
+//       profile_data
+//       username
+//     }
+//   }
+// `
+// const spotterQuery = gql`
+// query getSpotters($id: Int!){
+//   getSpotters(id: $id, type: "client") {
+//     trainer {
+//       username
+//       fullName
+//       id
+//     }
+//   }
+// }
+// `
 
-const addSpotter = gql`
-mutation setSpotter($trainer_id: Int!, $client_id: Int!){
-  setSpotter(trainer_id: $trainer_id, client_id: $client_id, type: "support") {
-    trainer {
-      id
-      fullName
-      email
-      profile_data
-      username
-    }
-  }
-}
-`
+// const addSpotter = gql`
+// mutation setSpotter($trainer_id: Int!, $client_id: Int!){
+//   setSpotter(trainer_id: $trainer_id, client_id: $client_id, type: "support") {
+//     trainer {
+//       id
+//       fullName
+//       email
+//       profile_data
+//       username
+//     }
+//   }
+// }
+// `
 
 class ClientTeam extends React.Component{
   constructor(props){
@@ -56,24 +56,11 @@ class ClientTeam extends React.Component{
         searchResults: [],
         loading: false,
         photos: {},
-        spotters: []
+        spotters: this.props.spotters
       }
   }
 
   componentDidMount () {
-    this.props.client.query({
-        query: spotterQuery,
-        variables: {
-          id: this.props.id
-        }
-      }).then(({data}) => {
-        console.log('datadata', data)
-        this.setState({spotters: data.getSpotters}, () => {
-          this.state.spotters.forEach(({trainer}) => {
-            console.log('TRAINER in mount', trainer)
-          })
-        })
-      })
   }
 
   render() {
@@ -96,7 +83,8 @@ const mapStoreToProps = (store) => {
     id: 3,
     user: store.auth.username,
     goals: store.auth.goals,
-    backgroundImage: store.branding.backgroundImg
+    backgroundImage: store.branding.backgroundImg,
+    spotters: store.auth.spotters
   };
 };
 

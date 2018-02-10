@@ -179,12 +179,17 @@ class LogIn extends React.Component{
       if (!data.loginUser) {
         alert('Invalid username or password!', 'Please try again.');
       } else {
-        console.log('what did we get back', data)
+        var Exercise_Plan = data.loginUser.Exercise_Plan.map((val, key) => {
+          temp = Object.assign({}, val)
+          temp.regimen = JSON.parse(val.regimen)
+          return temp
+        })
+        console.log('whats this dumb thing', Exercise_Plan)
         let payload = {
           type: type,
           PR: data.loginUser.Personal_Record,
           id: data.loginUser.id,
-          Exercise_Plan: data.loginUser.Exercise_Plan,
+          Exercise_Plan: Exercise_Plan,
           Chat_Room: data.loginUser.Chat_Room,
           auth: data.loginUser.type,
           fullName: data.loginUser.fullName,
@@ -192,6 +197,7 @@ class LogIn extends React.Component{
           spotters: data.loginUser.Spotter,
           goals: JSON.parse(data.loginUser.profile_data).goals
         }
+        console.log('whats the payload', payload)
         this.props.dispatch(Auth(payload))
       }
     }).catch((err) => {

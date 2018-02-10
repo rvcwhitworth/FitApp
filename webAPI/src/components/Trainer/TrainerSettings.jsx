@@ -19,7 +19,7 @@ class TrainerProfile extends React.Component{
       }
       this.handleBackground = this.handleBackground.bind(this)
       this.handleProfile = this.handleProfile.bind(this)
-      this.edit = this.edit.bind(this)
+      this.save = this.save.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -30,7 +30,7 @@ class TrainerProfile extends React.Component{
 
   handleBackground(){
     console.log('handling background')
-    var file = document.getElementById('file').files;
+    var file = document.getElementById('background').files;
     // console.log(file)
     if (file) {
       console.log('what is FIlereader???', FileReader)
@@ -50,10 +50,9 @@ class TrainerProfile extends React.Component{
     }
   }
 
-  edit(){
-    this.setState({
-      editing: !this.state.editing
-    })
+  save(){
+    this.handleProfile()
+    this.handleBackground()
   }
 
   handleProfile(){
@@ -79,15 +78,19 @@ class TrainerProfile extends React.Component{
   }
 
 render() {
-      return(
-<div>
-  <div id='test' className='container'>
-  </div>
-  <img src={this.state.backgroundImage} style={{zIndex: -1, width:'100%', height:'100%', position: 'absolute'}} />
-  <div className='container' style={{justifyConetent:'center'}}>
-  <img src={this.state.ProfileImage} style={{maxWidth: 250, maxHeight:250, display: 'block', margin:'0 auto'}} />
-  </div>
-  </div>
+    console.log(this.props, 'do we know redux?')
+  return(
+    <div className='container' style={{justifyConetent:'center'}}>
+    <h2> Background Image </h2>
+      <form method="POST" action="/server/pic" encType="multipart/form-data" target='_self' style={{zIndex:'1'}}>
+    <input type='file' id='background' name='file' style={{zIndex:'1'}}/>
+  </form>
+  <h2> Profile Picture </h2>
+  <form method="POST" action="/server/pic" encType="multipart/form-data" target='_self' style={{zIndex:'1'}}>
+    <input type='file' id='Profile' name='Profile' style={{zIndex:'1'}}/>
+  </form>
+    <button type='button' className="btn btn-lg" onClick={this.save}>Save Changes</button>
+    </div>
     )
   }
 }
