@@ -10,22 +10,18 @@ Amplify.configure({
 
 
 module.exports.getPhotosList = (id) => {
-	return Storage.list(id+'/').then((photo) => {
-		return photo;
-	}).catch((err) => {
-		console.log(err);
-	});
+	return Storage.list(id + '/');
 }
 
 module.exports.upload = (timestamp, base64, user_id) => {
-	Storage.put(user_id+'/'+timestamp, base64).then((result) => {
+	Storage.put(user_id + '/' + timestamp, base64, {level: 'public'}).then((result) => {
 		console.log('success!');
 	}).catch((err) => {
 		console.log('s3 bucket storage error: ', err);
 	})
 }
 
-module.exports.downloadPhoto = (key) => {
+module.exports.getPhotoURL = (key) => {
 	return Storage.get(key).then((url) => {
 		return url;
 	}).catch((err) => {

@@ -6,7 +6,8 @@ import gql from 'graphql-tag';
 import { FormLabel, FormInput, FormValidationMessage, ButtonGroup } from 'react-native-elements'
 var t = require('tcomb-form-native');
 var Form = t.form.Form;
-let getPhotosList = require('../../s3_utilities.js').getPhotosList;
+let { getPhotosList, getPhotoURL } = require('../../s3_utilities.js');
+let _ = require('underscore');
 
 var styles = StyleSheet.create({
   scrollView:{
@@ -93,14 +94,14 @@ class logInScreen extends React.Component {
   }
 
   componentDidMount(){
-    AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
-      if (err) console.log(err);
-      else {
-        if(val){
-        this.props.navigation.dispatch(resetAction)
-        }
-      }
-    })
+    // AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
+    //   if (err) console.log(err);
+    //   else {
+    //     if(val){
+    //     this.props.navigation.dispatch(resetAction)
+    //     }
+    //   }
+    // })
   }
 
 
@@ -118,12 +119,22 @@ class logInScreen extends React.Component {
       if (!data.loginUser) {
         Alert.alert('Invalid username or password!', 'Please try again.');
       } else {
-        getPhotosList(3).then((result) => {
-          console.log('data from AWS: ', result);
-        });
         AsyncStorage.setItem('@FitApp:UserInfo', JSON.stringify(data.loginUser))
-        .then(() => this.props.navigation.dispatch(resetAction))
-        .catch((err) => console.error('Error writing user info to storage', err))
+        .then(() => {
+          console.log('set user info.');
+          getPhotosList(data.loginUser.id).then((list) => {
+          // list is an array of objects containing the key for each photo in s3 bucket
+          // store keys in async storage
+          list.splice(list.indexOf(data.loginUser.id+'/profilePicture'), 1);
+          list.splice(list.indexOf(data.loginUser.id+'/'), 1);
+
+          AsyncStorage.setItem('@FitApp:UserPics', JSON.stringify(_.pluck(list, 'key')))
+          .then(() => {
+            console.log('Successfully stored pic list!');
+            this.props.navigation.dispatch(resetAction);
+          }).catch((err) => {console.error('Error writing pic list to storage', err)})
+        });
+        }).catch((err) => console.error('Error writing user info to storage', err))
       }
     }).catch((err) => {
       console.log('log in error: ', err);

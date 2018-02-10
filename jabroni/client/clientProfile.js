@@ -3,11 +3,10 @@ import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, Button, Dim
 import Chat from '../utilities/chatIcon'
 import FooterNav from './FooterNav.js'
 import SVG from '../SVG/svg5Center.js'
-import firebase from '../utilities/firebase.js'
-var {getPhotos} = require('../utilities/getPhotos');
+
+const axios = require('axios');
 
 const { width, height } = Dimensions.get('window');
-const imageStore = firebase.storage();
 
 class Profile extends React.Component {
   constructor(props) {
@@ -19,41 +18,18 @@ class Profile extends React.Component {
   }
 
   componentDidMount() {
-    // console.log('componentDidMount.');
     this.props.nav.cleanUp()
     const { nav } = this.props;
-    getPhotos().then((err, val) => {
+    AsyncStorage.getItem("@FitApp:UserInfo", (err, val) => {
       if ( err ) {
-        console.log('getPhotos error: ', err);
+        console.log('async storage error: ', err);
       } else {
-        // console.log('getPhotos success!');
-        
-        // console.log('getPhotos finished.')
-        // use AsyncStorage to grab prof pic:
-        AsyncStorage.getItem('@FitApp:UserPhotos', (err, val) => {
-          if ( err ) {
-            console.log('async storage error in componentDidMount:', err)
-          } else {
-            // console.log('got photos from async storage in component did mount.');
-            if ( !val ) {
-              // console.log('no pics yet.');
-              return;
-            }
-            let pics = JSON.parse(val);
-            // pics is an array of tuples -> [fileName, base64]
-            // iterate through and look for the profilePicture:
-            pics.forEach(tuple => {
-              // console.log('pic name: ', tuple[0]);
-              if ( tuple[0] === 'profilePicture') {
-                this.setState({
-                  profPic: { uri: `data:image/jpg;base64,${tuple[1]}` }
-                }, () => {
-                  console.log('set state of profile picture.')
-                });
-              }
-            });
-          }
-        });
+        axios.get("https://fitpics.s3.amazonaws.com/public/" + JSON.parse(val).id + "/profilePicture")
+        .then((response) => {
+          this.setState({
+            profPic: {uri: `data:image/jpg;base64,${response.data}`}
+          });
+        }).catch(err => console.log('axios error: ', err));
       }
     });
   }
@@ -63,7 +39,6 @@ class Profile extends React.Component {
   }
 
   render() {
-    // console.log('did we get the props we want 22', this.props)
     return ( 
       <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>
         <View style={{flex:1}}>
