@@ -13,6 +13,7 @@ import NewsFeed from './Trainer/NewsFeed.jsx'
 import ClientAnalytics from './Client/ClientAnalytics.jsx'
 import ClientTeam from './Client/ClientTeam.jsx'
 import TrainerSettings from './Trainer/TrainerSettings.jsx'
+import Chat from './Chat.jsx'
 import {
   HashRouter as Router,
   Route,
@@ -54,10 +55,10 @@ class Header extends React.Component{
     return(
       <div stlye={{backgroundColor: 'rgba(0,0,0, 0.9)'}}>
         <div style={{textAlign:'left', backgroundColor: 'rgba(0,0,0, 0.3)'}}>
-        <ul>
-        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to="/">Log In!</Link></button>
-        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/signUp'>Signup</Link></button>
-        </ul>
+          <ul>
+            <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to="/">Log In!</Link></button>
+            <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/signUp'>Signup</Link></button>
+          </ul>
         </div>
 
         <hr/>
@@ -65,7 +66,7 @@ class Header extends React.Component{
         <Route exact path='/' component={LogIn}/>
         <Route exact path='/signUp' component={SignUp}/>
 
-      </div>
+       </div>
       )
   } else if(this.state.type === 'Client'){
     return(
@@ -117,6 +118,7 @@ class Header extends React.Component{
         <Route exact path='/Roster' component={Roster}/>
         <Route exact path='/Updates' component={NewsFeed}/>
         <Route exact path='/Settings' component={TrainerSettings}/>
+        <Route exact path='/Chat' component={Chat}/>
 
 
 

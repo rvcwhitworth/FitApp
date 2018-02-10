@@ -65,9 +65,10 @@ module.exports = `
 		getDailyRecords(id: Int!, timestamp: String): [Daily_Record]
 		getPersonalRecord(id: Int!): Personal_Record
 		getChatRooms(id: Int!): [Chat_Room]
+		getChatRoomsByRoomId(room_id: String!): [Chat_Room]
 		getUsersByFullName(fullName: String!): [User]
 	}
-
+	
 	type Mutation {
 		setUser(username: String!, password: String!, fullName: String!, email: String, type: String!, profile_data: String): User
 		setExercisePlan(name: String!, regimen: String!, trainer_id: Int!, client_id: Int!): Exercise_Plan
@@ -77,4 +78,4 @@ module.exports = `
 		setPersonalRecord(user_id: Int!, data: String!): Personal_Record
 		setChatRoom(room_id: String!, user_id: Int!): Chat_Room
 	}
-`
+	`

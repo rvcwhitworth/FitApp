@@ -93,7 +93,7 @@ render() {
 }
 
 const mapStoreToProps = (store) => {
-  console.log('store', store);
+  console.log('TrainerProfileStore', store);
   return {
     id: store.auth.auth,
     user: store.auth.username,

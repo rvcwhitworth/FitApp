@@ -69,7 +69,7 @@ module.exports.getUserByID = (id) => {
 
 module.exports.getUsersByFullName = (fullName) => {
 	return models.User.where({fullName}).fetchAll().then(({models}) => {
-		console.log('Users', models, 'Plucking', _.pluck(models, 'attributes'));
+		// console.log('Users', models, 'Plucking', _.pluck(models, 'attributes'));
 		return _.pluck(models, 'attributes');
 	})
 }
@@ -78,7 +78,7 @@ module.exports.loginUser = (username, password) => {
 	// validate a username/password combo
 	return new models.User({username: username}).fetch().then((user) => {
 		if (user) {
-			console.log('USER BEFORE COMPARE', user)
+			// console.log('USER BEFORE COMPARE', user)
 			return bcrypt.compare(password, user.attributes.password).then((match) => {
 				if (match) {
 					return user.attributes;
@@ -204,19 +204,16 @@ module.exports.getChatRooms = (id) => {
 		obj.forEach(model => {
 			result.push(model.attributes);
 		});
-		// console.log("result>>===>>", result)
 		return result;
 	});
 } 
 
 module.exports.getChatRoomsByRoomId = (id) => {
 	let result = [];
-
 	return models.Chat_Room.where({room_id: id}).fetchAll().then((obj) => {
 		obj.forEach(model => {
 			result.push(model.attributes);
 		});
-		// console.log("result>>===>>", result)
 		return result;
 	});
 } 

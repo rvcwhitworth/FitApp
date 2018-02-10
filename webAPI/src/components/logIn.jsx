@@ -5,9 +5,8 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import ChangeUser from '../actions/example.jsx'
 import Bypass from '../actions/bypass.jsx'
-import Auth from '../actions/authorize.jsx'
 import { graphql, ApolloProvider, withApollo } from 'react-apollo';
-import auth from '../actions/authorize.jsx'
+import Auth from '../actions/authorize.jsx'
 import {
   HashRouter as Router,
   Route,
@@ -192,6 +191,7 @@ class LogIn extends React.Component{
           Exercise_Plan: Exercise_Plan,
           Chat_Room: data.loginUser.Chat_Room,
           auth: data.loginUser.type,
+          id: data.loginUser.id,
           fullName: data.loginUser.fullName,
           email: data.loginUser.email,
           spotters: data.loginUser.Spotter,
@@ -233,7 +233,7 @@ class LogIn extends React.Component{
             <input onChange={this.onTrainerUsernameChange} placeholder="Username" value={this.state.TrainerUsername} style={{backgroundColor:'rgba(255,255,255,0.6)', fontFamily: 'Sans-Serif'}} />
             <input onChange={this.onTrainerPasswordChange} placeholder='Password' type='password' value={this.state.TrainerPassword} style={{backgroundColor:'rgba(255,255,255,0.6)', fontFamily: 'Sans-Serif'}} />
             <button onClick={this.logIn} id='Trainer' className="btn btn-lg btn-block" type='button' style={{backgroundColor:'rgba(255,255,255,0.4)', fontFamily: 'Sans-Serif'}}>
-              <span id='Trainer' className="glyphicon glyphicon-search">Enter</span>
+            <span id='Trainer' className="glyphicon glyphicon-search">Enter</span>
             </button>
           </div>
           <div style={{position:'absolute', left:'50px', padding:'10px', backgroundColor:'rgba(0,0,0,0.2)'}}>
@@ -241,7 +241,7 @@ class LogIn extends React.Component{
             <input onChange={this.onClientUsernameChange} placeholder="Username" value={this.state.ClientUsername} style={{backgroundColor:'rgba(255,255,255,0.6)', fontFamily: 'Sans-Serif'}} />
             <input onChange={this.onClientPasswordChange} placeholder='Password' type='password' value={this.state.ClientPassword} style={{backgroundColor:'rgba(255,255,255,0.6)', fontFamily: 'Sans-Serif'}} />
             <button onClick={this.logIn} id='Client' className="btn btn-lg btn-block" type='button' style={{backgroundColor:'rgba(255,255,255,0.4)', fontFamily: 'Sans-Serif'}}>
-              <span id='Client' className="glyphicon glyphicon-search">Enter</span>
+            <span id='Client' className="glyphicon glyphicon-search">Enter</span>
             </button>
           </div>
         </div>
