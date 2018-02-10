@@ -5,7 +5,7 @@ import { withRouter } from 'react-router';
 import ChangeUser from '../../actions/example.jsx'
 import axios from 'axios'
 import firebase from '../../../../jabroni/utilities/firebase.js'
-import { Feed} from 'semantic-ui-react'
+import { Grid, Card, Feed} from 'semantic-ui-react'
 
 
 const database = firebase.database();
@@ -37,66 +37,86 @@ class NewsFeed extends React.Component{
   }
 
   render() {
+    return(
+      <Grid centered columns={1} style={{padding: '3%', height: '100vh', overFlowY: 'auto'}}>
+        <Grid.Column style={{ height: '100vh', overFlowY: 'auto'}} >
+        {this.state.update.map((update)=>{
+          console.log('UPDATE', update)
+          if(update.diet){
+            let macros = {
+              calories : update.diet.calories || '',
+              carbs : update.diet.carbs || '',
+              protien : update.diet.protein || '',
+              fat : update.diet.fat || '',
+            } 
+          return(
+            <Card centered={true} style={{width: '75%'}}>
+              <Card.Content>
+                <Card.Header>
+                  {update.user + ' - Diet' }
+                </Card.Header>
+                <Feed.Date style={{color: 'rgba(0,0,0,.4)'}}content={update.date}/> 
+              </Card.Content>
 
-      return(
-        <div>
-          <Feed>
-            {this.state.update.map((update)=>{
-              console.log('UPDATE', update)
-              if(update.diet){
-                return(
+              <Card.Content>
+                
+                <Feed>
                   <Feed.Event>
+                    {/* <Feed.Label image='/assets/images/avatar/small/jenny.jpg' /> */}
                     <Feed.Content>
                       <Feed.Summary>
-                        {update.user}
-                        <Feed.Date>{update.date}</Feed.Date>
+                        {update.diet.name}
                       </Feed.Summary>
-                      <Feed.Extra text>
-                        {update.diet.name + ' ' + update.diet.calories + ' ' + update.diet.carbs + ' ' + ' ' + update.diet.protien + ' ' + update.diet.fat }
-                      </Feed.Extra>
                     </Feed.Content>
                   </Feed.Event>
-                )
-              } else{
-                let keys = Object.keys(update.workout)
-                return(
-                  <Feed.Event>
-                    <Feed.Content>
-                      <Feed.Summary>
-                        {update.user}
-                        <Feed.Date>
-                          {update.date}
-                        </Feed.Date>
-                      </Feed.Summary>
-                      {keys.map((key, i)=>{
-                        return(
-                          <Feed.Extra text>
-                            <b>{key}</b>
-                            {' Frequency: ' + update.workout[key].frequency  + ' Weight: ' + update.workout[key].weight}
-                          </Feed.Extra>
-                        )
-                      })}
-                      
-                    </Feed.Content>
-                  </Feed.Event>
-                )
-              }
-            })}
-            <Feed.Event>
-              <Feed.Content>
-                <Feed.Summary>
-                  Joe Henderson posted on his page
-                  <Feed.Date>3 days ago</Feed.Date>
-                </Feed.Summary>
-                <Feed.Extra text>
-                  
-                </Feed.Extra>
-              </Feed.Content>
-            </Feed.Event>
+                  <Card.Content description={'Calories: ' + macros.calories } style={{textIndent: '10px'}}/>
+                  <Card.Content description={'Carbs: ' + macros.carbs} style={{textIndent: '10px'}}/>
+                  <Card.Content description={'Protien: ' + macros.protien} style={{textIndent: '10px'}}/>
+                  <Card.Content description={'Fat: ' + macros.fat } style={{textIndent: '10px'}}/>
+                </Feed>
+              </Card.Content>
+            </Card>
+          )
 
-          </Feed>
-        </div>
-        )
+          } else{
+            let keys = Object.keys(update.workout)
+            return(
+              <Card centered style={{width: '75%'}}>
+                <Card.Content>
+                  <Card.Header>
+                  {update.user + ' - WorkOut' }
+                  </Card.Header>
+                  <Feed.Date style={{color: 'rgba(0,0,0,.4)'}}content={update.date}/> 
+                </Card.Content>
+              
+                <Card.Content>
+                {keys.map((key, i)=>{
+                  return(
+                    <div >
+                      <Feed>
+                        <Feed.Event style={{paddingBottom: 0 , paddingTop: 4}}>
+                        {/* <Feed.Label image='/assets/images/avatar/small/jenny.jpg' /> */}
+                          <Feed.Content >
+                            <Feed.Summary >
+                              {key}
+                            </Feed.Summary>
+                          </Feed.Content>
+                        </Feed.Event>
+                          <Card.Content description={'Frequency: ' + update.workout[key].frequency } style={{textIndent: '10px'}}/>
+                          <Card.Content description={' Weight: ' + update.workout[key].weight} style={{textIndent: '10px'}}/>
+                      </Feed>
+                      {/* <br/> */}
+                      </div>
+                    )
+                  })}
+                  </Card.Content>
+              </Card>
+            )}
+          }  
+        )}
+        </Grid.Column>        
+      </Grid>
+    )
   }
 }
 
