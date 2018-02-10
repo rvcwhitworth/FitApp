@@ -5,7 +5,7 @@ import FooterNav from './FooterNav.js'
 import SVG from '../SVG/svg5Center.js'
 import firebase from '../utilities/firebase.js'
 import { S3Image } from 'aws-amplify-react-native';
-var {getPhotos} = require('../utilities/getPhotos');
+var {downloadPic} = require('../utilities/getPhotos');
 
 const { width, height } = Dimensions.get('window');
 const imageStore = firebase.storage();
@@ -23,6 +23,15 @@ class Profile extends React.Component {
     // console.log('componentDidMount.');
     this.props.nav.cleanUp()
     const { nav } = this.props;
+    AsyncStorage.getItem('@FitApp:ProfPic', (err, val) => {
+      if ( err ) {
+        console.log('error reading profile picture');
+      } else {
+        downloadPic(val, 'profilePicture').then((tuple) => {
+          this.setState({profPic: { uri: `data:image/jpg;base64,${tuple[1]}` }});
+        }).catch((err) => console.log('download error: ', err));
+      }
+    });
     // getPhotos().then((err, val) => {
     //   if ( err ) {
     //     console.log('getPhotos error: ', err);
@@ -72,8 +81,8 @@ class Profile extends React.Component {
         </View>  
         <Text style={styles.fullName}>{this.state.userInfo.fullName}</Text>
         <TouchableOpacity style={styles.circleContainer} onPress={this.onPress}>
-          { /*<Image style={styles.circle} source={this.state.profPic} /> */}
-          <S3Image imgKey={'3/profilePicture'} onLoad={url => console.log(url)/>
+          <Image style={styles.circle} source={this.state.profPic} />
+          {/*<S3Image imgKey={'3/profilePicture'} onLoad={url => console.log(url)}/>*/}
         </TouchableOpacity>
           <View style={{flex: 2}}>
             <Text style={styles.textBox}>Swipe left for your diet!</Text>

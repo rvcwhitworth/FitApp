@@ -93,8 +93,8 @@ export default class CameraExample extends React.Component {
       reviewMode: false,
       pic: null
     });
-
-    upload(this.state.pic.exif.DateTimeOriginal, this.state.pic.base64, this.state.userID);
+    console.log('uploading with uri: ', this.state.pic.uri);
+    upload(this.state.pic.exif.DateTimeOriginal, this.state.pic.uri, this.state.userID);
 
     // // use id to set up path in firebase storage for this user's pictures
     // let folder = imageStore.child(this.state.userID.toString());

@@ -7,6 +7,7 @@ import { FormLabel, FormInput, FormValidationMessage, ButtonGroup } from 'react-
 var t = require('tcomb-form-native');
 var Form = t.form.Form;
 let { getPhotosList, getPhotoURL } = require('../../s3_utilities.js');
+let _ = require('underscore');
 
 var styles = StyleSheet.create({
   scrollView:{
@@ -93,14 +94,14 @@ class logInScreen extends React.Component {
   }
 
   componentDidMount(){
-    AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
-      if (err) console.log(err);
-      else {
-        if(val){
-        this.props.navigation.dispatch(resetAction)
-        }
-      }
-    })
+    // AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
+    //   if (err) console.log(err);
+    //   else {
+    //     if(val){
+    //     this.props.navigation.dispatch(resetAction)
+    //     }
+    //   }
+    // })
   }
 
 
@@ -118,22 +119,42 @@ class logInScreen extends React.Component {
       if (!data.loginUser) {
         Alert.alert('Invalid username or password!', 'Please try again.');
       } else {
+        let urlArray = [];
+        let profilePictureURL;
         getPhotosList(data.loginUser.id).then((list) => {
-          let urlArray = [];
+          // list is an array of objects containing the key for each photo in s3 bucket
           list.forEach((photoKey) => {
-            urlArray.push([photoKey, getPhotoURL(photoKey).then((url) => {
+            // get the download URL for each photo (getPhotoURL returns arr of promises)
+            urlArray.push(getPhotoURL(photoKey.key).then((url) => {
+              if ( photoKey.key === data.loginUser.id+'/profilePicture') {
+                // store profile picture url for later
+                profilePictureURL = url;
+              }
               return url;
-            })]);
-          })
+            }).catch((err) => {console.error('Error getting url', err)}));
+          });
 
-          Promise.all(urlArray).then((tuples) => {
-            AsyncStorage.setItem('@FitApp:UserPics', JSON.stringify(tuples))
-            .then(() => console.log('Successfully stored pic list', tuples))
-            .catch((err) => console.error('Error writing pic list to storage', err))
-          })
+          Promise.all(urlArray).then((urls) => {
+            // wait for urls to resolve, then create tuple associating each key with download url
+            let payload = _.zip(_.pluck(list, 'key'), urls);
+            console.log('made it to payload');
+            
+            // store keys and urls in async storage
+            AsyncStorage.setItem('@FitApp:UserPics', JSON.stringify(payload))
+            .then(() => console.log('Successfully stored pic list', payload))
+            .catch((err) => console.error('Error writing pic list to storage', err));
+            
+            // store profPic in async storage
+            AsyncStorage.setItem('@FitApp:ProfPic', profilePictureURL)
+            .then(() => {
+              console.log('set prof pic in async storage');
+              this.props.navigation.dispatch(resetAction);
+            }).catch((err) => {console.log('error setting profile pic')});
+          });
         });
+
         AsyncStorage.setItem('@FitApp:UserInfo', JSON.stringify(data.loginUser))
-        .then(() => this.props.navigation.dispatch(resetAction))
+        .then(() => console.log('set user info.'))
         .catch((err) => console.error('Error writing user info to storage', err))
       }
     }).catch((err) => {

@@ -8,13 +8,16 @@ const database = firebase.database();
 let pics = [];
 
 let downloadPic = function(url, name) {
+	console.log('downloading profile pic')
 	return new Promise(resolve => {
 	  var xhr = new XMLHttpRequest();
 	  xhr.responseType = "text";
 	  xhr.onload = event => {
+	  	console.log('xhr response: ', xhr.response);
 	    resolve([name, xhr.response]);
 	  };
 	  xhr.open("GET", url);
+	  xhr.setRequestHeader('Authorization', 'AWS4-HMAC-SHA256');
 	  xhr.send();
 	});
 }
@@ -52,4 +55,5 @@ async function getPhotos(){
 
 module.exports = {
 	getPhotos: getPhotos,
+	downloadPic: downloadPic
 }
