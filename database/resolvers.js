@@ -19,21 +19,25 @@ module.exports = {
 			return db.getPersonalRecord(id);
 		},
 		getChatRooms: (parent, {id}, db) => {
-			 
-			return db.getChatRooms(id).then((rooms)=>{
-				// console.log("in then", rooms)
+			return db.getChatRooms(id);
+			// .then((rooms)=>{
+			// 	// console.log("in then", rooms)
 				
-				return Promise.all(rooms.map( (ele)=>{
-					// console.log("in Map", ele)
-					return db.getChatRoomsByRoomId(ele.room_id)
-				}))
-			}).then((rooms)=>{
-				// console.log("here", rooms)
-				return rooms;
-			});
+			// 	return Promise.all(rooms.map( (ele)=>{
+			// 		console.log("in Map", ele)
+			// 		 db.getChatRoomsByRoomId(ele.room_id)
+			// 	}))
+			// }).then((rooms)=>{
+			// 	console.log("here", rooms)
+			// 	return rooms;
+			// });
 		},
 		getUsersByFullName: (parent, {fullName}, db) => {
 			return db.getUsersByFullName(fullName);
+		},
+		getChatRoomsByRoomId: (parent, {room_id}, db) => {
+			// console.log('resolver has id: ', id);
+			return db.getChatRoomsByRoomId(room_id);
 		}
 	},
 
@@ -80,12 +84,12 @@ module.exports = {
 
 	Diet_Plan: {
 		client: (parent, args, db) => {
-			console.log(parent)
+			// console.log(parent)
 			return db.getUserByID(parent.client_id);
 		},
 
 		trainer: (parent, args, db) => {
-			console.log(parent)
+			// console.log(parent)
 			return db.getUserByID(parent.trainer_id);
 		}
 	},

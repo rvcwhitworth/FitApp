@@ -11,13 +11,9 @@ import WorkoutPlans from './Trainer/WorkoutPlans.jsx'
 import Roster from './Trainer/TrainerRoster.jsx'
 import NewsFeed from './Trainer/NewsFeed.jsx'
 import ClientAnalytics from './Client/ClientAnalytics.jsx'
-<<<<<<< HEAD
 import ClientTeam from './Client/ClientTeam.jsx'
 import TrainerSettings from './Trainer/TrainerSettings.jsx'
-=======
 import Chat from './Chat.jsx'
-
->>>>>>> update
 import {
   HashRouter as Router,
   Route,
@@ -70,7 +66,7 @@ class Header extends React.Component{
         <Route exact path='/' component={LogIn}/>
         <Route exact path='/signUp' component={SignUp}/>
 
-      </div>
+       </div>
       )
   } else if(this.state.type === 'Client'){
     return(
