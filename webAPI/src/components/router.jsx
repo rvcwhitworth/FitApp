@@ -52,20 +52,21 @@ class Header extends React.Component{
     if(!this.state.type){
 
     return(
-      <div stlye={{backgroundColor: 'rgba(0,0,0, 0.9)'}}>
-        <div style={{textAlign:'left', backgroundColor: 'rgba(0,0,0, 0.3)'}}>
-          <ul>
-            <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to="/">Log In!</Link></button>
-            <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/signUp'>Signup</Link></button>
-          </ul>
-        </div>
+      <NewsFeed/>
+      // <div stlye={{backgroundColor: 'rgba(0,0,0, 0.9)'}}>
+      //   <div style={{textAlign:'left', backgroundColor: 'rgba(0,0,0, 0.3)'}}>
+      //     <ul>
+      //       <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to="/">Log In!</Link></button>
+      //       <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/signUp'>Signup</Link></button>
+      //     </ul>
+      //   </div>
 
-        <hr/>
+      //   <hr/>
 
-        <Route exact path='/' component={LogIn}/>
-        <Route exact path='/signUp' component={SignUp}/>
+      //   <Route exact path='/' component={LogIn}/>
+      //   <Route exact path='/signUp' component={SignUp}/>
 
-      </div>
+      // </div>
       )
   } else if(this.state.type === 'Client'){
     return(

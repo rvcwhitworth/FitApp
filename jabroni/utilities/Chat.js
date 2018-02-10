@@ -39,23 +39,23 @@ class Chat extends React.Component {
   componentDidMount() {
     console.log("DID MOUNT")
  
-  AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
-    if (err) console.log(err);
-      else {console.log("STORE STORE STORE STORE +++>>><+++===>>>",val, JSON.parse(val))}
+    AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
+      if (err) console.log(err);
+        // else {console.log("STORE STORE STORE STORE +++>>><+++===>>>",val, JSON.parse(val))}
 
       var storeVals = JSON.parse(val);
 
-        this.state.presentUser = storeVals.username;
-        this.state.presentUserID = storeVals.id; 
-         // Based Async Store Changes For ID
-          this.props.client.query({
-            query: getChatRooms,
-            variables: {
-              id: this.state.presentUserID
-            }
-          }).then((data)=>{
-            this.setState({rooms: data.data.getChatRooms, propsReady: true}) 
-          })
+      this.state.presentUser = storeVals.username;
+      this.state.presentUserID = storeVals.id; 
+      // Based Async Store Changes For ID
+      this.props.client.query({
+        query: getChatRooms,
+        variables: {
+          id: this.state.presentUserID
+        }
+      }).then((data)=>{
+        this.setState({rooms: data.data.getChatRooms, propsReady: true}) 
+      })
     })  
   }
 
@@ -87,7 +87,6 @@ class Chat extends React.Component {
         <View style={{ display: this.state.showRooms}}>
         
           <TouchableHighlight style={styles.button} onPress={()=>{console.log("press", this.props); this.props.navigation.goBack()}} underlayColor='red'>
-          {/* <TouchableHighlight style={styles.button} onPress={()=>{console.log("press"); this.props.nav.navigateBack()}} underlayColor='red'> */}
             <Text style={styles.buttonText}>BACK</Text>
           </TouchableHighlight>
 
@@ -95,15 +94,14 @@ class Chat extends React.Component {
           <View >
             {console.log("COMP")}
             {this.state.rooms.map( (room, idx)=>{
-              // console.log(room)
               if(room.user.fullName){
                 return <Button
                   key={idx}
-                  title={room.user.fullName}
+                  title={room.room_id}
                   onPress={ ()=>{this.touch(room.room_id)}  }
                 />
               }
-            } )}
+            })}
           </View> 
 
         </View>
@@ -111,17 +109,16 @@ class Chat extends React.Component {
 
         <View style={{display: this.state.showRoom, flex: 1}}>
           <TouchableHighlight style={styles.button} onPress={ ()=>{ this.setState({showRooms: "flex", showRoom: "none"}) } } underlayColor='red'>
-                <Text style={styles.buttonText}>Back To Rooms</Text>
+            <Text style={styles.buttonText}>Back To Rooms</Text>
           </TouchableHighlight>
 
           <ScrollView ref={ref => this.scrollView = ref}
-              onContentSizeChange={(contentWidth, contentHeight)=>{ this.scrollView.scrollToEnd({animated: true})}}>
-              {/* console.log("MESSAGES=>", this.state.messages)*/}
+            onContentSizeChange={(contentWidth, contentHeight)=>{ this.scrollView.scrollToEnd({animated: true})}} >
             {this.state.messages.map( (message, idx)=>{
-                if(this.state.messages.length > 0){
-                  return <Text key={idx} style={styles.message}> <Text style={styles.user}>{message.user}</Text> :     {message.message}</Text>
-                }
-              })}
+              if(this.state.messages.length > 0){
+                return <Text key={idx} style={styles.message}> <Text style={styles.user}>{message.user}</Text> :     {message.message}</Text>
+              }
+            })}
           </ScrollView>
 
            <View style={{display: this.state.showRoom, paddingBottom: 10}}>

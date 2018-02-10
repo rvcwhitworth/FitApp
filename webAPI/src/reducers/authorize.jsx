@@ -15,6 +15,7 @@ export default function authReducer (state={
 			return {
 				...state,
 				auth: action.payload.type,
+				id: action.payload.id,
 				type: action.payload.type,
 				user: action.payload.fullName,
 				goals: action.payload.goals
