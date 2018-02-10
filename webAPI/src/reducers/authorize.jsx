@@ -16,7 +16,7 @@ export default function authReducer (state={
 				...state,
 				auth: action.payload.auth,
 				PR: action.payload.PR,
-				Exercie_Plan: action.payload.Exercie_Plan,
+				Exercise_Plan: action.payload.Exercise_Plan,
 				Chat_Room: action.payload.Chat_Room,
 				fullName: action.payload.fullName,
 				email: action.payload.email,
