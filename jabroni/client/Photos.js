@@ -13,14 +13,10 @@ import {
 } from "react-native";
 import NavFooter from "./FooterNav.js";
 import Chat from "../utilities/chatIcon.js";
-import firebase from "../utilities/firebase.js";
+// import firebase from "../utilities/firebase.js";
 var moment = require("moment");
-
 const trash = require("../../images/trash.png");
-
-const imageStore = firebase.storage();
-const database = firebase.database();
-
+const s3 = require('../../s3_utilities.js');
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
@@ -121,7 +117,8 @@ class Photos extends React.Component {
 		super(props);
 		this.state = {
 			userID: null,
-			photos: [],
+			photos: [], // [timestamp1, timestamp2, ...]
+			currentPic: [], // tuple: [timestamp, base64]
 			index: 0,
 			loading: true,
 			showButtons: false
@@ -140,62 +137,23 @@ class Photos extends React.Component {
 				console.log("async storage error: ", err);
 			} else {
 				this.setState({ userID: JSON.parse(val).id }, () => {
-					// use ID look up references to photo names in database
-					database
-						.ref("imgURLs/" + this.state.userID.toString())
-						.once("value", snapshot => {
-							// snapshot.val() is an object. iterate throgh object to get all the names of img files in imageStore:
-							let obj = snapshot.val();
-							let fileNames = [];
-							for (var key in obj) {
-								fileNames.push(key);
-							}
-							// download files from the imageStore and store them in state.
-							fileNames.forEach(name => {
-								let url = imageStore
-									.ref("images/" + this.state.userID.toString() + "/" + name)
-									.getDownloadURL()
-									.then(url => {
-										this.downloadPic(url, name, fileNames.length);
-									});
-							});
-						});
+				AsyncStorage.getItem("@FitApp:UserPics", (err, val) => {
+					if ( err ) {
+						console.log("async storage error: ", err);
+					} else {
+						let keys = JSON.parse(val);
+						
+					}
+				})
 				});
 			}
 		});
 	}
 
-	downloadPic(url, name, length) {
-		var xhr = new XMLHttpRequest();
-		xhr.responseType = "text";
-		xhr.onload = event => {
-			let photos = this.state.photos;
-			photos.push([name, xhr.response]); // [timestamp, base64 string]
-			photos = photos.sort((a, b) => {
-				return a[0].localeCompare(b[0]) * -1; // newest photo should appear first
-			});
-			this.setState({ photos: photos }, () => {
-				if (this.state.photos.length === length) {
-					this.setState({ loading: false });
-				}
-			});
-		};
-		xhr.open("GET", url);
-		xhr.send();
-	}
-
 	setProfPic(e) {
 		e.preventDefault();
-		let pic = this.state.photos[this.state.index]; // a tuple - idx 1 is the base64 string
-		imageStore
-			.ref("images/" + this.state.userID.toString())
-			.child("profilePicture")
-			.putString(pic[1])
-			.then(() => {
-				console.log("saved profile picture to firebase storage.");
-				// save pic to async storage as well to improve load time later:
-				// AsyncStorage.setItem('@FitApp:profilePicture', pic[1]); // there were problems reading from asyncStorage, so scrapping for now.
-			});
+		// this.state.currentPic is a tuple [timestamp, base64]
+		s3.setProfilePicture(this.state.currentPic[1], this.state.userID);
 	}
 
 	toggleButtons(e) {
@@ -205,31 +163,28 @@ class Photos extends React.Component {
 
 	delete(e) {
 		e.preventDefault();
-		// remove photo from firebase storage:
-		let fileName = this.state.photos[this.state.index][0];
-		imageStore
-			.ref("images/" + this.state.userID.toString() + "/" + fileName)
-			.delete()
-			.then(() => {
-				// remove reference to photo from imgURLs:
-				database
-					.ref("imgURLs/" + this.state.userID.toString() + "/" + fileName)
-					.remove()
-					.then(() => {
-						Alert.alert("photo deleted.");
-						// remove the photo from component state:
-						let p = this.state.photos;
-						p.splice(this.state.index, 1);
-						let i = this.state.index === 0 ? 0 : -1;
-						this.setState({ photos: p, index: i });
-					})
-					.catch(err => {
-						console.error("firebase database delete error: ", err);
-					});
-			})
-			.catch(err => {
-				console.error("firebase storage delete error: ", err);
-			});
+
+		// delete from s3 bucket
+		s3.delete(this.state.userID, this.state.currentPic[0]);
+
+		// remove key from state
+		let p = this.state.photos;
+		p.splice(index, 1);
+		let i = this.state.index;
+		if ( i > 0 ) {
+			i--;
+		}
+		this.setState({index: i, photos: p});
+
+		// remove key from asyncStorage
+		AsyncStorage.setItem("@FitApp: UserPics", JSON.stringify(p))
+		.then(() => {
+			console.log('successfully spliced photo key from async storage')
+		})
+		.catch((err) => {
+			console.log('error splicing photo key from async storage: ', err);
+		});
+
 	}
 
 	next(e) {

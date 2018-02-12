@@ -3,23 +3,6 @@ import { Text, View, TouchableOpacity, TouchableHighlight, Dimensions, Button, I
 import { Camera, Permissions } from 'expo';
 const upload = require('../../s3_utilities.js').upload;
 
-// import * as firebase from 'firebase';
-// import TOKENS from '../../TOKENS.js';
-// import firebase from './firebase.js'
-
-// const firebaseConfig = {
-//   apiKey: TOKENS.firebaseConfig.apiKey,
-//   authDomain: TOKENS.firebaseConfig.authDomain,
-//   databaseURL: TOKENS.firebaseConfig.databaseURL,
-//   projectId: TOKENS.firebaseConfig.projectId,
-//   storageBucket: TOKENS.firebaseConfig.storageBucket,
-//   messagingSenderId: TOKENS.firebaseConfig.messagingSenderId,
-// };
-
-// const firebaseApp = firebase.initializeApp(firebaseConfig);
-// const imageStore = firebase.storage().ref().child('images');
-// const database = firebase.database();
-
 export default class CameraExample extends React.Component {
   constructor(props) {
     super(props);
@@ -87,7 +70,6 @@ export default class CameraExample extends React.Component {
         this.setState({saveMessageDisplay: false})
       }, 2000);
     });
-    // Alert.alert('photo saved!');
 
     this.setState({
       reviewMode: false,
@@ -95,26 +77,9 @@ export default class CameraExample extends React.Component {
     });
 
     upload(this.state.pic.exif.DateTimeOriginal, this.state.pic.base64, this.state.userID);
-
-    // // use id to set up path in firebase storage for this user's pictures
-    // let folder = imageStore.child(this.state.userID.toString());
-    // let fileName = this.state.pic.exif.DateTimeOriginal; // timestamp
-
-    // // save image to fireStore
-    // let address = folder.child(fileName);
-    // address.putString(this.state.pic.base64).then((snapshot) => {
-    //   // save reference to file in firebase database so it can be downloaded later:
-    //   database.ref('imgURLs').child(this.state.userID.toString()+'/'+fileName).set({
-    //     name: fileName
-    //   });
-
-    // }).catch(err => {
-    //   console.log('firebase save error: ', err);
-    // })
   }
 
   render() {
-    console.log('in camera!');
     const { hasCameraPermission } = this.state;
     const { width, height } = Dimensions.get('window');
     if (hasCameraPermission === null) {
