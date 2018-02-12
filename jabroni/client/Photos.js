@@ -15,11 +15,8 @@ import NavFooter from "./FooterNav.js";
 import Chat from "../utilities/chatIcon.js";
 import firebase from "../utilities/firebase.js";
 var moment = require("moment");
-
 const trash = require("../../images/trash.png");
-
-const imageStore = firebase.storage();
-const database = firebase.database();
+const downloadURL = "https://fitpics.s3.amazonaws.com/public"
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -140,49 +137,57 @@ class Photos extends React.Component {
 				console.log("async storage error: ", err);
 			} else {
 				this.setState({ userID: JSON.parse(val).id }, () => {
+				AsyncStorage.getItem("@FitApp:UserPics", (err, val) => {
+					if ( err ) {
+						console.log("async storage error: ", err);
+					} else {
+						let keys = JSON.parse(val);
+						
+					}
+				})
 					// use ID look up references to photo names in database
-					database
-						.ref("imgURLs/" + this.state.userID.toString())
-						.once("value", snapshot => {
-							// snapshot.val() is an object. iterate throgh object to get all the names of img files in imageStore:
-							let obj = snapshot.val();
-							let fileNames = [];
-							for (var key in obj) {
-								fileNames.push(key);
-							}
-							// download files from the imageStore and store them in state.
-							fileNames.forEach(name => {
-								let url = imageStore
-									.ref("images/" + this.state.userID.toString() + "/" + name)
-									.getDownloadURL()
-									.then(url => {
-										this.downloadPic(url, name, fileNames.length);
-									});
-							});
-						});
+					// database
+					// 	.ref("imgURLs/" + this.state.userID.toString())
+					// 	.once("value", snapshot => {
+					// 		// snapshot.val() is an object. iterate throgh object to get all the names of img files in imageStore:
+					// 		let obj = snapshot.val();
+					// 		let fileNames = [];
+					// 		for (var key in obj) {
+					// 			fileNames.push(key);
+					// 		}
+					// 		// download files from the imageStore and store them in state.
+					// 		fileNames.forEach(name => {
+					// 			let url = imageStore
+					// 				.ref("images/" + this.state.userID.toString() + "/" + name)
+					// 				.getDownloadURL()
+					// 				.then(url => {
+					// 					this.downloadPic(url, name, fileNames.length);
+					// 				});
+					// 		});
+					// 	});
 				});
 			}
 		});
 	}
 
-	downloadPic(url, name, length) {
-		var xhr = new XMLHttpRequest();
-		xhr.responseType = "text";
-		xhr.onload = event => {
-			let photos = this.state.photos;
-			photos.push([name, xhr.response]); // [timestamp, base64 string]
-			photos = photos.sort((a, b) => {
-				return a[0].localeCompare(b[0]) * -1; // newest photo should appear first
-			});
-			this.setState({ photos: photos }, () => {
-				if (this.state.photos.length === length) {
-					this.setState({ loading: false });
-				}
-			});
-		};
-		xhr.open("GET", url);
-		xhr.send();
-	}
+	// downloadPic(url, name, length) {
+	// 	var xhr = new XMLHttpRequest();
+	// 	xhr.responseType = "text";
+	// 	xhr.onload = event => {
+	// 		let photos = this.state.photos;
+	// 		photos.push([name, xhr.response]); // [timestamp, base64 string]
+	// 		photos = photos.sort((a, b) => {
+	// 			return a[0].localeCompare(b[0]) * -1; // newest photo should appear first
+	// 		});
+	// 		this.setState({ photos: photos }, () => {
+	// 			if (this.state.photos.length === length) {
+	// 				this.setState({ loading: false });
+	// 			}
+	// 		});
+	// 	};
+	// 	xhr.open("GET", url);
+	// 	xhr.send();
+	// }
 
 	setProfPic(e) {
 		e.preventDefault();
