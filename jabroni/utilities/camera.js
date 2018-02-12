@@ -76,7 +76,18 @@ export default class CameraExample extends React.Component {
       pic: null
     });
 
-    upload(this.state.pic.exif.DateTimeOriginal, this.state.pic.base64, this.state.userID);
+    upload(this.state.pic.exif.DateTimeOriginal, this.state.pic.base64, this.state.userID)
+    .then(({key}) => {
+      AsyncStorage.getItem('@FitApp:UserPics')
+      .then((keysString) => {
+        let keyArray = JSON.parse(keysString);
+        keyArray.push(key);
+        AsyncStorage.setItem('@FitApp:UserPics', JSON.stringify(keyArray))
+        .then(() => console.log('Successfully stored new key in storage'))
+        .catch((err) => console.error('Error storing new key in storage', err))
+      })
+    });
+
   }
 
   render() {
