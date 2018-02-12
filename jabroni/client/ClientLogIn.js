@@ -94,14 +94,14 @@ class logInScreen extends React.Component {
   }
 
   componentDidMount(){
-    // AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
-    //   if (err) console.log(err);
-    //   else {
-    //     if(val){
-    //     this.props.navigation.dispatch(resetAction)
-    //     }
-    //   }
-    // })
+    AsyncStorage.getItem('@FitApp:UserInfo', (err, val) => {
+      if (err) console.log(err);
+      else {
+        if(val){
+        this.props.navigation.dispatch(resetAction)
+        }
+      }
+    })
   }
 
 
@@ -125,10 +125,11 @@ class logInScreen extends React.Component {
           getPhotosList(data.loginUser.id).then((list) => {
           // list is an array of objects containing the key for each photo in s3 bucket
           // store keys in async storage
+          list = _.pluck(list, 'key');
           list.splice(list.indexOf(data.loginUser.id+'/profilePicture'), 1);
           list.splice(list.indexOf(data.loginUser.id+'/'), 1);
-
-          AsyncStorage.setItem('@FitApp:UserPics', JSON.stringify(_.pluck(list, 'key')))
+          console.log('HERE WITH LIST:', list);
+          AsyncStorage.setItem('@FitApp:UserPics', JSON.stringify(list))
           .then(() => {
             console.log('Successfully stored pic list!');
             this.props.navigation.dispatch(resetAction);
