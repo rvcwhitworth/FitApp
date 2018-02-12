@@ -15,6 +15,8 @@ import NavFooter from "./FooterNav.js";
 import Chat from "../utilities/chatIcon.js";
 // import firebase from "../utilities/firebase.js";
 var moment = require("moment");
+import axios from 'axios';
+
 const trash = require("../../images/trash.png");
 const s3 = require('../../s3_utilities.js');
 const width = Dimensions.get("window").width;
@@ -137,17 +139,27 @@ class Photos extends React.Component {
 				console.log("async storage error: ", err);
 			} else {
 				this.setState({ userID: JSON.parse(val).id }, () => {
-				AsyncStorage.getItem("@FitApp:UserPics", (err, val) => {
-					if ( err ) {
-						console.log("async storage error: ", err);
-					} else {
-						let keys = JSON.parse(val);
-						
-					}
-				})
+					// get photo keys from async storage
+					AsyncStorage.getItem("@FitApp:UserPics")
+					.then((picsString) => {
+						let photos = JSON.parse(picsString);
+						this.setState({photos}, () => this.downloadPic());
+					})
 				});
 			}
 		});
+	}
+
+	downloadPic () {
+		axios.get("https://fitpics.s3.amazonaws.com/public/" + this.state.photos[this.state.index])
+		.then((response) => {
+			//slice user id and '/' from key
+			let timestamp = this.state.photos[this.state.index].split('/')[1];
+			this.setState({
+				currentPic: [timestamp, response.data],
+				loading: false
+			});
+		}).catch(err => console.log('axios error: ', err));
 	}
 
 	setProfPic(e) {
@@ -169,13 +181,12 @@ class Photos extends React.Component {
 
 		// remove key from state
 		let p = this.state.photos;
-		p.splice(index, 1);
+		p.splice(this.state.index, 1);
 		let i = this.state.index;
 		if ( i > 0 ) {
 			i--;
 		}
-		this.setState({index: i, photos: p});
-
+		this.setState({index: i, photos: p}, () => this.downloadPic()); 
 		// remove key from asyncStorage
 		AsyncStorage.setItem("@FitApp: UserPics", JSON.stringify(p))
 		.then(() => {
@@ -192,7 +203,9 @@ class Photos extends React.Component {
 		let i = this.state.index;
 		if (this.state.index < this.state.photos.length - 1) {
 			i++;
-			this.setState({ index: i });
+			this.setState({ loading: true, index: i }, () => {
+				this.downloadPic();
+			});
 		}
 	}
 
@@ -201,13 +214,15 @@ class Photos extends React.Component {
 		let i = this.state.index;
 		if (this.state.index > 0) {
 			i--;
-			this.setState({ index: i });
+			this.setState({ loading: true, index: i }, () => {
+				this.downloadPic();
+			});
 		}
 	}
 
 	render() {
 		const { width, height } = Dimensions.get("window");
-		const curr = this.state.photos[this.state.index]; // a tuple representing the [timestamp,image] currently being displayed
+		const curr = this.state.currentPic; // a tuple representing the [timestamp,image] currently being displayed
 		return (
 			<View style={{"backgroundColor":"black", flexDirection: 'column', width: width, height: height}}>
 				<View style={styles.galleryContainer}>
@@ -249,7 +264,7 @@ class Photos extends React.Component {
 									onPress={this.toggleButtons}
 								>
 									<Image
-										source={{ uri: `data:image/jpg;base64,${curr[1]}` }}
+										source={{uri: `data:image/jpg;base64,${curr[1]}`}}
 										style={styles.image}
 									/>
 								</TouchableHighlight>

@@ -27,11 +27,22 @@ class Profile extends React.Component {
         axios.get("https://fitpics.s3.amazonaws.com/public/" + JSON.parse(val).id + "/profilePicture")
         .then((response) => {
           this.setState({
-            profPic: {uri: `data:image/jpg;base64,${response.data}`}
+            profPic: {uri: `data:image/jpg;base64,${response.data}`},
+            userId: JSON.parse(val).id
           });
         }).catch(err => console.log('axios error: ', err));
       }
     });
+  }
+
+  //refetch profile picture when it is changed in photo gallery
+  componentWillReceiveProps () {
+    axios.get("https://fitpics.s3.amazonaws.com/public/" + this.state.userId + "/profilePicture")
+        .then((response) => {
+          this.setState({
+            profPic: {uri: `data:image/jpg;base64,${response.data}`}
+          });
+        }).catch(err => console.log('axios error: ', err));
   }
 
   componentWillUnmount() {
