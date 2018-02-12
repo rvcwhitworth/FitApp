@@ -8,7 +8,9 @@ import axios from 'axios'
 import Workout from './Workout.jsx'
 import ImgHandler from './workoutTemplatePhotoUpload.jsx'
 import { graphql, ApolloProvider, withApollo } from 'react-apollo';
+import { Button, Card, Icon, Image, Segment, Divider, Container} from 'semantic-ui-react'
 import { createExercisePlan } from '../../../utilities/mutations.jsx'
+
 
 
 
@@ -147,7 +149,13 @@ class Template extends React.Component{
         })}
         <button value='tester' onClick={(e) =>{ this.testingForms(e)}}> Add workouts! </button>
         <input onChange={this.testingInputs} placeholder='Exercise Name' value={this.state.WorkoutName} /> 
-        <button onClick={() => {this.saveMe()} } className="btn btn-lg btn-block" type='button' style={{position:'relative', bottom:'0'}}>Save Template</button>
+        <Container fluid stlye={{position: 'fixed', bottom:0}}>
+          <Segment padded>
+            <Button style={{backgroundColor:'#06D6A0'}} fluid onClick={() => {this.saveMe()} }>Save Template</Button>
+            <Divider horizontal>Or</Divider>
+            <Button style={{backgroundColor:'#FFD166'}} fluid onClick={() => {this.props.cancel()}}>Cancel</Button>
+         </Segment>
+        </Container>
         </div>
         )
   }

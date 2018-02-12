@@ -5,44 +5,10 @@ import { withRouter } from 'react-router';
 import ChangeUser from '../../actions/example.jsx'
 import gql from 'graphql-tag';
 import { graphql, ApolloProvider, withApollo } from 'react-apollo';
-//import { searchQuery, spotterQuery, addSpotter } from '../utilities/queries.js'
+import { Input, Button, Icon, Card } from 'semantic-ui-react'
+import { searchQuery } from '../../../utilities/queries.jsx'
 
-// const searchQuery = gql`
-//   query getUsersByFullName($fullName: String!){
-//     getUsersByFullName(fullName: $fullName) {
-//       id
-//       fullName
-//       email
-//       profile_data
-//       username
-//     }
-//   }
-// `
-// const spotterQuery = gql`
-// query getSpotters($id: Int!){
-//   getSpotters(id: $id, type: "client") {
-//     trainer {
-//       username
-//       fullName
-//       id
-//     }
-//   }
-// }
-// `
 
-// const addSpotter = gql`
-// mutation setSpotter($trainer_id: Int!, $client_id: Int!){
-//   setSpotter(trainer_id: $trainer_id, client_id: $client_id, type: "support") {
-//     trainer {
-//       id
-//       fullName
-//       email
-//       profile_data
-//       username
-//     }
-//   }
-// }
-// `
 
 class ClientTeam extends React.Component{
   constructor(props){
@@ -56,24 +22,114 @@ class ClientTeam extends React.Component{
         searchResults: [],
         loading: false,
         photos: {},
+        search: '',
         spotters: this.props.spotters
       }
+      this.handleSearch = this.handleSearch.bind(this)
+      this.handleChange = this.handleChange.bind(this)
+      this.handleBackClick = this.handleBackClick.bind(this)
+      this.requestSpotter = this.requestSpotter.bind(this)
   }
 
   componentDidMount () {
   }
 
+  handleBackClick(){
+    this.setState({
+      searchResults: []
+    })
+  }
+
+  requestSpotter(){
+    console.loig('requesting')
+  }
+
+  handleSearch(){
+      this.props.client.query({
+        query: searchQuery,
+        variables: {
+          fullName: this.state.search
+        }
+      }).then((results) => {
+        console.log('RESULTS FROM SEARCH', results);
+        let temp = this.state.searchResults;
+        results.data.getUsersByFullName.forEach((person) => {
+          temp.push(person);
+        });
+        this.setState({
+          searchResults: temp,
+          search: ''});
+      }).catch((err) => {
+        console.log('graphQL error in teamScreen query: ', err);
+      }).then(() => {
+        console.log('fin')
+      })
+  }
+
+  handleChange(e){
+    this.setState({
+      search: e.target.value
+    })
+  }
+
   render() {
     console.log('this si the state', this.state)
+    if(this.state.searchResults.length === 0){
       return(
         <div>
         <img src={this.state.backgroundImage} style={{zIndex: -1, width:'100%', height:'100%', position: 'absolute'}} />
         <h1 style={{textAlign:'center'}}> Team </h1>
+        <Input icon='users' value={this.state.search} onChange={this.handleChange}iconPosition='left' placeholder='Search users...' />
+        <Button animated>
+          <Button.Content onClick={this.handleSearch} visible>Search</Button.Content>
+          <Button.Content onClick={this.handleSearch} hidden>
+            <Icon name='search' />
+          </Button.Content>
+        </Button>
         {this.state.spotters.map((val, key) => {
           return <div className='container'><h2>Trainer: {val.trainer.fullName}</h2></div>
         })}
         </div>
         )
+    } else{
+      return(
+      <div>
+        {this.state.searchResults.map((val, key) => {
+          return(
+      <Card>
+        <Card.Content>
+          <Card.Header>
+            {val.fullName}
+          </Card.Header>
+          <Card.Meta>
+            <span className='date'>
+              Athlete
+            </span>
+          </Card.Meta>
+          <Card.Description>
+            {val.profile_data}
+          </Card.Description>
+        </Card.Content>
+        <Card.Content extra>
+          <a>
+            <Button animated style={{backgroundColor:'#06D6A0'}}>
+              <Button.Content visible>Connect</Button.Content>
+              <Button.Content hidden onClick={this.requestSpotter}>
+                <Icon name='user' />
+              </Button.Content>
+            </Button>
+          </a>
+        </Card.Content>
+      </Card>)
+      })}
+            <Button animated>
+              <Button.Content visible>Back to Team</Button.Content>
+              <Button.Content hidden onClick={this.handleBackClick}>
+                <Icon name='arrow left' />
+              </Button.Content>
+            </Button>
+    </div>)
+    }
   }
 }
 
@@ -90,4 +146,4 @@ const mapStoreToProps = (store) => {
 
 export default withRouter(connect(
   mapStoreToProps
-)(withApollo(ClientTeam)));
+)(withApollo(withApollo(ClientTeam))));
