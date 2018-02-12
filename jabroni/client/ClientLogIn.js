@@ -128,7 +128,6 @@ class logInScreen extends React.Component {
           list = _.pluck(list, 'key');
           list.splice(list.indexOf(data.loginUser.id+'/profilePicture'), 1);
           list.splice(list.indexOf(data.loginUser.id+'/'), 1);
-          console.log('HERE WITH LIST:', list);
           AsyncStorage.setItem('@FitApp:UserPics', JSON.stringify(list))
           .then(() => {
             console.log('Successfully stored pic list!');
