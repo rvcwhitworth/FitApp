@@ -6,6 +6,7 @@ import c3 from 'c3';
 import BodyCompGraphs from './Graphs/bodyComp.jsx'
 import DietAnalytcis from './Graphs/dietAnalytics.jsx'
 import { graphql, ApolloProvider, withApollo } from 'react-apollo';
+import { Grid, Menu, Segment } from 'semantic-ui-react'
 
 class Analytics extends React.Component{
   constructor(props){
@@ -27,9 +28,11 @@ class Analytics extends React.Component{
     // })
   }
 
-  tester(e){
+  tester(e, { name }){
+    e.preventDefault()
+    console.log('what is the value', e.target, name)
     this.setState({
-      selected: e.target.value
+      selected: name
     })
   }
 
@@ -54,6 +57,7 @@ class Analytics extends React.Component{
   }
 
   renderGraph(){
+    console.log('whats going on?', this.state)
     if(this.state.selected === 'BodyComp'){
         return(
           <div style={{width:'75%', display:'inline-block'}}>
@@ -70,27 +74,26 @@ class Analytics extends React.Component{
   }
 
   render() {
+    console.log('whats zeee state', this.state)
     return(
-      <div className='container' style={{flexDirection:'column', display:'inline-block', textAlign:'center'}}>
-      <div className="btn-group-vertical" style={{backgroundColor:'rgba(255,255,255,0.6)', float:'left'}}>
-      <button onClick={this.tester} className="btn btn-lg btn-block" value='BodyComp' style={{backgroundColor:'rgba(255,255,255,0.4)', fontFamily: 'Sans-Serif', height:'33%', width:'33%'}}>Body Composition</button>
-      <button onClick={this.tester} className="btn btn-lg btn-block" value='Diet' style={{backgroundColor:'rgba(255,255,255,0.4)', fontFamily: 'Sans-Serif', height:'33%', width:'33%'}}>Diet</button>
-      <button onClick={this.tester} className="btn btn-lg btn-block" value='Workouts' style={{backgroundColor:'rgba(255,255,255,0.4)', fontFamily: 'Sans-Serif', height:'33%', width:'33%'}}>Workouts</button>
-      </div>
-
-      {this.renderGraph()}
-    </div>
+      <Grid>
+        <Grid.Column width={3}>
+          <Menu fluid vertical tabular>
+      <Menu.Item active={this.state.selected === 'BodyComp'} onClick={this.tester} value='BodyComp' name="BodyComp" />
+      <Menu.Item active={this.state.selected === 'Diet'} onClick={this.tester} value='Diet' name='Diet' />
+      <Menu.Item active={this.state.selected === 'Workouts'} onClick={this.tester} value='Workouts' name='Workouts' />
+                </Menu>
+        </Grid.Column>
+        <Grid.Column stretched width={12}>
+          <Segment>
+           {this.renderGraph()}
+          </Segment>
+        </Grid.Column>
+      </Grid>
     )
   }
 
 }
-
-// <div>
-//     <div style={{padding:'25px', backgroundColor:'rgba(0,0,0,.3)'}}>
-//     <h1 style={{color:'white', textAlign:'center', fontFamily: 'Sans-Serif'}}> Body Fat Percentage </h1>
-//     <div id='chart2' style={{backgroundColor:'rgba(256,256,256,.7)', fontFamily: 'Sans-Serif', color:'white'}}> </div>
-//     </div>
-//     </div>
 
 const mapStoreToProps = (store) => {
   console.log('store', store);

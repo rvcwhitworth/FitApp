@@ -54,10 +54,10 @@ class Header extends React.Component{
 
     return(
       <div stlye={{backgroundColor: 'rgba(0,0,0, 0.9)'}}>
-        <div style={{textAlign:'left', backgroundColor: 'rgba(0,0,0, 0.3)'}}>
+        <div className='Seven blue ui buttons'>
           <ul>
-            <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to="/">Log In!</Link></button>
-            <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/signUp'>Signup</Link></button>
+            <button className="ui button"><Link style={{color:'white'}} to="/">Log In!</Link></button>
+            <button className="ui button"><Link style={{color:'white'}} to='/signUp'>Signup</Link></button>
           </ul>
         </div>
 
@@ -71,17 +71,16 @@ class Header extends React.Component{
   } else if(this.state.type === 'Client'){
     return(
       <div stlye={{backgroundColor: 'rgba(0,0,0, 0.9)'}}>
-        <div style={{textAlign:'left', backgroundColor: 'rgba(0,0,0, 0.3)'}}>
+        <div className='Seven blue ui buttons'>
         <ul>
-        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to="/">Profile</Link></button>
-        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/signUp'>Photos</Link></button>
-        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/Analytics'>Analytics</Link></button>
-        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/signUp'>Planner</Link></button>
-        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/Team'>Team</Link></button>
-        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/signUp'>Chat</Link></button>
-        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/Settings'>Settings</Link></button>
-
-        <button className="btn btn-secondary btn-lg" onClick={this.handleClick} style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}>Log out</button>
+        <button className="ui button" ><Link style={{color:'white'}} to="/">Profile</Link></button>
+        <button className="ui button" ><Link style={{color:'white'}} to='/signUp'>Photos</Link></button>
+        <button className="ui button" ><Link style={{color:'white'}} to='/Analytics'>Analytics</Link></button>
+        <button className="ui button" ><Link style={{color:'white'}} to='/signUp'>Planner</Link></button>
+        <button className="ui button" ><Link style={{color:'white'}} to='/Team'>Team</Link></button>
+        <button className="ui button" ><Link style={{color:'white'}} to='/Chat'>Chat</Link></button>
+        <button className="ui button" ><Link style={{color:'white'}} to='/Settings'>Settings</Link></button>
+        <button className="ui button" onClick={this.handleClick} >Log out</button>
         </ul>
         </div>
 
@@ -91,22 +90,23 @@ class Header extends React.Component{
         <Route exact path='/Settings' component={ClientProfile}/>
         <Route exact path='/Analytics' component={ClientAnalytics}/>
         <Route exact path='/Team' component={ClientTeam}/>
+        <Route exact path='/Chat' component={Chat}/>
 
       </div>
       )
   } else if(this.state.type === 'Trainer'){
     return(
       <div stlye={{backgroundColor: 'rgba(0,0,0, 0.9)'}}>
-        <div style={{textAlign:'left', backgroundColor: 'rgba(0,0,0, 0.3)'}}>
+        <div className='Seven blue ui buttons'>
         <ul>
-        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to="/">Profile</Link></button>
-        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/Updates'>News Feed</Link></button>
-        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/Roster'>Roster</Link></button>
-        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/WorkoutPlans'>Workout Plans</Link></button>
-        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/Chat'>Chat</Link></button>
-        <button className="btn btn-secondary btn-lg" style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}><Link style={{color:'white'}} to='/Settings'>Settings</Link></button>
-        <button className="btn btn-secondary btn-lg" onClick={this.handleClick} style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}>Log out</button>
-        <button className="btn btn-secondary btn-lg" onClick={this.handleClick} style={{fontFamily: 'Sans-Serif', backgroundColor: 'rgba(0,0,0, 0.2)'}}>Switch to Client Profile</button>
+        <button className="ui button"><Link style={{color:'white'}} to="/">Profile</Link></button>
+        <button className="ui button"><Link style={{color:'white'}} to='/Updates'>News Feed</Link></button>
+        <button className="ui button"><Link style={{color:'white'}} to='/Roster'>Roster</Link></button>
+        <button className="ui button"><Link style={{color:'white'}} to='/WorkoutPlans'>Workout Plans</Link></button>
+        <button className="ui button"><Link style={{color:'white'}} to='/Chat'>Chat</Link></button>
+        <button className="ui button"><Link style={{color:'white'}} to='/Settings'>Settings</Link></button>
+        <button className="ui button" onClick={this.handleClick} >Log out</button>
+        <button className="ui button" onClick={this.handleClick} >Switch to Client Profile</button>
 
         </ul>
         </div>

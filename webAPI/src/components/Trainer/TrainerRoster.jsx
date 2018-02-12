@@ -3,36 +3,8 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import ChangeUser from '../../actions/example.jsx'
-import axios from 'axios'
-import { CSSTransition, TransitionGroup } from 'react-transition-group'
-const Fade = ({ children, ...props }) => (
-  <CSSTransition
-    {...props}
-    timeout={500}
-    classNames="example"
-  >
-    {children}
-  </CSSTransition>
-);
+import { Grid, Image, Button } from 'semantic-ui-react'
 
-class FadeInAndOut extends React.Component {
-  constructor(...args) {
-    super(...args);
-    this.state = { show: false };
-
-    setInterval(() => {
-      this.setState({ show: !this.state.show })
-    }, 500)
-  }
-  
-  render() {
-    return (
-      <Fade in={this.state.show}>
-        <div className='greeting'>Hello world</div>
-      </Fade>
-    )
-  }
-}
 
 class Roster extends React.Component{
   constructor(props){
@@ -41,17 +13,44 @@ class Roster extends React.Component{
         id : this.props.id || null,
         username : this.props.user || null,
         goals : this.props.goals || null,
-        backgroundImage: this.props.backgroundImage
+        backgroundImage: this.props.backgroundImage,
+        roster: this.props.roster
       }
   }
 
   componentWillReceiveProps(nextProps) {
   }
 
+  testing(){
+    console.log('i can click')
+  }
+
   render() {
+    var point = Math.ceil(this.state.roster.length/2)
+    var firstHalf = this.state.roster.slice(0, point)
+    var secondHalf = this.state.roster.slice(point)
 
       return(
-        <FadeInAndOut />
+        
+        <Grid columns={2} divided>
+    <Grid.Column style={{textAlign:'center'}}>
+    {firstHalf.map((val, key) => {
+        return (<Grid.Row style={{padding:'20px'}}>
+          <Button fluid primary onClick={this.selectClient} >{val.client.fullName}</Button>
+          </Grid.Row>
+          )
+      })}
+    </Grid.Column>
+
+    <Grid.Column style={{textAlign:'center'}}>
+    {secondHalf.map((val, key) => {
+        return (<Grid.Row style={{padding:'20px'}}>
+          <Button fluid primary onClick={this.selectClient} >{val.client.fullName}</Button>
+          </Grid.Row>
+          )
+      })}
+    </Grid.Column>
+  </Grid>
         )
   }
 }
@@ -62,6 +61,7 @@ const mapStoreToProps = (store) => {
     id: store.auth.auth,
     user: store.auth.username,
     goals: store.auth.goals,
+    roster: store.auth.spotters,
     backgroundImage: store.branding.backgroundImg,
   };
 };
@@ -69,3 +69,4 @@ const mapStoreToProps = (store) => {
 export default withRouter(connect(
   mapStoreToProps
 )(Roster));
+
