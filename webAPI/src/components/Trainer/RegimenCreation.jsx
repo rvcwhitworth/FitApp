@@ -5,6 +5,7 @@ import { withRouter } from 'react-router';
 import reactDragula from 'react-dragula';
 import dragula from 'dragula';
 import axios from 'axios';
+import { Button, Card, Icon, Image, Grid, Header } from 'semantic-ui-react'
 
 class Regimen extends React.Component{
   constructor(props){
@@ -136,36 +137,77 @@ class Regimen extends React.Component{
   		<div className='container' ><button type='button' onClick={this.props.finished} style={{backgroundColor:'rgba(0,0,0,.5)', fontFamily: 'Sans-Serif', float:'right'}}><h3 style={{color:'white', float:'right'}}>Save!</h3></button></div>
   		<h1 style={{color:'white', textAlign:'center'}}>Weekly Planner</h1>
   		<div id='Workouts' style={{display: 'flex', flexDirection:'row'}}>
-  		<button value='1' className="btn btn-lg" type='button' style={{backgroundColor:'rgba(0,0,0,.3)', fontFamily: 'Sans-Serif', float:'left'}}><h4 style={{color:'white'}}>Chest and Back</h4></button>
-        <button value='3' className="btn btn-lg" type='button' style={{backgroundColor:'rgba(0,0,0,.3)', fontFamily: 'Sans-Serif', float:'left'}}><h4 style={{color:'white'}}>Legs</h4></button>
-        <button value='2' className="btn btn-lg" type='button' style={{backgroundColor:'rgba(0,0,0,.3)', fontFamily: 'Sans-Serif', float:'left'}}><h4 style={{color:'white'}}>Shoulders and Arms</h4></button>
-        <button value='4' className="btn btn-lg" type='button' style={{backgroundColor:'rgba(0,0,0,.3)', fontFamily: 'Sans-Serif', float:'left'}}><h4 style={{color:'white'}}>Cardio</h4></button>
+        {this.state.exercisePlans.map((val, key) =>{
+          return(
+            <div>
+            <Card key={key} onClick={() => this.divClick(key)}style={{width: "12rem", maxheight:'12rem', padding:'10px', float:'left', cursor:'pointer'}}>
+              <Image src={val.regimen.photo} alt="Card image cap" />
+              <Card.Content>
+              <Card.Header>
+              {val.name}
+              </Card.Header>
+              <Card.Meta>
+              <span className='workout'>
+                 Workout
+              </span>
+              </Card.Meta>
+              <Card.Description>
+                {val.regimen.description}
+              </Card.Description>
+              </Card.Content>
+              <Card.Content extra>
+             <a>
+             Difficulty 5
+             <Icon name='star' />
+             </a>
+             </Card.Content>
+             </Card>
+             </div>
+          )})}
   		</div>
   		</div>
+      <Grid centered='true'>
+    <Grid.Row columns={3} stretched='true' style={{height:450}}>
+      <Grid.Column centered='true' stretched='true' style={{backgroundColor:'#FFFCF9', border: '5px solid #26547C'}}>
+        <Header textAlign="center" as='h1'>Monday</Header>
+        <Grid.Row id='monday' centered='true' stretched='true'>
+        </Grid.Row>
+      </Grid.Column>
+      <Grid.Column centered='true' stretched='true' style={{backgroundColor:'#FFFCF9', border: '5px solid #26547C'}}>
+      <Header textAlign="center" as='h1'>Tuesday</Header>
+        <Grid.Row id='tuesday'>
+        </Grid.Row>
+      </Grid.Column>
+      <Grid.Column centered='true' style={{backgroundColor:'#FFFCF9', border: '5px solid #26547C'}}>
+      <Header textAlign="center" as='h1'>Wednesday</Header>
+        <Grid.Row id='wednesday'>
+        </Grid.Row>
+      </Grid.Column>
+    </Grid.Row>
 
-  		<div style={{display: 'flex', flexDirection:'row'}}> 
-
-  		<div id='sunday' value='sunday' className='container' style={{maxWidth:'25%', padding:'50px', border:'5px solid #cecece'}}> <h2 style={{color:'white', textAlign:'center', padding:'50px'}}>Sunday</h2>
-  		</div>
-  		<div id='monday' value='monday' className='container' style={{maxWidth:'25%', border:'5px solid #cecece', padding:'50px'}}> <h2 style={{color:'white', textAlign:'center', padding:'50px'}}>Monday</h2>
-  		</div>
-  		 <div id='tuesday' value='tuesday' className='container' style={{maxWidth:'25%', border:'5px solid #cecece', padding:'50px'}}> <h2 style={{color:'white', textAlign:'center', padding:'50px'}}>Tuesday</h2>
-  		</div>
-  		<div id='wednesday' value='wednesday' className='container' style={{maxWidth:'25%', border:'5px solid #cecece', padding:'50px'}}> <h2 style={{color:'white', textAlign:'center', padding:'50px'}}>Wednesday</h2>
-  		</div>
-
-  		  		</div>
-
-  		<div style={{display: 'flex', flexDirection:'row'}}> 
-
-
-  		<div id='thursday' value='thursday' className='container' style={{maxWidth:'34%', border:'5px solid #cecece', padding:'50px'}}> <h2 style={{color:'white', padding:'50px', textAlign:'center'}}>Thursday</h2>
-  		</div>
-  		<div id='friday' value='friday' className='container' style={{maxWidth:'34%', border:'5px solid #cecece', padding:'50px'}}> <h2 style={{color:'white', padding:'50px', textAlign:'center'}}>Friday</h2>
-  		</div>
-  		<div id='saturday' value='saturday' className='container' style={{maxWidth:'34%', border:'5px solid #cecece', padding:'50px'}}> <h2 style={{color:'white', padding:'50px', textAlign:'center'}}>Saturday</h2>
-  		</div>
-  		</div>
+    <Grid.Row columns={4} stretched style={{height:450}}>
+      <Grid.Column style={{backgroundColor:'#FFFCF9', border: '5px solid #26547C'}}>
+      <Header textAlign="center" as='h1'>Thursday</Header>
+        <Grid.Row id='thursday'>
+        </Grid.Row>
+      </Grid.Column>
+      <Grid.Column style={{backgroundColor:'#FFFCF9', border: '5px solid #26547C'}}>
+      <Header textAlign="center" as='h1'>Friday</Header>
+        <Grid.Row id='friday'>
+        </Grid.Row>
+      </Grid.Column>
+      <Grid.Column style={{backgroundColor:'#FFFCF9', border: '5px solid #26547C'}}>
+      <Header textAlign="center" as='h1'>Saturday</Header>
+        <Grid.Row id='saturday'>
+        </Grid.Row>
+      </Grid.Column>
+      <Grid.Column style={{backgroundColor:'#FFFCF9', border: '5px solid #26547C'}}>
+      <Header textAlign="center" as='h1'>Sunday</Header>
+        <Grid.Row id='sunday'>
+        </Grid.Row>
+      </Grid.Column>
+    </Grid.Row>
+    </Grid>
 
   		</div>)
   }
@@ -177,7 +219,7 @@ const mapStoreToProps = (store) => {
     id: store.auth.auth,
     user: store.auth.username,
     goals: store.auth.goals,
-    exercisePlans: store.auth.Exercise_Plans
+    exercisePlans: store.auth.Exercise_Plan
   };
 };
 

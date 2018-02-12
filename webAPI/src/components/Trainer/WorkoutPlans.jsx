@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import ChangeUser from '../../actions/example.jsx'
-import axios from 'axios'
+import { Button, Card, Icon, Image, Segment, Divider, Container} from 'semantic-ui-react'
 import Template from './WorkoutTemplate.jsx'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import Regimen from './RegimenCreation.jsx'
@@ -27,6 +27,7 @@ class WorkoutPlans extends React.Component{
       this.handleTemplateMenu = this.handleTemplateMenu.bind(this)
       this.createRegimen = this.createRegimen.bind(this)
       this.finishedRegimen = this.finishedRegimen.bind(this)
+      this.cancelTemplate = this.cancelTemplate.bind(this)
   }
 
   componentDidMount() {
@@ -41,22 +42,41 @@ class WorkoutPlans extends React.Component{
 
   divClick(i){
     console.log('what is love?', this.state)
-    if(i !== this.state.popOut){
+    if(i !== this.state.popOut && this.state.show){
     this.setState({
-      popOut: i,
       show: !this.state.show
-    })}
+    }, () =>{
+      setTimeout(()=>{
+        this.setState({
+          popOut: i,
+          show:!this.state.show
+        })
+      }, 500)
+    })} else if(i !== this.state.popOut && !this.state.show){
+      this.setState({
+        popOut: i,
+        show: !this.state.show
+      })
+    } else if(i === this.state.popOut){
+      this.setState({
+        show: !this.state.show
+      }, () => {
+        setTimeout(() =>{this.setState({
+          popOut: null
+        })}, 500)
+      })
+    }
   }
 
   handleTemplateMenu(e){
     if(e.target.id === 'close'){
-      this.setState({
-        show:false,
-      }, () => {
+      // this.setState({
+      //   
+      // }, () => {
         this.setState({
-          popOut: null
+          show:false,
         })
-      })
+      // })
     } else{
       console.log('What did you click?', e.target.id)
     }
@@ -67,13 +87,15 @@ class WorkoutPlans extends React.Component{
       return (
         <CSSTransition 
           classNames="example"
-          in={this.state.show}>
-         <div key={i} style={{backgroundColor:'rgba(0,0,0,0.5'}}>
-         <button onClick={this.handleTemplateMenu} id='View/Edit' className="btn btn-lg btn-block" type='button' >View/Edit</button>
-         <button onClick={this.handleTemplateMenu} id='SendToClient' className="btn btn-lg btn-block" type='button' >Send to a client</button>
-         <button onClick={this.handleTemplateMenu} id='Delete' className="btn btn-lg btn-block" type='button' >Delete</button>
-         <button onClick={this.handleTemplateMenu} id='close' className="btn btn-lg btn-block" type='button' >Close</button>
-         </div>
+          in={this.state.show}
+          style={{zIndex:5}}
+          >
+        <Button.Group vertical>
+         <Button onClick={this.handleTemplateMenu} id='View/Edit' >View/Edit</Button>
+         <Button onClick={this.handleTemplateMenu} id='SendToClient' >Send to a client</Button>
+         <Button onClick={this.handleTemplateMenu} id='Delete' >Delete</Button>
+         <Button onClick={this.handleTemplateMenu} id='close' >Close</Button>
+       </Button.Group>
        </CSSTransition>
       )
     } else{
@@ -86,6 +108,11 @@ class WorkoutPlans extends React.Component{
         </CSSTransition>)
     }
   }
+ 
+
+
+
+
 
   createRegimen(){
     this.setState({
@@ -107,44 +134,76 @@ class WorkoutPlans extends React.Component{
     })
   }
 
+  cancelTemplate(){
+    this.setState({
+      creatingTemplate:false
+    })
+  }
+
   render() {
     console.log(this.state)
     if(this.state.creatingTemplate){
       return(
         <div>
           <img src={this.state.backgroundImage} style={{zIndex: -1, width:'100%', height:'100%', position: 'absolute'}} />
-          <Template save={this.finishedTemplate} />
+          <Template save={this.finishedTemplate} cancel={this.cancelTemplate} />
         </div>)
     } else if(this.state.creatingRegimen){
       return(
       <Regimen finished={this.finishedRegimen} />)
     }else{
       return(
-        <div style={{flexDirection:'Column'}}>
+        <div style={{flexDirection:'Column', height:'100%' }}>
         <img src={this.state.backgroundImage} style={{zIndex: -1, width:'100%', height:'100%', position: 'absolute'}} />
-        <div>
+        <Container fluid>
         {this.state.plans.map((val, key) =>{
+          if(key === this.state.popOut){
+            var z = 2
+          } else{
+            var z = 1
+          }
           return(
-            <div>
-            <div className="card" key={key} onClick={() => this.divClick(key)}style={{width: "12rem", maxheight:'20rem', padding:'10px', float:'left', cursor:'pointer'}}>
-              <img className="card-img-top" src={val.regimen.photo} alt="Card image cap" />
-              <div className="card-block">
+            <Card key={key} onClick={() => this.divClick(key)}style={{width: "12rem", height:'15rem', padding:'10px', float:'left', cursor:'pointer', zIndex:z}}>
+              <Image src={val.regimen.photo} alt="Card image cap" />
+              <Card.Content>
+              <Card.Header>
+              {val.name}
+              </Card.Header>
+              <Card.Meta>
+              <span className='workout'>
+                 Workout
+              </span>
+              </Card.Meta>
+              <Card.Description>
+                {val.regimen.description}
+              </Card.Description>
                     {this.popOutMenu(key)}
-                <h4 className="card-title">{val.name}</h4>
-                <p className="card-text">{val.regimen.description}</p>
-              </div>
-            </div>
-            </div>
+              </Card.Content>
+              <Card.Content extra>
+             <a>
+             Difficulty 5
+             <Icon name='star' />
+             </a>
+             </Card.Content>
+             </Card>
           )
         }
         )}
-        </div>
-          <button onClick={() => {this.createTemplate()}} className="btn btn-lg btn-block" type='button' >Create a new Template</button>
-          <button onClick={() => {this.createRegimen()}} className="btn btn-lg btn-block" type='button' >Create a new Regimen</button>
+        </Container>
+         <Container fluid stlye={{position: 'fixed', bottom:0}}>
+          <Segment padded>
+            <Button style={{backgroundColor:'#06D6A0'}}fluid onClick={() => {this.createTemplate()}}>Create a new Workout</Button>
+            <Divider horizontal>Or</Divider>
+            <Button style={{backgroundColor:'#FFD166'}} fluid onClick={() => {this.createRegimen()}}>Create a new Regimen</Button>
+         </Segment>
+        </Container>
         </div>)
     }
   }
 }
+
+
+
 
 const mapStoreToProps = (store) => {
   console.log('store', store);

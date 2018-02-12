@@ -8,6 +8,21 @@ const createExercisePlan = gql`
 	}
 }`
 
+const addSpotter = gql`
+mutation setSpotter($trainer_id: Int!, $client_id: Int!){
+  setSpotter(trainer_id: $trainer_id, client_id: $client_id, type: "support") {
+    trainer {
+      id
+      fullName
+      email
+      profile_data
+      username
+    }
+  }
+}
+`
+
 module.exports = {
-	createExercisePlan
+	createExercisePlan,
+	addSpotter
 }
