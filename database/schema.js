@@ -11,6 +11,7 @@ bookshelf.knex.schema.hasTable('Users').then(function(exists) {
 			e.text('email'); // optional
 			e.text('type').notNullable(); // options: 'client' or 'trainer'
 			e.text('profile_data', 'longtext').nullable();
+			e.text('connection_requests', 'longtext').nullable();
 		}).then(function(a) {
 			console.log('created the users table!');
 		});
