@@ -19,6 +19,7 @@ yarn-error.log*
 
 /database/config.js
 TOKENS.js
+.DS_Store
 
 serviceAccount.json
 /webAPI/src/www/bundle.js

@@ -84,7 +84,7 @@ class Regimen extends React.Component{
 
   componentDidMount() {
   	var that = this
-  	dragula([document.getElementById('saturday'), document.getElementById('friday'), document.getElementById('monday'), document.getElementById('sunday'), document.getElementById('thursday'), document.getElementById('wednesday'), document.getElementById('tuesday'), document.getElementById('Workouts')], {copy:true}, {remoiveOnSpill: true})
+  	dragula([document.getElementById('saturday'), document.getElementById('friday'), document.getElementById('monday'), document.getElementById('sunday'), document.getElementById('thursday'), document.getElementById('wednesday'), document.getElementById('tuesday'), document.getElementById('Workouts')], {copy:true, removeOnSpill:true})
   .on('drag', function (el) {
     el.className = el.className.replace('ex-moved', '');
   }).on('drop', function (el, target, old) {
@@ -97,6 +97,16 @@ class Regimen extends React.Component{
   })
     // var container = ReactDOM.findDOMNode(this);
     // reactDragula([container]);
+  //     .on('drag', function (el) {
+  //   el.className = el.className.replace('ex-moved', '');
+  // }).on('drop', function (el, target, old) {
+  //   that.handleMoving(el, target, old)
+  //   el.className += ' ex-moved';
+  // }).on('over', function (el, container) {
+  //   container.className += ' ex-over';
+  // }).on('out', function (el, container) {
+  //   container.className = container.className.replace('ex-over', '');
+  // })
   }
 
   saveWeek () {
