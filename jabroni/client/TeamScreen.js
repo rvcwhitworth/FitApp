@@ -5,11 +5,10 @@ import { graphql, ApolloProvider, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import FooterNav from './FooterNav.js'
 import Chat from '../utilities/chatIcon'
-import firebase from '../utilities/firebase.js';
 import { searchQuery, spotterQuery, addSpotter } from '../utilities/queries.js'
+import axios from 'axios';
 
 const { width, height } = Dimensions.get('window');
-const imageStore = firebase.storage();
 
 class TeamScreen extends React.Component {
   constructor(props) {
@@ -37,11 +36,7 @@ class TeamScreen extends React.Component {
       }).then(({data}) => {
         this.setState({spotters: data.getSpotters}, () => {
           this.state.spotters.forEach(({trainer}) => {
-            console.log('TRAINER in mount', trainer)
-            imageStore
-              .ref('/images/' + trainer.id + '/profilePicture')
-              .getDownloadURL()
-              .then((url) => this.downloadPic(url, trainer.id))
+            this.downloadPic(trainer.id);
           })
         })
       })
@@ -69,15 +64,12 @@ class TeamScreen extends React.Component {
   search() {
     // send this.state.searchTerm to graphQL query
     this.setState({loading: true, searchResults: []}, () => {
-      console.log('HEEEEEERE in setState callback')
       this.props.client.query({
         query: searchQuery,
         variables: {
           fullName: this.state.searchTerm
         }
       }).then((results) => {
-        console.log('RESULTS FROM SEARCH', results);
-        console.log('GOT HERE')
         // do something with the results
         let temp = this.state.searchResults;
         results.data.getUsersByFullName.forEach((person) => {
@@ -85,10 +77,7 @@ class TeamScreen extends React.Component {
         });
         this.setState({searchResults: temp}, () => {
           this.state.searchResults.forEach((user) => {
-            imageStore
-              .ref('images/' + user.id + '/profilePicture')
-              .getDownloadURL()
-              .then((url) => this.downloadPic(url, user.id))
+            this.downloadPic(user.id);
           })
         });
       }).catch((err) => {
@@ -102,18 +91,13 @@ class TeamScreen extends React.Component {
     Keyboard.dismiss();
   }
   
-  downloadPic(url, userId) {
-    console.log('L107 GOT HERE')
-    
-		var xhr = new XMLHttpRequest();
-		xhr.responseType = "text";
-		xhr.onload = event => {
+  downloadPic(userId) {
+    axios.get('https://fitpics.s3.amazonaws.com/public/' + userId + '/profilePicture')
+    .then(({data}) => {
       let photos = this.state.photos;
-      photos[userId] = xhr.response;
+      photos[userId] = data;
 			this.setState({ photos });
-		};
-		xhr.open("GET", url);
-		xhr.send();
+    });
 	}
 
   render(){
@@ -170,14 +154,13 @@ class TeamScreen extends React.Component {
               }
             )
           )}
-          <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
         </ScrollView>
 
 
       </View>
-      {/* <View style={{flex: 1}}> */}
+      <View style={{flex: 1, zIndex: 2}}> 
         <Chat nav={this.props.nav}/>
-      {/* </View> */}
+      </View>
     <FooterNav nav={this.props.nav} index={4} />
   </View>);
   }

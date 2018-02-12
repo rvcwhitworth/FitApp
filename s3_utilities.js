@@ -1,5 +1,4 @@
 import Amplify, {Storage} from 'aws-amplify';
-import {AsyncStorage} from 'react-native';
 const axios = require('axios');
 
 Amplify.configure({
