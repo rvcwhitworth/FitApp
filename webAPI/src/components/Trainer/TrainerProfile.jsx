@@ -5,7 +5,7 @@ import { withRouter } from 'react-router';
 import ChangeUser from '../../actions/example.jsx'
 import SetBackground from '../../actions/backgroundImage.jsx'
 import SetProfile from '../../actions/profileImage.jsx'
-
+import axios from 'axios'
 class TrainerProfile extends React.Component{
   constructor(props){
       super(props)
@@ -14,16 +14,31 @@ class TrainerProfile extends React.Component{
         username : this.props.user || null,
         goals : this.props.goals || null,
         backgroundImage: this.props.backgroundImage,
-        ProfileImage: this.props.ProfileImage,
+        ProfileImage: 'https://media.giphy.com/media/lf9PrYyjFOQta/giphy.gif',
         editing: false
       }
       this.handleBackground = this.handleBackground.bind(this)
       this.handleProfile = this.handleProfile.bind(this)
       this.edit = this.edit.bind(this)
+      this.getProfileImg = this.getProfileImg.bind(this)
+
+      this.getProfileImg()
+
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({goals: nextProps.goals})
+  }
+
+  getProfileImg(){
+        axios.get("https://fitpics.s3.amazonaws.com/public/" + 4 + "/profilePicture")
+        .then((response) => {
+          this.setState({
+            ProfileImage: `data:image/jpg;base64,${response.data}`
+          });
+        }).catch(err => console.log('axios error: ', err));
+
+        //probably want a redux dispatch here for rest of components
   }
 
 
@@ -79,6 +94,7 @@ class TrainerProfile extends React.Component{
   }
 
 render() {
+  console.log('gimme dat state', this.state)
       return(
 <div>
   <div id='test' className='container'>
@@ -95,7 +111,7 @@ render() {
 const mapStoreToProps = (store) => {
   console.log('TrainerProfileStore', store);
   return {
-    id: store.auth.auth,
+    id: store.auth.id,
     user: store.auth.username,
     goals: store.auth.goals,
     backgroundImage: store.branding.backgroundImg,

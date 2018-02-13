@@ -8,6 +8,13 @@ import { graphql, ApolloProvider, withApollo } from 'react-apollo';
 import { Input, Button, Icon, Card } from 'semantic-ui-react'
 import { searchQuery } from '../../../utilities/queries.jsx'
 
+const q = gql`
+  mutation connectionRequest($id: Int!, $connection_requests: String!){
+    connectionRequest(id: $id, connection_requests: $connection_requests) {
+        id
+        connection_requests
+    }
+  }`
 
 
 class ClientTeam extends React.Component{
@@ -31,7 +38,7 @@ class ClientTeam extends React.Component{
       this.requestSpotter = this.requestSpotter.bind(this)
   }
 
-  componentDidMount () {
+  componentDidMount(){
   }
 
   handleBackClick(){
@@ -40,8 +47,25 @@ class ClientTeam extends React.Component{
     })
   }
 
-  requestSpotter(){
-    console.loig('requesting')
+  requestSpotter(id){
+    var payload = JSON.stringify({
+          id: this.state.id,
+          name: this.state.username
+            })
+
+    this.props.client.mutate({
+      mutation: q,
+      variables: {
+        id: id, 
+        connection_requests: payload
+          }
+          }).then((results) => {
+            console.log('did it work?', results)
+          }).catch((err) => {
+        console.log('graphQL error in teamScreen query: ', err);
+      }).then(() => {
+        console.log('fin')
+      })
   }
 
   handleSearch(){
@@ -114,7 +138,7 @@ class ClientTeam extends React.Component{
           <a>
             <Button animated style={{backgroundColor:'#06D6A0'}}>
               <Button.Content visible>Connect</Button.Content>
-              <Button.Content hidden onClick={this.requestSpotter}>
+              <Button.Content hidden onClick={() => {this.requestSpotter(val.id)}}>
                 <Icon name='user' />
               </Button.Content>
             </Button>
@@ -136,9 +160,10 @@ class ClientTeam extends React.Component{
 const mapStoreToProps = (store) => {
   console.log('store', store);
   return {
-    id: 3,
-    user: store.auth.username,
+    id: store.auth.id,
+    user: store.auth.fullName,
     goals: store.auth.goals,
+    connection_requests: store.auth.connection_requests,
     backgroundImage: store.branding.backgroundImg,
     spotters: store.auth.spotters
   };

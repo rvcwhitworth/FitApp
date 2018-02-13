@@ -13,6 +13,7 @@ module.exports = `
 		Spotter: [Spotter]
 		Personal_Record: [Personal_Record]
 		Chat_Room: [Chat_Room]
+		connection_requests: String
 	}
 
 	type Exercise_Plan {
@@ -70,7 +71,8 @@ module.exports = `
 	}
 	
 	type Mutation {
-		setUser(username: String!, password: String!, fullName: String!, email: String, type: String!, profile_data: String): User
+		setUser(username: String!, password: String!, fullName: String!, email: String, type: String!, profile_data: String, connection_requests: String): User
+		connectionRequest(id: Int!, connection_requests: String!): User
 		setExercisePlan(name: String!, regimen: String!, trainer_id: Int!, client_id: Int!): Exercise_Plan
 		setDietPlan(name: String!, diet: String!, trainer_id: Int!, client_id: Int!): Diet_Plan
 		setSpotter(trainer_id: Int!, client_id: Int!, type: String!): Spotter

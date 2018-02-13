@@ -8,7 +8,7 @@ import mantic from 'semantic-ui-react'
 import firebase from '../../../jabroni/utilities/firebase.js'
 import gql from 'graphql-tag';
 import { graphql, ApolloProvider, withApollo } from 'react-apollo';
-import { Menu, Message, Grid, Form, Input, Button } from 'semantic-ui-react'
+import { Menu, Message, Grid, Form, Input, Button, Label } from 'semantic-ui-react'
 
 const database = firebase.database();
 
@@ -34,7 +34,8 @@ class Chat extends React.Component{
             message: [],
             highLight: 'active',
             activeItem: '',
-            sendMessage: ''
+            sendMessage: '',
+            connectionRequests: this.props.connection_requests
         }
         // this.roomClickHandler = this.roomClickHandler.bind(this)
         this.handleItemClick = this.handleItemClick.bind(this)
@@ -103,6 +104,12 @@ class Chat extends React.Component{
 
                 <Grid.Column style={{width: 'auto', height:'80vh', overflowY: 'auto', overflowX: 'hidden', backgroundColor: 'pink', paddingRight: 5}}>
                     <Menu pointing vertical style={{marginTop: '2%'}}>
+                    {this.state.connectionRequests.map((val, key) => {
+                        let value = JSON.parse(val)
+                       return (<Menu.Item key={key} active={activeItem === value.id } onClick={() => console.log(value)}>
+                        {value.name} <Label color='teal'>!</Label>
+                       </Menu.Item>)
+                    })}
                         {this.state.rooms.map(
                             (room, i)=>{
                                 return <Menu.Item key={i} name={room.room_id} active={activeItem === room.room_id } onClick={this.handleItemClick} />
@@ -160,7 +167,8 @@ const mapStoreToProps = (store) => {
   return {
     id: store.auth.id,
     user: store.auth.user,
-    goals: store.auth.goals
+    goals: store.auth.goals,
+    connection_requests: store.auth.connection_requests
   };
 };
 

@@ -60,6 +60,22 @@ module.exports.setUser = (obj) => {
 	});
 }
 
+module.exports.connectionRequest = (obj) =>{
+	console.log('inside collections', obj)
+	let result = [];
+	return new models.User({id: obj.id}).fetch().then((model) =>{
+		let temp = model.get('connection_requests') || '[]'
+		if(temp){
+			temp = JSON.parse(temp)
+		}
+		console.log('whats temp doe', temp)
+		temp.push(obj.connection_requests)
+	    model.set('connection_requests', JSON.stringify(temp))
+	    model.save()
+	    return model.attributes;
+	}) 
+} 
+
 module.exports.getUserByID = (id) => {
 	// lookup a user by their user_id
 	return new models.User({id: id}).fetch().then((obj) => {
@@ -216,7 +232,7 @@ module.exports.getChatRoomsByRoomId = (id) => {
 		});
 		return result;
 	});
-} 
+}
 
 // var results = []
 // return models.Chat_Room.where({user_id: id}).fetchAll().then((rooms) => {

@@ -8,6 +8,7 @@ const searchQuery = gql`
       email
       profile_data
       username
+      connection_requests
     }
   }
 `

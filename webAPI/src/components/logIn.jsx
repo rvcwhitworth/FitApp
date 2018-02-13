@@ -59,6 +59,7 @@ const q = gql`
           fullName
         }
       }
+      connection_requests
     }}`
 
 
@@ -178,12 +179,12 @@ class LogIn extends React.Component{
       if (!data.loginUser) {
         alert('Invalid username or password!', 'Please try again.');
       } else {
+        console.log('whats this dumb thing', data.loginUser)
         var Exercise_Plan = data.loginUser.Exercise_Plan.map((val, key) => {
           temp = Object.assign({}, val)
           temp.regimen = JSON.parse(val.regimen)
           return temp
         })
-        console.log('whats this dumb thing', Exercise_Plan)
         let payload = {
           type: type,
           PR: data.loginUser.Personal_Record,
@@ -192,6 +193,7 @@ class LogIn extends React.Component{
           Chat_Room: data.loginUser.Chat_Room,
           auth: data.loginUser.type,
           id: data.loginUser.id,
+          connection_requests: data.loginUser.connection_requests,
           fullName: data.loginUser.fullName,
           email: data.loginUser.email,
           spotters: data.loginUser.Spotter,
