@@ -126,12 +126,31 @@ class logInScreen extends React.Component {
           // list is an array of objects containing the key for each photo in s3 bucket
           // store keys in async storage
           list = _.pluck(list, 'key');
-          list.splice(list.indexOf(data.loginUser.id+'/profilePicture'), 1);
+
           list.splice(list.indexOf(data.loginUser.id+'/'), 1);
-          AsyncStorage.setItem('@FitApp:UserPics', JSON.stringify(list))
+
+          let fixedList = [];
+          list.forEach(url => {
+            // get rid of the id/ at beginning of string
+            let t = url.split('/');
+
+            // splice out and store the timestamp at end of string separately
+            let v = t[1].split('TIMESTAMP=');
+
+            // replace the single quote with a forward slash
+            let s = v[0].split("'").join('/');
+
+            let u = "http://res.cloudinary.com/dvhehr6k8/image/upload/" + s;
+
+            fixedList.push([u, v[1]]);
+          });
+
+          AsyncStorage.setItem('@FitApp:UserPics', JSON.stringify(fixedList))
           .then(() => {
-            console.log('Successfully stored pic list!');
-            this.props.navigation.dispatch(resetAction);
+            console.log('Successfully stored pic list:', fixedList);
+            AsyncStorage.setItem('@FitApp:profilePictureURL', JSON.stringify(JSON.parse(data.loginUser.profile_data).profilePictureURL)).then(() => {
+              this.props.navigation.dispatch(resetAction);
+            }).catch((err) => {console.error('error writing profile picture to async storage')});
           }).catch((err) => {console.error('Error writing pic list to storage', err)})
         });
         }).catch((err) => console.error('Error writing user info to storage', err))

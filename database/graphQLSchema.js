@@ -73,6 +73,7 @@ module.exports = `
 	type Mutation {
 		setUser(username: String!, password: String!, fullName: String!, email: String, type: String!, profile_data: String, connection_requests: String): User
 		connectionRequest(id: Int!, connection_requests: String!): User
+		updateUser(user_id: Int!, profile_data: String!): User
 		setExercisePlan(name: String!, regimen: String!, trainer_id: Int!, client_id: Int!): Exercise_Plan
 		setDietPlan(name: String!, diet: String!, trainer_id: Int!, client_id: Int!): Diet_Plan
 		setSpotter(trainer_id: Int!, client_id: Int!, type: String!): Spotter

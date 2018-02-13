@@ -45,6 +45,9 @@ module.exports = {
 		setUser: (parent, obj, db) => {
 			return db.setUser(obj);
 		},
+		updateUser: (parent, obj, db) => {
+			return db.updateUser(obj);
+		},
 		setExercisePlan: (parent, obj, db) => {
 			console.log('are we resoliving anyhting??')
 			return db.setExercisePlan(obj);

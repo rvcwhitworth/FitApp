@@ -1,7 +1,10 @@
 import React from 'react';
 import { Text, View, TouchableOpacity, TouchableHighlight, Dimensions, Button, Image, AsyncStorage, StyleSheet, Alert } from 'react-native';
 import { Camera, Permissions } from 'expo';
-const upload = require('../../s3_utilities.js').upload;
+const {cloudinary} = require('../../TOKENS.js');
+const s3_upload = require('../../s3_utilities.js').upload;
+const CryptoJS = require('crypto-js');
+
 
 export default class CameraExample extends React.Component {
   constructor(props) {
@@ -18,6 +21,7 @@ export default class CameraExample extends React.Component {
     this.snap = this.snap.bind(this);
     this.save = this.save.bind(this);
     this.cancel = this.cancel.bind(this);
+    this.upload = this.upload.bind(this);
   }
 
   async componentWillMount() {
@@ -36,6 +40,29 @@ export default class CameraExample extends React.Component {
 
   goBack() {
     this.props.navigation.goBack();
+  }
+
+  upload(uri) {
+    let timestamp = (Date.now() / 1000 | 0).toString();
+    let api_key = cloudinary.API_KEY;
+    let api_secret = cloudinary.API_SECRET;
+    let cloud = cloudinary.CLOUD_NAME;
+    let hash_string = 'timestamp=' + timestamp + api_secret
+    let signature = CryptoJS.SHA1(hash_string).toString();
+    let upload_url = 'https://api.cloudinary.com/v1_1/' + cloud + '/image/upload'
+
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', upload_url);
+    xhr.onload = () => {
+      // store cloudinary public url in s3
+      s3_upload('v' + JSON.parse(xhr._response).version + '\'' + JSON.parse(xhr._response).public_id + '.jpg', this.state.userID, Date.now().toString());
+    };
+    let formdata = new FormData();
+    formdata.append('file', {uri: uri, type: 'image/png', name: 'upload.png'});
+    formdata.append('timestamp', timestamp);
+    formdata.append('api_key', api_key);
+    formdata.append('signature', signature);
+    xhr.send(formdata);
   }
 
   snap() {
@@ -76,18 +103,7 @@ export default class CameraExample extends React.Component {
       pic: null
     });
 
-    upload(this.state.pic.exif.DateTimeOriginal, this.state.pic.base64, this.state.userID)
-    .then(({key}) => {
-      AsyncStorage.getItem('@FitApp:UserPics')
-      .then((keysString) => {
-        let keyArray = JSON.parse(keysString);
-        keyArray.push(key);
-        AsyncStorage.setItem('@FitApp:UserPics', JSON.stringify(keyArray))
-        .then(() => console.log('Successfully stored new key in storage'))
-        .catch((err) => console.error('Error storing new key in storage', err))
-      })
-    });
-
+    this.upload(this.state.pic.uri);
   }
 
   render() {

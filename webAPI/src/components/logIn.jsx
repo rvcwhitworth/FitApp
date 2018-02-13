@@ -14,6 +14,8 @@ import {
  } from 'react-router-dom';
 import gql from 'graphql-tag';
 
+const s3 = require('../../utilities/s3_utilities.js');
+const _ = require('underscore');
 const q = gql`
   query loginUser($username: String!, $password: String!){
     loginUser(username: $username, password: $password) {
@@ -185,22 +187,36 @@ class LogIn extends React.Component{
           temp.regimen = JSON.parse(val.regimen)
           return temp
         })
-        let payload = {
-          type: type,
-          PR: data.loginUser.Personal_Record,
-          id: data.loginUser.id,
-          Exercise_Plan: Exercise_Plan,
-          Chat_Room: data.loginUser.Chat_Room,
-          auth: data.loginUser.type,
-          id: data.loginUser.id,
-          connection_requests: data.loginUser.connection_requests,
-          fullName: data.loginUser.fullName,
-          email: data.loginUser.email,
-          spotters: data.loginUser.Spotter,
-          goals: JSON.parse(data.loginUser.profile_data).goals
-        }
-        console.log('whats the payload', payload)
-        this.props.dispatch(Auth(payload))
+
+        console.log('whats this dumb thing', Exercise_Plan)
+        // get list of photo keys
+        console.log('id: ', data.loginUser.id);
+        s3.getPhotosList(data.loginUser.id).then((list) => {
+          console.log('list: ', list);
+          let l = _.pluck(list, 'key');
+          console.log('l is: ', l);
+          l.splice(l.indexOf(data.loginUser.id+'/profilePicture'), 1);
+          l.splice(l.indexOf(data.loginUser.id+'/'), 1);
+          console.log('now l is: ', l);
+          let payload = {
+            type: type,
+            PR: data.loginUser.Personal_Record,
+            id: data.loginUser.id,
+            Exercise_Plan: Exercise_Plan,
+            Chat_Room: data.loginUser.Chat_Room,
+            auth: data.loginUser.type,
+            id: data.loginUser.id,
+            fullName: data.loginUser.fullName,
+            email: data.loginUser.email,
+            spotters: data.loginUser.Spotter,
+            goals: JSON.parse(data.loginUser.profile_data).goals,
+            photoKeys: l
+          }
+          console.log('whats the payload', payload)
+          this.props.dispatch(Auth(payload))
+        }).catch((e) => {
+          console.log('s3 error: ', e);
+        })
       }
     }).catch((err) => {
       console.log('log in error: ', err);

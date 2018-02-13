@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import NavFooter from "./FooterNav.js";
 import Chat from "../utilities/chatIcon.js";
-// import firebase from "../utilities/firebase.js";
+import { graphql, withApollo } from 'react-apollo';
 var moment = require("moment");
 import axios from 'axios';
 
@@ -21,7 +21,8 @@ const trash = require("../../images/trash.png");
 const s3 = require('../../s3_utilities.js');
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
-
+import {updateUser} from '../utilities/mutations.js';
+console.log('update user: ', updateUser);
 const styles = StyleSheet.create({
 	galleryContainer: {
 		width: width,
@@ -111,6 +112,9 @@ const styles = StyleSheet.create({
 		height: '100%',
 		tintColor: 'white',
 		backgroundColor: 'black'
+	},
+	timestamp: {
+		color: "white"
 	}
 });
 
@@ -122,10 +126,10 @@ class Photos extends React.Component {
 			photos: [], // [timestamp1, timestamp2, ...]
 			currentPic: [], // tuple: [timestamp, base64]
 			index: 0,
-			loading: true,
+			loading: false,
 			showButtons: false
 		};
-		this.downloadPic = this.downloadPic.bind(this);
+		// this.downloadPic = this.downloadPic.bind(this);
 		this.next = this.next.bind(this);
 		this.prev = this.prev.bind(this);
 		this.setProfPic = this.setProfPic.bind(this);
@@ -139,12 +143,19 @@ class Photos extends React.Component {
 				console.log("async storage error: ", err);
 			} else {
 				this.setState({ userID: JSON.parse(val).id }, () => {
-					// get photo keys from async storage
-					AsyncStorage.getItem("@FitApp:UserPics")
-					.then((picsString) => {
-						let photos = JSON.parse(picsString);
-						this.setState({photos}, () => this.downloadPic());
-					})
+				AsyncStorage.getItem("@FitApp:UserPics", (err, val) => {
+					if ( err ) {
+						console.log("async storage error: ", err);
+					} else {
+						let tuples = JSON.parse(val);
+						tuples.forEach(tuple => {
+							tuple[1] = moment(parseInt(tuple[1])).format('LLLL')
+						});
+						this.setState({photos: tuples}, () => {
+							console.log('set state in photo gallery: ', this.state.photos);
+						});
+					}
+				});
 				});
 			}
 		});
@@ -164,8 +175,19 @@ class Photos extends React.Component {
 
 	setProfPic(e) {
 		e.preventDefault();
+		this.props.client.mutate({
+			mutation: updateUser,
+			variables: {
+				user_id: this.state.userID, 
+				profile_data: this.state.photos[this.state.index][0]
+			}
+		}).then((response) => {
+			console.log('successfully set profile picture: ', response);
+		}).catch((err) => {
+			console.log('error setting profile picture: ', err);
+		})
 		// this.state.currentPic is a tuple [timestamp, base64]
-		s3.setProfilePicture(this.state.currentPic[1], this.state.userID);
+		// s3.setProfilePicture(this.state.currentPic[1], this.state.userID);
 	}
 
 	toggleButtons(e) {
@@ -257,6 +279,7 @@ class Photos extends React.Component {
 										title="set profile picture"
 									/>
 								</View>
+
 							) : null}
 							<View style={{ width: "100%", height: "100%" }}>
 								<TouchableHighlight
@@ -264,10 +287,11 @@ class Photos extends React.Component {
 									onPress={this.toggleButtons}
 								>
 									<Image
-										source={{uri: `data:image/jpg;base64,${curr[1]}`}}
+										source={{uri: "https://res.cloudinary.com/dvhehr6k8/image/fetch/"+curr[0]}}
 										style={styles.image}
 									/>
 								</TouchableHighlight>
+								{this.state.showButtons ? <Text style={styles.timestamp}>{curr[1]}</Text> : null }
 							</View>
 						</View>
 					)}
@@ -279,4 +303,4 @@ class Photos extends React.Component {
 	}
 }
 
-export default Photos;
+export default withApollo(Photos);

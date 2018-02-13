@@ -75,6 +75,16 @@ module.exports.connectionRequest = (obj) =>{
 	    return model.attributes;
 	}) 
 } 
+module.exports.updateUser = (obj) => {
+	// update the profile_data column
+	return models.User.where({id: obj.user_id}).fetch().then((model) => {
+		let data = JSON.parse(model.attributes.profile_data);
+		data['profilePictureURL'] = obj.profile_data;
+		return model.save('profile_data', JSON.stringify(data), {}, {method: "update"}).then((newModel) => {
+			return newModel.attributes;
+		});		
+	});
+}
 
 module.exports.getUserByID = (id) => {
 	// lookup a user by their user_id

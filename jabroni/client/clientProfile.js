@@ -3,7 +3,6 @@ import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, Button, Dim
 import Chat from '../utilities/chatIcon'
 import FooterNav from './FooterNav.js'
 import SVG from '../SVG/svg5Center.js'
-
 const axios = require('axios');
 
 const { width, height } = Dimensions.get('window');
@@ -24,6 +23,13 @@ class Profile extends React.Component {
       if ( err ) {
         console.log('async storage error: ', err);
       } else {
+        AsyncStorage.getItem("@FitApp:profilePictureURL", (err, val) => {
+          if ( err ) {
+            console.log('error retrieving profile picture URL from async storage');
+          } else {
+            console.log('your profile picture URL is: ', val);
+          }
+        })
         axios.get("https://fitpics.s3.amazonaws.com/public/" + JSON.parse(val).id + "/profilePicture")
         .then((response) => {
           this.setState({
