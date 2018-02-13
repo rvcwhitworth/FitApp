@@ -14,12 +14,13 @@ const resolvers = require('../../database/resolvers.js');
 const graphqlHTTP = require('express-graphql');
 const graphql = require('graphql');
 const cors = require('cors')
+const cors = require('../../node_modules/')
+
 const { graphiqlExpress, graphqlExpress } = require('graphql-server-express');
 
 // const compiler = webpack(webpackConfig);
  
-app.use(express.static(__dirname + 'www'));
-app.use(express.static('../../node_modules'));
+app.use(express.static(__dirname + '/www'));
 app.use(cors())
 
 
