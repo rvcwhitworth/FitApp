@@ -14,6 +14,7 @@ import ClientAnalytics from './Client/ClientAnalytics.jsx'
 import ClientTeam from './Client/ClientTeam.jsx'
 import TrainerSettings from './Trainer/TrainerSettings.jsx'
 import Chat from './Chat.jsx'
+import Photos from './Client/Photos.jsx';
 import {
   HashRouter as Router,
   Route,
@@ -74,7 +75,7 @@ class Header extends React.Component{
         <div className='Seven blue ui buttons'>
         <ul>
         <button className="ui button" ><Link style={{color:'white'}} to="/">Profile</Link></button>
-        <button className="ui button" ><Link style={{color:'white'}} to='/signUp'>Photos</Link></button>
+        <button className="ui button" ><Link style={{color:'white'}} to='/Photos'>Photos</Link></button>
         <button className="ui button" ><Link style={{color:'white'}} to='/Analytics'>Analytics</Link></button>
         <button className="ui button" ><Link style={{color:'white'}} to='/signUp'>Planner</Link></button>
         <button className="ui button" ><Link style={{color:'white'}} to='/Team'>Team</Link></button>
@@ -87,6 +88,7 @@ class Header extends React.Component{
         <hr/>
 
         <Route exact path='/' component={ClientProfile}/>
+        <Route exact path='/Photos' component={Photos}/>
         <Route exact path='/Settings' component={ClientProfile}/>
         <Route exact path='/Analytics' component={ClientAnalytics}/>
         <Route exact path='/Team' component={ClientTeam}/>

@@ -1,9 +1,9 @@
 import Amplify, {Storage} from 'aws-amplify';
-import {AsyncStorage} from 'react-native';
+// import {AsyncStorage} from 'react-native';
 const axios = require('axios');
 
 Amplify.configure({
-  Auth: require('./TOKENS.js').s3,
+  Auth: require('../../TOKENS.js').s3,
   Storage: {
   	bucket: 'fitpics',
   }
@@ -11,12 +11,17 @@ Amplify.configure({
 
 
 module.exports.getPhotosList = (id) => {
-	return Storage.list(id + '/');
+	return Storage.list(id + '/').then((data) => {
+		console.log('result of getPhotosList request', data);
+		return data;
+	}).catch((err) => {
+		console.log('storage list error: ', err);
+	});
 }
 
-module.exports.upload = (CLOUDINARY_URL, user_id) => {
-	Storage.put(user_id + '/' + CLOUDINARY_URL, '', {level: 'public'}).then((result) => {
-		console.log('successfully uploaded cloudinary URL to s3!');
+module.exports.upload = (timestamp, base64, user_id) => {
+	Storage.put(user_id + '/' + timestamp, base64, {level: 'public'}).then((result) => {
+		console.log('successfully uploaded picture!');
 	}).catch((err) => {
 		console.log('s3 bucket storage error: ', err);
 	})
