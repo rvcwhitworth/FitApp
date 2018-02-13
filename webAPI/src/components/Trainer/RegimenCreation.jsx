@@ -5,7 +5,7 @@ import { withRouter } from 'react-router';
 import reactDragula from 'react-dragula';
 import dragula from 'dragula';
 import axios from 'axios';
-import { Button, Card, Icon, Image, Grid, Header } from 'semantic-ui-react'
+import { Button, Card, Icon, Image, Grid, Header, Input } from 'semantic-ui-react'
 
 class Regimen extends React.Component{
   constructor(props){
@@ -20,29 +20,35 @@ class Regimen extends React.Component{
         thursday: this.props.thursday || [null],
         friday: this.props.friday || [null],
         saturday: this.props.saturday || [null],
-        sunday: this.props.sunday || [null]
+        sunday: this.props.sunday || [null],
+        RegimenName: '',
+        RegimenDescription: ''
       }
       this.handleMoving = this.handleMoving.bind(this)
-      this.saveWeek = this.saveWeek.bind(this)
+      this.nameChange = this.nameChange.bind(this)
+      this.descriptionChange = this.descriptionChange.bind(this)
   }
 
   handleMoving (el, target, old) {
-  	console.log('is targ what we think it is??', old.id, this.state)
   	var targ = target.id
   	var old = old.id
+    console.log('targ', targ)
+    console.log('old', old)
+    console.log('stateprop', this.state[targ])
   	var firstAddition = () => {
   		console.log('this', this)
   	  var obj = {};
-  	  obj[targ] = [el.value]
+  	  obj[targ] = [ this.state.exercisePlans[el.id] ]
   	  return obj
     }
     var addition = () => {
     	var obj = {}
-    	obj[targ] = this.state[targ].concat([el.value])
+    	obj[targ] = this.state[targ].concat(this.state.exercisePlans[el.id])
+      console.log('are we just adding??', obj)
     	return obj
     }
 
-  	if(this.state[targ][0] === [null]){
+  	if(this.state[targ][0] === null){
   	   this.setState(firstAddition)
   	} else{
   		this.setState(addition)
@@ -54,7 +60,7 @@ class Regimen extends React.Component{
   	}
   	var removeWorkout = () => {
   		var obj = {}
-  		var temp = this.state[old].indexOf(el.value)
+  		var temp = this.state[old].indexOf(this.state.exercisePlans[el.id])
   		obj[old] = this.state[old].splice(temp, 1)
   	}
   	if(this.state[old]){
@@ -79,13 +85,23 @@ class Regimen extends React.Component{
 //     this.setState( stateObject );    
 // },
 
+  nameChange(e){
+    this.setState({
+      RegimenName: e.target.value
+    })
+  }
 
+  descriptionChange(e){
+    this.setState({
+      RegimenDescription: e.target.value
+    })
+  }
 
 
 
   componentDidMount() {
   	var that = this
-  	dragula([document.getElementById('saturday'), document.getElementById('friday'), document.getElementById('monday'), document.getElementById('sunday'), document.getElementById('thursday'), document.getElementById('wednesday'), document.getElementById('tuesday'), document.getElementById('Workouts')], {copy:true, removeOnSpill:true})
+  	dragula([document.getElementById('saturday'), document.getElementById('friday'), document.getElementById('monday'), document.getElementById('sunday'), document.getElementById('thursday'), document.getElementById('wednesday'), document.getElementById('tuesday'), document.getElementById('Workouts')], {removeOnSpill:true})
   .on('drag', function (el) {
     el.className = el.className.replace('ex-moved', '');
   }).on('drop', function (el, target, old) {
@@ -110,37 +126,23 @@ class Regimen extends React.Component{
   // })
   }
 
-  saveWeek () {
-  	console.log('inside save week')
-  	var payload = {
-  		user: this.state.id,
-  		monday: this.state.monday,
-  		tuesday: this.state.tuesday,
-  		wednesday: this.state.wednesday,
-  		thursday: this.state.thursday,
-  		friday: this.state.friday,
-  		saturday: this.state.saturday,
-  		sunday: this.state.sunday
-  	}
-
-  	axios.post('/server/saveWeek', payload).then((result) => {
-  		console.log(result)
-  	})
-  }
-
   render() {
 
   	console.log('WERE RENDERING SHITT', this.state)
   	return (
   		<div>
   		<div>
-  		<div className='container' ><button type='button' onClick={this.props.finished} style={{backgroundColor:'rgba(0,0,0,.5)', fontFamily: 'Sans-Serif', float:'right'}}><h3 style={{color:'white', float:'right'}}>Save!</h3></button></div>
+  		<div className='container' >
+      <Button primary onClick={()=>this.props.save(this.state)} style={{fontFamily: 'Sans-Serif', float:'right'}}><h3 style={{color:'white', float:'right'}}>Save!</h3></Button>
+      <Input onChange={this.nameChange} value={this.state.RegimenName} style={{float:'right'}} focus placeholder='Name this Regimen!' />
+      <Input onChange={this.descriptionChange} value={this.state.RegimenDescription} style={{float:'right'}} focus placeholder='Describe this Regimen!' />
+      </div>
   		<h1 style={{color:'white', textAlign:'center'}}>Weekly Planner</h1>
   		<div id='Workouts' style={{display: 'flex', flexDirection:'row'}}>
-        {this.state.exercisePlans.map((val, key) =>{
+        {this.state.exercisePlans.map((val, i) =>{
           return(
-            <div>
-            <Card key={key} onClick={() => this.divClick(key)}style={{width: "12rem", maxheight:'12rem', padding:'10px', float:'left', cursor:'pointer'}}>
+            <div key={i} id={i} value={i} >
+            <Card key={i} value={i} onClick={() => console.log(i)}style={{width: "12rem", maxheight:'12rem', padding:'10px', float:'left', cursor:'pointer'}}>
               <Image src={val.regimen.photo} alt="Card image cap" />
               <Card.Content>
               <Card.Header>

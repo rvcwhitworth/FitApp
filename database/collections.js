@@ -220,21 +220,29 @@ module.exports.setSpotter = (obj) => {
 
 module.exports.getSpotters = (id, type) => {
 	let result = [];
-	if ( type === "trainer" ) {
+	// if ( type === "trainer" ) {
 		return models.Spotter.where({trainer_id: id}).fetchAll().then((obj) => {
 			obj.forEach(model => {
 				result.push(model.attributes);
 			});
-			return result;
-		});
-	} else if ( type === "client" ) {
-		return models.Spotter.where({client_id: id}).fetchAll().then((obj) => {
-			obj.forEach(model => {
+			return models.Spotter.where({client_id: id}).fetchAll().then((obj) => {
+			  obj.forEach(model => {
 				result.push(model.attributes);
-			});
-			return result;
+			  });
+			  return result;
+			
+		      });
+			// return result;
+
 		});
-	}
+	// } else if ( type === "client" ) {
+	// 	return models.Spotter.where({client_id: id}).fetchAll().then((obj) => {
+	// 		obj.forEach(model => {
+	// 			result.push(model.attributes);
+	// 		});
+	// 		return result;
+	// 	});
+	// }
 }
 
 module.exports.setChatRoom = (obj) => {
