@@ -13,6 +13,7 @@ import {
   Link
  } from 'react-router-dom';
 import gql from 'graphql-tag';
+import { Dropdown, Grid, Item, Image, Menu, Segment, Form,Icon, Button, Header, Modal } from 'semantic-ui-react'
 
 const q = gql`
   query loginUser($username: String!, $password: String!){
@@ -118,25 +119,25 @@ class LogIn extends React.Component{
   onClientPasswordChange(e) {
     this.setState({
       ClientPassword: e.target.value
-    })
+    },()=>{console.log(this.state.ClientPassword)})
   }
 
   onClientUsernameChange(e) {
     this.setState({
       ClientUsername : e.target.value
-    })
+    },()=>{console.log(this.state.ClientUsername)})
   }
 
   onTrainerPasswordChange(e) {
     this.setState({
       TrainerPassword: e.target.value
-    })
+    },()=>{console.log(this.state.TrainerPassword)})
   }
 
   onTrainerUsernameChange(e) {
     this.setState({
       TrainerUsername : e.target.value
-    })
+    },()=>{console.log(this.state.TrainerUsername)})
   }
 
   handleTrainerButtonClick(){
@@ -151,10 +152,10 @@ class LogIn extends React.Component{
     // this.props.dispatch(ChangeUser(payload))
   }
 
-  logIn(e){
-    e.preventDefault();
-    console.log('what is state rn?', this.state, e.target)
-    var type = e.target.id
+  logIn(type){
+    // e.preventDefault();
+    // console.log('what is state rn?', this.state, e.target)
+    // var type = e.target.id
     console.log('type', type)
     if(type === 'Client'){
     var values = {
@@ -223,29 +224,128 @@ class LogIn extends React.Component{
   }
 
   render() {
+    
+
+
     console.log('heres the state', this.state, this.props)
     return (
-      <div className="container" style={{backgroundColor:'rgba(0,0,0,0.2)', textAlign:'center'}}>
-        <h1 style={{fontFamily: 'Sans-Serif', color:'white'}}> Welcome </h1>
-        <div style={{flexDirection:'row'}}>
-          <div style={{position:'absolute', right:'50px', padding:'10px', backgroundColor:'rgba(0,0,0,0.2)'}}>
-            <h2> Trainer? </h2>
-            <input onChange={this.onTrainerUsernameChange} placeholder="Username" value={this.state.TrainerUsername} style={{backgroundColor:'rgba(255,255,255,0.6)', fontFamily: 'Sans-Serif'}} />
-            <input onChange={this.onTrainerPasswordChange} placeholder='Password' type='password' value={this.state.TrainerPassword} style={{backgroundColor:'rgba(255,255,255,0.6)', fontFamily: 'Sans-Serif'}} />
-            <button onClick={this.logIn} id='Trainer' className="btn btn-lg btn-block" type='button' style={{backgroundColor:'rgba(255,255,255,0.4)', fontFamily: 'Sans-Serif'}}>
-            <span id='Trainer' className="glyphicon glyphicon-search">Enter</span>
-            </button>
-          </div>
-          <div style={{position:'absolute', left:'50px', padding:'10px', backgroundColor:'rgba(0,0,0,0.2)'}}>
-            <h2> Client? </h2>
-            <input onChange={this.onClientUsernameChange} placeholder="Username" value={this.state.ClientUsername} style={{backgroundColor:'rgba(255,255,255,0.6)', fontFamily: 'Sans-Serif'}} />
-            <input onChange={this.onClientPasswordChange} placeholder='Password' type='password' value={this.state.ClientPassword} style={{backgroundColor:'rgba(255,255,255,0.6)', fontFamily: 'Sans-Serif'}} />
-            <button onClick={this.logIn} id='Client' className="btn btn-lg btn-block" type='button' style={{backgroundColor:'rgba(255,255,255,0.4)', fontFamily: 'Sans-Serif'}}>
-            <span id='Client' className="glyphicon glyphicon-search">Enter</span>
-            </button>
-          </div>
+      <div>
+        <Segment style={{marginBottom: 0, position:'fixed', top:0,  width: '100%', zIndex: 2}}>
+          <Item.Image size='mini' src='https://fitpics.s3.amazonaws.com/public/GreenBlack.jpg' style={{display: 'inline-block', width: '5%'}}/>
+          {/* <Image src='https://fitpics.s3.amazonaws.com/public/GreenBlack.jpg' size='mini'/> */}
+          
+          <Menu  pointing secondary style={{width:'95%', float:'right'}}>
+            <b style={{marginRight: '2%', display:'inline-block'}}>Fit Hero</b>
+            <Menu.Item name='Home' as={Link} to="/"/>
+            <Menu.Item name='About' as={Link} to="/about"/>
+            <Menu.Item name='Contact' as={Link} to="/contact"/>
+            <Menu.Menu position='right'>
+              {/* <Menu.Item name='Log In' as={Link} to="/"/> */}
+              {/* <Menu.Item name='Sign Up' as={Link} to='/signUp'/> */}
+            </Menu.Menu>
+
+            {/* NAV RIGHT */}
+            <Menu.Menu position='right'>
+              <Dropdown item  text='Sign In / Log In'>
+                <Dropdown.Menu fluid style={{width: '20em', wordWrap: 'break-word', backgroundColor:'#211e1f', color:'white', padding: '5%'}}>
+                <h2 style={{textAlign: 'center'}}>Join For Free</h2>
+                <p style={{ wordWrap: 'break-word', whiteSpace: 'pre-line', padding:'5%'}}>Meet a trainer or build your own workouts, and start tracking your results and more!</p>
+                {/* Drop Down Log In Button Modal Window */}
+                <Modal style={{height: '50%', width: '50%'}} center trigger={<Dropdown.Item><Button fluid primary>Log In</Button></Dropdown.Item>}>
+                  <Modal.Header>Login</Modal.Header>
+                  <Modal.Content >
+                    {/* <Image wrapped size='medium' src='/assets/images/avatar/large/rachel.png' /> */}
+                    <Modal.Description>
+                    <div style={{float: 'left', width: '48%'}}>
+                        <Header>Member</Header>
+                        <Segment style={{backgroundColor:'#2185d0'}} >
+                            <Form size='tiny' inverted >
+                              <Form.Input label='User Name' onChange={this.onClientUsernameChange} placeholder="User Name" value={this.state.ClientUsername}/>
+                              <Form.Input label='Password' onChange={this.onClientPasswordChange} placeholder='Password' type='password' value={this.state.ClientPassword} />
+                            <Button id='Client' type='submit' onClick={()=>{this.logIn('Client')}}>Enter</Button>
+                          </Form>
+                        </Segment>
+                      </div>
+
+                      <div style={{float:'right', width: '48%'}}>
+                        <Header>Trainer</Header>
+                        <Segment inverted>
+                          <Form size='tiny' inverted>
+                              <Form.Input label='User Name' onChange={this.onTrainerUsernameChange} placeholder="User Name" value={this.state.TrainerUsername}/>
+                              <Form.Input label='Password' onChange={this.onTrainerPasswordChange} placeholder='Password' type='password' value={this.state.TrainerPassword}/>
+                            <Button id='Trainer' type='submit' onClick={()=>{this.logIn('Trainer')}}>Enter</Button>
+                          </Form>
+                        </Segment>
+                      </div>
+                        {/* <input onChange={this.onTrainerUsernameChange} placeholder="Username" value={this.state.TrainerUsername} style={{backgroundColor:'rgba(255,255,255,0.6)', fontFamily: 'Sans-Serif'}} />
+                        <input onChange={this.onTrainerPasswordChange} placeholder='Password' type='password' value={this.state.TrainerPassword} style={{backgroundColor:'rgba(255,255,255,0.6)', fontFamily: 'Sans-Serif'}} />
+                        <button onClick={this.logIn} id='Trainer' className="btn btn-lg btn-block" type='button' style={{backgroundColor:'rgba(255,255,255,0.4)', fontFamily: 'Sans-Serif'}}>
+                        <span id='Trainer' className="glyphicon glyphicon-search">Enter</span>
+                        </button> */}
+                      {/* <p>We've found the following gravatar image associated with your e-mail address.</p>
+                      <p>Is it okay to use this photo?</p> */}
+                      
+                        
+                        {/* <input onChange={this.onClientUsernameChange} placeholder="Username" value={this.state.ClientUsername} style={{backgroundColor:'rgba(255,255,255,0.6)', fontFamily: 'Sans-Serif'}} />
+                        <input onChange={this.onClientPasswordChange} placeholder='Password' type='password' value={this.state.ClientPassword} style={{backgroundColor:'rgba(255,255,255,0.6)', fontFamily: 'Sans-Serif'}} />
+                        <button onClick={this.logIn} id='Client' className="btn btn-lg btn-block" type='button' style={{backgroundColor:'rgba(255,255,255,0.4)', fontFamily: 'Sans-Serif'}}>
+                        <span id='Client' className="glyphicon glyphicon-search">Enter</span>
+                        </button> */}
+                      {/* <p>We've found the following gravatar image associated with your e-mail address.</p>
+                      <p>Is it okay to use this photo?</p> */}
+                    </Modal.Description>
+                  </Modal.Content>
+                </Modal>
+
+                <Dropdown.Item><Button fluid secondary style={{backgroundColor: 'white', color: 'black'}}>SignUp</Button></Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Menu.Menu>
+          </Menu>
+        </Segment>
+
+        <div style={{background: 'url("http://gettheshot.ca/images/hero/Mark-Whitehead-Photography-Get-The-Shot-Studios-4.jpg") center', backgroundSize: 'cover', height: '65vh', marginTop: 0}}>
+          {/* ?<Image src='http://gettheshot.ca/images/hero/Mark-Whitehead-Photography-Get-The-Shot-Studios-4.jpg' centered style={{margin: '-10' ,width: '100%', height: '100%', opacity: 0.7}} /> */}
         </div>
+        {/* Info Blurb */}
+        <Grid style={{backgroundColor: "#06D6A0", margin: 0, marginTop:'10'}} columns={4} >
+          <Grid.Row centered>
+            <Grid.Column >
+              <Icon name='comments outline' size='huge'/>
+              <span>Talk Live With Trainers</span>
+            </Grid.Column>
+            <Grid.Column >
+              <Icon name='line chart' size='huge' />
+              <span>Record Track and View Graphed Analysis of Workouts and Diet</span>
+            </Grid.Column >
+          </Grid.Row>
+
+          <Grid.Row centered>
+            <Grid.Column centered>
+              <Icon name='calendar' size='huge' />
+              <span>Structured Workout Regimen</span>
+            </Grid.Column>
+            <Grid.Column centered>
+              <Icon name='user plus' size='huge' />
+              <span>Find Real Professional Trainers</span>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+
+        {/* <Route exact path='/' component={LogIn}/>
+        <Route exact path='/signUp' component={SignUp}/> */}
       </div>
+      // <div className="container" style={{backgroundColor:'rgba(0,0,0,0.2)', textAlign:'center'}}>
+      //   {/* <h1 style={{fontFamily: 'Sans-Serif', color:'white'}}> Welcome </h1> */}
+      //   <div style={{flexDirection:'row'}}>
+      //     <div style={{position:'absolute', right:'50px', padding:'10px', backgroundColor:'rgba(0,0,0,0.2)'}}>
+      //       <h2> Trainer? </h2>
+      //     </div>
+      //     <div style={{position:'absolute', left:'50px', padding:'10px', backgroundColor:'rgba(0,0,0,0.2)'}}>
+      //       <h2> Client? </h2>
+      //     </div>
+      //   </div>
+      // </div>
     )
   }
 }
