@@ -11,7 +11,7 @@ class Profile extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      profPic: require('../../images/muscle.gif'),
+      profPic: null,
       userInfo: {},
     }
   }
@@ -23,32 +23,33 @@ class Profile extends React.Component {
       if ( err ) {
         console.log('async storage error: ', err);
       } else {
-        AsyncStorage.getItem("@FitApp:profilePictureURL", (err, val) => {
+        AsyncStorage.getItem("@FitApp:profilePictureURL", (err, url) => {
           if ( err ) {
             console.log('error retrieving profile picture URL from async storage');
           } else {
-            console.log('your profile picture URL is: ', val);
+            console.log('your profile picture URL is: ', JSON.parse(url));
+            this.setState({
+              profPic: JSON.parse(url),
+              userId: JSON.parse(val).id
+            });
           }
-        })
-        axios.get("https://fitpics.s3.amazonaws.com/public/" + JSON.parse(val).id + "/profilePicture")
-        .then((response) => {
-          this.setState({
-            profPic: {uri: `data:image/jpg;base64,${response.data}`},
-            userId: JSON.parse(val).id
-          });
-        }).catch(err => console.log('axios error: ', err));
+        }).catch(err => console.log('async storage error: ', err))
       }
     });
   }
 
   //refetch profile picture when it is changed in photo gallery
   componentWillReceiveProps () {
-    axios.get("https://fitpics.s3.amazonaws.com/public/" + this.state.userId + "/profilePicture")
-        .then((response) => {
-          this.setState({
-            profPic: {uri: `data:image/jpg;base64,${response.data}`}
-          });
-        }).catch(err => console.log('axios error: ', err));
+    AsyncStorage.getItem("@FitApp:profilePictureURL", (err, url) => {
+          if ( err ) {
+            console.log('error retrieving profile picture URL from async storage');
+          } else {
+            console.log('your profile picture URL is: ', url);
+            this.setState({
+              profPic: JSON.parse(url),
+            });
+          }
+    }).catch(err => console.log('async storage error: ', err))
   }
 
   componentWillUnmount() {
@@ -56,15 +57,21 @@ class Profile extends React.Component {
   }
 
   render() {
+    console.log('profile picture url: ', this.state.profPic);
     return ( 
       <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>
         <View style={{flex:1}}>
           <SVG />
         </View>  
         <Text style={styles.fullName}>{this.state.userInfo.fullName}</Text>
+        {this.state.profPic === null ? 
         <TouchableOpacity style={styles.circleContainer} onPress={this.onPress}>
-          <Image style={styles.circle} source={this.state.profPic} />
+          <Image style={styles.circle} source={require('../../images/muscle.gif')} onLoadEnd={() => console.log('loaded')}/>
         </TouchableOpacity>
+        :
+        <TouchableOpacity style={styles.circleContainer} onPress={this.onPress}>
+          <Image style={styles.circle} source={{uri: "https://res.cloudinary.com/dvhehr6k8/image/fetch/"+this.state.profPic}} onLoadEnd={() => console.log('loaded')}/>
+        </TouchableOpacity>}
           <View style={{flex: 2}}>
             <Text style={styles.textBox}>Swipe left for your diet!</Text>
             <Text style={styles.textBox}>Swipe right for your daily inputs and progress stuff!</Text>
