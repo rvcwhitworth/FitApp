@@ -8,6 +8,16 @@ const setDailyRecord = gql`
   }
 `
 
+const updateUser = gql`
+	mutation updateUser($user_id: Int!, $profile_data: String!) {
+  	updateUser(user_id:$user_id, profile_data:$profile_data) {
+    	id
+    	profile_data
+	  }
+	}
+`
+
 module.exports = {
-	setDailyRecord
+	setDailyRecord,
+	updateUser
 }

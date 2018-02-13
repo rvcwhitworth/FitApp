@@ -11,7 +11,7 @@ class Photos extends React.Component{
       this.state = {
         id : this.props.id || null,
         username : this.props.user || null,
-        loading: false,
+        loading: true,
         photos: []
       }
   }
@@ -31,7 +31,7 @@ class Photos extends React.Component{
   render() {
     return this.state.loading ? <div>Loading...</div> :
       <div>
-        {this.props.photos.map((photo, i) => {
+        {this.state.photos.map((photo, i) => {
           return <Photo key={i} />
         })}
       </div>

@@ -2,8 +2,6 @@ import React from 'react';
 import { Text, View, TouchableOpacity, TouchableHighlight, Dimensions, Button, Image, AsyncStorage, StyleSheet, Alert } from 'react-native';
 import { Camera, Permissions } from 'expo';
 const {cloudinary} = require('../../TOKENS.js');
-// console.log('cloudinary: ', RNCloudinary);
-// RNCloudinary.config(, cloudinary.API_KEY, cloudinary.API_SECRET);
 const s3_upload = require('../../s3_utilities.js').upload;
 const CryptoJS = require('crypto-js');
 
@@ -56,7 +54,8 @@ export default class CameraExample extends React.Component {
     let xhr = new XMLHttpRequest();
     xhr.open('POST', upload_url);
     xhr.onload = () => {
-      s3_upload(xhr._response.url, this.state.userID);
+      // store cloudinary public url in s3
+      s3_upload('v' + JSON.parse(xhr._response).version + '\'' + JSON.parse(xhr._response).public_id + '.jpg', this.state.userID, Date.now().toString());
     };
     let formdata = new FormData();
     formdata.append('file', {uri: uri, type: 'image/png', name: 'upload.png'});
