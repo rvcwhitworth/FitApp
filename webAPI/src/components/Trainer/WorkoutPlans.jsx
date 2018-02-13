@@ -4,9 +4,12 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import ChangeUser from '../../actions/example.jsx'
 import { Button, Card, Icon, Image, Segment, Divider, Container} from 'semantic-ui-react'
+import AddTemplate from '../../actions/addTemplate.jsx'
 import Template from './WorkoutTemplate.jsx'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import Regimen from './RegimenCreation.jsx'
+import { graphql, ApolloProvider, withApollo } from 'react-apollo';
+import { createExercisePlan } from '../../../utilities/mutations.jsx'
 // import Styles from '../../www/ReactCSSAnimation.css'
 
 class WorkoutPlans extends React.Component{
@@ -125,6 +128,35 @@ class WorkoutPlans extends React.Component{
     this.setState({
       creatingRegimen: false
     })
+    var payload = {
+      regimen: {
+        monday: obj.monday,
+        tuesday: obj.tuesday,
+        wednesday: obj.wednesday,
+        thursday: obj.thursday,
+        friday: obj.friday,
+        saturday: obj.saturday,
+        sunday: obj.sunday,
+        name: obj.RegimenName,
+        description: obj.RegimenDescription },
+      name: obj.RegimenName,
+      type: 'Regimen',
+      creator: this.state.username
+    }
+
+    this.props.dispatch(AddTemplate(payload))
+    this.props.client.mutate({
+      mutation: createExercisePlan,
+      variables: {
+        name: payload.name,
+        regimen: JSON.stringify(payload),
+        trainer_id: this.state.id,
+        client_id: this.state.id
+      }
+    }).then( (...args) => {
+      console.log('hey it worked', ...args)
+      this.finishedTemplate(payload)
+    })
   }
 
   finishedTemplate(obj){
@@ -150,7 +182,7 @@ class WorkoutPlans extends React.Component{
         </div>)
     } else if(this.state.creatingRegimen){
       return(
-      <Regimen finished={this.finishedRegimen} />)
+      <Regimen save={this.finishedRegimen} />)
     }else{
       return(
         <div style={{flexDirection:'Column', height:'100%' }}>
@@ -164,14 +196,14 @@ class WorkoutPlans extends React.Component{
           }
           return(
             <Card key={key} onClick={() => this.divClick(key)}style={{width: "12rem", height:'15rem', padding:'10px', float:'left', cursor:'pointer', zIndex:z}}>
-              <Image src={val.regimen.photo} alt="Card image cap" />
+              {/*<Image src={val.regimen.photo} alt="Card image cap" />*/}
               <Card.Content>
               <Card.Header>
               {val.name}
               </Card.Header>
               <Card.Meta>
               <span className='workout'>
-                 Workout
+                 {val.type || 'Workout'}
               </span>
               </Card.Meta>
               <Card.Description>
@@ -208,8 +240,8 @@ class WorkoutPlans extends React.Component{
 const mapStoreToProps = (store) => {
   console.log('store', store);
   return {
-    id: store.auth.auth,
-    user: store.auth.username,
+    id: store.auth.id,
+    user: store.auth.fullName,
     backgroundImage: store.branding.backgroundImg,
     plans: store.auth.Exercise_Plan
   };
@@ -217,4 +249,4 @@ const mapStoreToProps = (store) => {
 
 export default withRouter(connect(
   mapStoreToProps
-)(WorkoutPlans));
+)(withApollo(WorkoutPlans)));

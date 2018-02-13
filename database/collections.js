@@ -61,8 +61,30 @@ module.exports.setUser = (obj) => {
 }
 
 module.exports.connectionRequest = (obj) =>{
+	if(obj.delete){
+		console.log('inside delete')
+	return new models.User({id: obj.id}).fetch().then((model) =>{
+		let temp = model.get('connection_requests') || '[]'
+		if(temp){
+			temp = JSON.parse(temp)
+		}
+		let identity = JSON.parse(obj.connection_requests)
+		temp2 = _.filter(temp, (val) => {
+			console.log('whats this filter val', val)
+			let foo = JSON.parse(val)
+			if(foo.id !== identity.id){
+				return true
+			} else{
+				return false
+			}
+		})
+		console.log('what are we setting this as?', temp2)
+	    model.set('connection_requests', JSON.stringify(temp2))
+	    model.save()
+	    return model.attributes;
+	}) 
+	} else{
 	console.log('inside collections', obj)
-	let result = [];
 	return new models.User({id: obj.id}).fetch().then((model) =>{
 		let temp = model.get('connection_requests') || '[]'
 		if(temp){
@@ -74,6 +96,7 @@ module.exports.connectionRequest = (obj) =>{
 	    model.save()
 	    return model.attributes;
 	}) 
+  }
 } 
 module.exports.updateUser = (obj) => {
 	// update the profile_data column
@@ -197,21 +220,29 @@ module.exports.setSpotter = (obj) => {
 
 module.exports.getSpotters = (id, type) => {
 	let result = [];
-	if ( type === "trainer" ) {
+	// if ( type === "trainer" ) {
 		return models.Spotter.where({trainer_id: id}).fetchAll().then((obj) => {
 			obj.forEach(model => {
 				result.push(model.attributes);
 			});
-			return result;
-		});
-	} else if ( type === "client" ) {
-		return models.Spotter.where({client_id: id}).fetchAll().then((obj) => {
-			obj.forEach(model => {
+			return models.Spotter.where({client_id: id}).fetchAll().then((obj) => {
+			  obj.forEach(model => {
 				result.push(model.attributes);
-			});
-			return result;
+			  });
+			  return result;
+			
+		      });
+			// return result;
+
 		});
-	}
+	// } else if ( type === "client" ) {
+	// 	return models.Spotter.where({client_id: id}).fetchAll().then((obj) => {
+	// 		obj.forEach(model => {
+	// 			result.push(model.attributes);
+	// 		});
+	// 		return result;
+	// 	});
+	// }
 }
 
 module.exports.setChatRoom = (obj) => {
