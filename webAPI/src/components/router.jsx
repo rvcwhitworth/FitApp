@@ -13,6 +13,7 @@ import NewsFeed from './Trainer/NewsFeed.jsx'
 import ClientAnalytics from './Client/ClientAnalytics.jsx'
 import ClientTeam from './Client/ClientTeam.jsx'
 import TrainerSettings from './Trainer/TrainerSettings.jsx'
+import Schedule from './Client/Schedule.jsx';
 import Chat from './Chat.jsx'
 import {
   HashRouter as Router,
@@ -76,7 +77,7 @@ class Header extends React.Component{
         <button className="ui button" ><Link style={{color:'white'}} to="/">Profile</Link></button>
         <button className="ui button" ><Link style={{color:'white'}} to='/signUp'>Photos</Link></button>
         <button className="ui button" ><Link style={{color:'white'}} to='/Analytics'>Analytics</Link></button>
-        <button className="ui button" ><Link style={{color:'white'}} to='/signUp'>Planner</Link></button>
+        <button className="ui button" ><Link style={{color:'white'}} to='/Schedule'>Schedule</Link></button>
         <button className="ui button" ><Link style={{color:'white'}} to='/Team'>Team</Link></button>
         <button className="ui button" ><Link style={{color:'white'}} to='/Chat'>Chat</Link></button>
         <button className="ui button" ><Link style={{color:'white'}} to='/Settings'>Settings</Link></button>
@@ -91,6 +92,7 @@ class Header extends React.Component{
         <Route exact path='/Analytics' component={ClientAnalytics}/>
         <Route exact path='/Team' component={ClientTeam}/>
         <Route exact path='/Chat' component={Chat}/>
+        <Route exact path='/Schedule' component={Schedule}/>
 
       </div>
       )
