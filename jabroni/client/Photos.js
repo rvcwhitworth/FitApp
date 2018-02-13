@@ -148,9 +148,6 @@ class Photos extends React.Component {
 						console.log("async storage error: ", err);
 					} else {
 						let tuples = JSON.parse(val);
-						tuples.forEach(tuple => {
-							tuple[1] = moment(parseInt(tuple[1])).format('LLLL')
-						});
 						this.setState({photos: tuples}, () => {
 							console.log('set state in photo gallery: ', this.state.photos);
 						});
@@ -159,18 +156,6 @@ class Photos extends React.Component {
 				});
 			}
 		});
-	}
-
-	downloadPic () {
-		axios.get("https://fitpics.s3.amazonaws.com/public/" + this.state.photos[this.state.index])
-		.then((response) => {
-			//slice user id and '/' from key
-			let timestamp = this.state.photos[this.state.index].split('/')[1];
-			this.setState({
-				currentPic: [timestamp, response.data],
-				loading: false
-			});
-		}).catch(err => console.log('axios error: ', err));
 	}
 
 	setProfPic(e) {
@@ -182,12 +167,14 @@ class Photos extends React.Component {
 				profile_data: this.state.photos[this.state.index][0]
 			}
 		}).then((response) => {
-			console.log('successfully set profile picture: ', response);
+			console.log('successfully set profile picture in SQL: ', response);
+			// set in async storage as well
+			AsyncStorage.setItem("@FitApp: profilePictureURL", this.state.photos[this.state.index][0]).then(() => {
+				console.log('successfully set profile picture in async storage');
+			})
 		}).catch((err) => {
 			console.log('error setting profile picture: ', err);
 		})
-		// this.state.currentPic is a tuple [timestamp, base64]
-		// s3.setProfilePicture(this.state.currentPic[1], this.state.userID);
 	}
 
 	toggleButtons(e) {
@@ -195,11 +182,21 @@ class Photos extends React.Component {
 		this.setState({ showButtons: !this.state.showButtons });
 	}
 
+
+
 	delete(e) {
 		e.preventDefault();
 
-		// delete from s3 bucket
-		s3.delete(this.state.userID, this.state.currentPic[0]);
+		// before sending the key to be deleted, you need to:
+		let key = this.state.photos[0];
+		let url = key[0].split('upload/')[1];
+		let timestamp = key[1];
+		// append timestamp to end
+		url += "TIMESTAMP="+timestamp;
+		url = url.split('/').join('\'');
+		console.log('url to delete: ',url);
+
+		s3.delete(this.state.userID, url);
 
 		// remove key from state
 		let p = this.state.photos;
@@ -208,7 +205,7 @@ class Photos extends React.Component {
 		if ( i > 0 ) {
 			i--;
 		}
-		this.setState({index: i, photos: p}, () => this.downloadPic()); 
+		this.setState({index: i, photos: p}); 
 		// remove key from asyncStorage
 		AsyncStorage.setItem("@FitApp: UserPics", JSON.stringify(p))
 		.then(() => {
@@ -225,9 +222,7 @@ class Photos extends React.Component {
 		let i = this.state.index;
 		if (this.state.index < this.state.photos.length - 1) {
 			i++;
-			this.setState({ loading: true, index: i }, () => {
-				this.downloadPic();
-			});
+			this.setState({ index: i });
 		}
 	}
 
@@ -236,23 +231,17 @@ class Photos extends React.Component {
 		let i = this.state.index;
 		if (this.state.index > 0) {
 			i--;
-			this.setState({ loading: true, index: i }, () => {
-				this.downloadPic();
-			});
+			this.setState({ index: i });
 		}
 	}
 
 	render() {
 		const { width, height } = Dimensions.get("window");
-		const curr = this.state.currentPic; // a tuple representing the [timestamp,image] currently being displayed
+		const curr = this.state.photos[this.state.index]; // a tuple representing the [timestamp,image] currently being displayed
 		return (
 			<View style={{"backgroundColor":"black", flexDirection: 'column', width: width, height: height}}>
 				<View style={styles.galleryContainer}>
-					{this.state.loading ? (
-						<View style={styles.loadingMessageContainer}>
-							<Text style={styles.loadingMessage}>Loading!</Text>
-						</View>
-					) : this.state.photos.length === 0 ? (
+					{this.state.photos.length === 0 ? (
 						<View style={styles.galleryContainer}>
 							<Text>No photos to display.</Text>
 						</View>
@@ -291,7 +280,7 @@ class Photos extends React.Component {
 										style={styles.image}
 									/>
 								</TouchableHighlight>
-								{this.state.showButtons ? <Text style={styles.timestamp}>{curr[1]}</Text> : null }
+								{this.state.showButtons ? <Text style={styles.timestamp}>{moment(parseInt(curr[1])).format('LLLL')}</Text> : null }
 							</View>
 						</View>
 					)}
@@ -304,3 +293,5 @@ class Photos extends React.Component {
 }
 
 export default withApollo(Photos);
+
+1518540420

@@ -136,6 +136,7 @@ class logInScreen extends React.Component {
 
             // splice out and store the timestamp at end of string separately
             let v = t[1].split('TIMESTAMP=');
+            console.log('timestamp: ', v[1]);
 
             // replace the single quote with a forward slash
             let s = v[0].split("'").join('/');
