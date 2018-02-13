@@ -13,6 +13,7 @@ import NewsFeed from './Trainer/NewsFeed.jsx'
 import ClientAnalytics from './Client/ClientAnalytics.jsx'
 import ClientTeam from './Client/ClientTeam.jsx'
 import TrainerSettings from './Trainer/TrainerSettings.jsx'
+import Schedule from './Client/Schedule.jsx';
 import Chat from './Chat.jsx'
 import Photos from './Client/Photos.jsx';
 
@@ -78,7 +79,7 @@ class Header1 extends React.Component{
             <Menu.Item name='Profile' as={Link} to="/"/>
             <Menu.Item name='Photos' as={Link} to="/signUp"/>
             <Menu.Item name='Analytics' as={Link} to="/Analytics"/>
-            <Menu.Item name='Planner' as={Link} to="/signUp"/>
+            <Menu.Item name='Schedule' as={Link} to="/Schedule"/>
             <Menu.Item name='Team' as={Link} to="/Team"/>
             <Menu.Item name='Chat' as={Link} to="/SignUp"/>
             
@@ -92,6 +93,7 @@ class Header1 extends React.Component{
           <Route exact path='/Team' component={ClientTeam}/>
           <Route exact path='/' component={ClientProfile}/>
           <Route exact path='/Settings' component={ClientProfile}/>
+          <Route exact path='/Schedule' component={Schedule}/>
           <Route exact path='/Analytics' component={ClientAnalytics}/>
         </div>
       //   <div style={{textAlign:'left', backgroundColor: 'rgba(0,0,0, 0.3)'}}>
