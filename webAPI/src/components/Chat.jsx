@@ -9,6 +9,7 @@ import firebase from '../../../jabroni/utilities/firebase.js'
 import gql from 'graphql-tag';
 import { graphql, ApolloProvider, withApollo } from 'react-apollo';
 import { Menu, Message, Grid, Form, Input, Button, Label } from 'semantic-ui-react'
+import _ from 'underscore'
 
 const database = firebase.database();
 
@@ -23,6 +24,28 @@ query getChatRooms($id: Int!){
   }
 }`
 
+const q = gql`
+  mutation connectionRequest($id: Int!, $connection_requests: String! $delete: Boolean){
+    connectionRequest(id: $id, connection_requests: $connection_requests, delete: $delete) {
+        id
+        connection_requests
+    }
+  }`
+
+const addSpotter = gql`
+mutation setSpotter($trainer_id: Int!, $client_id: Int!){
+  setSpotter(trainer_id: $trainer_id, client_id: $client_id, type: "support") {
+    trainer {
+      id
+      fullName
+      email
+      profile_data
+      username
+    }
+  }
+}
+`
+
 class Chat extends React.Component{
     constructor(props){
         super(props)
@@ -35,13 +58,16 @@ class Chat extends React.Component{
             highLight: 'active',
             activeItem: '',
             sendMessage: '',
-            connectionRequests: this.props.connection_requests
+            connectionRequests: this.props.connection_requests || [],
+            answeringRequest: false
         }
         // this.roomClickHandler = this.roomClickHandler.bind(this)
         this.handleItemClick = this.handleItemClick.bind(this)
         this.handleSendClick = this.handleSendClick.bind(this)
         this.scrollToBottom = this.scrollToBottom.bind(this)
         this.sendInputChangeHandler = this.sendInputChangeHandler.bind(this)
+        this.handleConnectionRequestClick = this.handleConnectionRequestClick.bind(this)
+        this.deleteRequest = this.deleteRequest.bind(this)
     }
 
     sendInputChangeHandler(e){
@@ -53,8 +79,77 @@ class Chat extends React.Component{
     }
 
     handleSendClick (){
+        if(this.state.answeringRequest){
+            if(this.state.sendMessage.toLowerCase() === 'accept'){
+                //We are accepting requests here
+            this.props.client.mutate({
+              mutation: addSpotter,
+              variables: {
+              client_id: this.state.id,
+              trainer_id: this.state.activeItem
+            }
+              }).then(({data}) => {
+                console.log('DATA AFTER addSpotter', data)
+                this.props.client.mutate({
+                  mutation: addSpotter,
+                  variables: {
+                  client_id: this.state.activeItem,
+                  trainer_id: this.state.id
+                }
+              }).then(({data}) => {
+                this.deleteRequest()
+              })
+            })
+            } else if(this.state.sendMessage.toLowerCase() === 'decline'){
+                this.deleteRequest()
+            } else{
+                var obj = {}
+                obj.user = 'FitBot'
+                obj.message = `Sorry, I didn't quite catch that. Please answer with 'Accept' or 'Decline'`
+                this.setState({
+                    message: this.state.message.concat([obj])
+                })
+            }
+        } else{
         database.ref('rooms/' + this.state.activeItem + '/messages').push({user: this.state.username, message: this.state.sendMessage})
         this.setState({sendMessage: ''})
+        }
+    }
+
+    deleteRequest(){
+     var payload = JSON.stringify({
+        id: this.state.activeItem
+      })
+     this.props.client.mutate({
+     mutation: q,
+     variables: {
+     id: this.state.id, 
+     connection_requests: payload,
+     delete: true
+     }
+       }).then((results) => {
+        console.log('did it work?', results)
+        let temp = this.state.connectionRequests
+        temp2 = _.filter(temp, (val) => {
+          let foo = JSON.parse(val)
+          if(foo.id !== this.state.activeItem){
+            return true
+          } else{
+            return false
+          }
+        })
+        this.setState({
+            answeringRequest: false,
+            activeItem: '',
+            connectionRequests: temp2,
+            message: [],
+            sendMessage: ''
+        })
+        }).catch((err) => {
+        console.log('graphQL error in teamScreen query: ', err);
+        }).then(() => {
+          console.log('fin')
+        })
     }
 
     handleItemClick = (e, { name }) => {
@@ -68,6 +163,21 @@ class Chat extends React.Component{
                 console.log("the read failed: " + errorObject.code);
             })
         })
+    }
+
+    handleConnectionRequestClick = (val) => {
+        console.log('what is val??', val)
+        let obj = {}
+        obj.user = 'FitBot'
+        obj.message = `${val.name} wants to share with you on your fitness Journey: Type 'Accept' or 'Decline' to answer!`
+        this.setState({
+            activeItem: val.id,
+            message: [obj],
+            answeringRequest: true
+        })
+
+
+
     }
 
     componentDidMount() {
@@ -102,13 +212,14 @@ class Chat extends React.Component{
         <div style={{hieght: "90vh", padding: 0}}>
             <Grid columns={2} textAlign={'center'}>
 
-                <Grid.Column style={{width: 'auto', height:'80vh', overflowY: 'auto', overflowX: 'hidden', backgroundColor: 'pink', paddingRight: 5}}>
+                <Grid.Column style={{width: 'auto', height:'80vh', overflowY: 'auto', overflowX: 'hidden', backgroundColor: '#26547C', paddingRight: 5}}>
                     <Menu pointing vertical style={{marginTop: '2%'}}>
                     {this.state.connectionRequests.map((val, key) => {
                         let value = JSON.parse(val)
-                       return (<Menu.Item key={key} active={activeItem === value.id } onClick={() => console.log(value)}>
-                        {value.name} <Label color='teal'>!</Label>
-                       </Menu.Item>)
+                        if(val){
+                       return (<Menu.Item key={key} active={activeItem === value.id } name={value.id} onClick={() => this.handleConnectionRequestClick(value)}>
+                        {value.name} <Label color='red'>!</Label>
+                       </Menu.Item>)}
                     })}
                         {this.state.rooms.map(
                             (room, i)=>{
@@ -119,7 +230,7 @@ class Chat extends React.Component{
                 </Grid.Column>                
 
                 <Grid.Column style={{height:'90vh', overflowY: 'hidden', overflowX: 'hidden', maxWidth:'100%'}}>  
-                    <div style={{height:'80vh', maxWidth:'100%', overflowY: 'auto', overflowX: 'hidden', backgroundColor: 'red'}}
+                    <div style={{height:'80vh', maxWidth:'100%', overflowY: 'auto', overflowX: 'hidden', backgroundColor: '#FFFCFA'}}
                         
                     >
                         {this.state.message.map(
@@ -128,14 +239,14 @@ class Chat extends React.Component{
                                 if(message.user === 'test'){
                                     return (
                                         <Grid.Row >
-                                            <Message compact key={i} content={message.message} style={{margin: 3, left: '5%', backgroundColor: 'cyan', borderRadius: '17%', padding: '10', maxWidth:'20%'}}/>
+                                            <Message compact key={i} content={`${message.user} : ${message.message}`} style={{margin: 3, left: '5%', backgroundColor: '#FFD166', borderRadius: '17%', padding: '10', maxWidth:'20%'}}/> 
                                                     
                                         </Grid.Row> 
                                     )
                                 }else{
                                     return (
                                         <Grid.Row >
-                                            <Message compact key={i} content={message.message} style={{margin: 3, right: '-75%', backgroundColor: 'cyan', borderRadius: '17%', padding: '10', maxWidth:'20%', wordWrap: 'break-word'}}/>
+                                            <Message compact key={i} content={`${message.user} : ${message.message}`} style={{margin: 3, right: '-75%', backgroundColor: '#06D6A0', borderRadius: '17%', padding: '10', maxWidth:'20%', wordWrap: 'break-word'}}/>
                                         </Grid.Row>                        
                                     )
                                 }
@@ -145,7 +256,7 @@ class Chat extends React.Component{
                     </div>
                     
                     {/* <Grid.Row stretched style={{verticalAlign: 'bottom'}}> */}
-                        <Form style={{width: '100%', height: '10vh', backgroundColor:'red'}}>
+                        <Form style={{width: '100%', height: '10vh', backgroundColor:'#FFFCFA'}}>
                             <Input fluid action={{ content:'Send', onClick: this.handleSendClick }} onChange={(e)=>{this.sendInputChangeHandler(e)}} style={{padding:'2%' }} value={this.state.sendMessage} placeholder='Message...' />
                             {/* <Button type='submit' onClick={(e)=>{console.log('evert', e.target.value)}}>Send</Button> */}
                         {/* <TextArea autoHeight style={{width: '50%', justifyContent: 'center'}} placeholder='Try adding multiple lines'/> */}
