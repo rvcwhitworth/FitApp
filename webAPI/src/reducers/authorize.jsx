@@ -1,3 +1,6 @@
+import axios from 'axios'
+
+
 export default function authReducer (state={
 	auth: null,
 	user: '',
@@ -24,7 +27,8 @@ export default function authReducer (state={
 				id: action.payload.id,
 				spotters : action.payload.spotters,
 				user: action.payload.fullName,
-				goals: action.payload.goals
+				goals: action.payload.goals,
+				connection_requests: JSON.parse(action.payload.connection_requests)
 			}
 		}
 

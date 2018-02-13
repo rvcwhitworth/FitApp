@@ -63,6 +63,9 @@ module.exports = {
 		},
 		setChatRoom: (parent, obj, db) => {
 			return db.setChatRoom(obj);
+		},
+		connectionRequest:(parent, obj, db) => {
+			return db.connectionRequest(obj);
 		}
 	},
 

@@ -63,7 +63,6 @@ class TrainerProfile extends React.Component{
       var ProReader = new FileReader
       // console.log(FileReader)
       ProReader.onload = (e) => {
-        var payload = { uri: e.target.result }
         this.setState({
           ProfileImage: e.target.result
         })
