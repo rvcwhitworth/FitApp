@@ -13,10 +13,10 @@ module.exports.getPhotosList = (id) => {
 	return Storage.list(id + '/');
 }
 
-module.exports.upload = (timestamp, base64, user_id) => {
-	return Storage.put(user_id + '/' + timestamp, base64, {level: 'public'}).then((result) => {
-		console.log('successfully uploaded picture!', result);
-		return result;
+
+module.exports.upload = (CLOUDINARY_URL_ENDING, user_id, timestamp) => {
+	Storage.put(user_id + '/' + CLOUDINARY_URL_ENDING + 'TIMESTAMP=' + timestamp, '', {level: 'public'}).then((result) => {
+		console.log('successfully uploaded cloudinary URL to s3!');
 	}).catch((err) => {
 		console.log('s3 bucket storage error: ', err);
 	})
@@ -32,9 +32,9 @@ module.exports.delete = (user_id, key) => {
 
 module.exports.setProfilePicture = (base64, user_id) => {
 	// upload base64 image to s3 bucket under key 'profilePicture'
-	Storage.put(user_id + '/profilePicture', base64, {level: 'public'}).then((result) => {
-		console.log('successfully uploaded profile picture!');
-	}).catch((err) => {
-		console.log('s3 profile picture set error: ', err);
-	});
+	// Storage.put(user_id + '/profilePicture', base64, {level: 'public'}).then((result) => {
+	// 	console.log('successfully uploaded profile picture!');
+	// }).catch((err) => {
+	// 	console.log('s3 profile picture set error: ', err);
+	// });
 }
