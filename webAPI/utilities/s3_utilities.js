@@ -19,14 +19,6 @@ module.exports.getPhotosList = (id) => {
 	});
 }
 
-module.exports.upload = (timestamp, base64, user_id) => {
-	Storage.put(user_id + '/' + timestamp, base64, {level: 'public'}).then((result) => {
-		console.log('successfully uploaded picture!');
-	}).catch((err) => {
-		console.log('s3 bucket storage error: ', err);
-	})
-}
-
 module.exports.delete = (user_id, key) => {
 	Storage.remove(user_id + '/' +  key).then((result) => {
 		console.log('successfully removed item from s3: ', result);

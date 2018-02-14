@@ -195,6 +195,30 @@ class LogIn extends React.Component{
         // get list of photo keys
         console.log('id: ', data.loginUser.id);
         let payload = {
+        s3.getPhotosList(data.loginUser.id).then((list) => {
+          console.log('list: ', list);
+          let l = _.pluck(list, 'key');
+          console.log('l is: ', l);
+          l.splice(l.indexOf(data.loginUser.id+'/'), 1);
+          console.log('now l is: ', l);
+          let fixedList = [];
+          l.forEach(url => {
+            // get rid of the id/ at beginning of string
+            let t = url.split('/');
+
+            // splice out and store the timestamp at end of string separately
+            let v = t[1].split('TIMESTAMP=');
+            console.log('timestamp: ', v[1]);
+
+            // replace the single quote with a forward slash
+            let s = v[0].split("'").join('/');
+
+            let u = "http://res.cloudinary.com/dvhehr6k8/image/upload/" + s;
+
+            fixedList.push([u, v[1]]);
+          });
+          console.log('finally, l is: ', fixedList);
+          let payload = {
             type: type,
             PR: data.loginUser.Personal_Record,
             id: data.loginUser.id,
@@ -205,35 +229,15 @@ class LogIn extends React.Component{
             fullName: data.loginUser.fullName,
             email: data.loginUser.email,
             spotters: data.loginUser.Spotter,
+            goals: JSON.parse(data.loginUser.profile_data).goals,
             connection_requests: data.loginUser.connection_requests,
-            goals: JSON.parse(data.loginUser.profile_data).goals}
-        this.props.dispatch(Auth(payload))
-        // s3.getPhotosList(data.loginUser.id).then((list) => {
-        //   console.log('list: ', list);
-        //   let l = _.pluck(list, 'key');
-        //   console.log('l is: ', l);
-        //   l.splice(l.indexOf(data.loginUser.id+'/profilePicture'), 1);
-        //   l.splice(l.indexOf(data.loginUser.id+'/'), 1);
-        //   console.log('now l is: ', l);
-        //   let payload = {
-        //     type: type,
-        //     PR: data.loginUser.Personal_Record,
-        //     id: data.loginUser.id,
-        //     Exercise_Plan: Exercise_Plan,
-        //     Chat_Room: data.loginUser.Chat_Room,
-        //     auth: data.loginUser.type,
-        //     id: data.loginUser.id,
-        //     fullName: data.loginUser.fullName,
-        //     email: data.loginUser.email,
-        //     spotters: data.loginUser.Spotter,
-        //     goals: JSON.parse(data.loginUser.profile_data).goals,
-        //     photoKeys: l
-        //   }
-        //   console.log('whats the payload', payload)
-        //   this.props.dispatch(Auth(payload))
-        // }).catch((e) => {
-        //   console.log('s3 error: ', e);
-        // })
+            photoKeys: fixedList
+          }
+          console.log('whats the payload', payload)
+          this.props.dispatch(Auth(payload))
+        }).catch((e) => {
+          console.log('the s3 error is: ', e);
+        })
       }
     }).catch((err) => {
       console.log('log in error: ', err);

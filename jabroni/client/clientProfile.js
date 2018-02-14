@@ -3,7 +3,6 @@ import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, Button, Dim
 import Chat from '../utilities/chatIcon'
 import FooterNav from './FooterNav.js'
 import SVG from '../SVG/svg5Center.js'
-const axios = require('axios');
 
 const { width, height } = Dimensions.get('window');
 
