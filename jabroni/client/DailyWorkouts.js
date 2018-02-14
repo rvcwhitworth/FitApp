@@ -20,6 +20,7 @@ import firebase from '../utilities/firebase.js'
 
 const database = firebase.database();
 const { width, height } = Dimensions.get('window');
+const days = ['sunday','tuesday','wednesday','thursday','friday','saturday'];
 
 class WorkoutScreen extends React.Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class WorkoutScreen extends React.Component {
 
     this.state = {
       color: 'white',
-      selectedDay: new Date().getDay(),
+      selectedDay: days[new Date().getDay()],
       workoutData: {},
       loading: true,
       trainer: ''
@@ -52,6 +53,15 @@ class WorkoutScreen extends React.Component {
       })
       .then(({data}) => {
         // console.log('DATA IN DID MOUNT', data)
+
+        // pull regimen from workout plan
+        regimen = JSON.parse(data.getExercisePlans.slice().pop().regimen);
+        this.state.dailyWorkout = this.state.regimen[this.state.selectedDay];
+      if (this.state.dailyWorkout !== "OFF") {
+        this.setupWorkoutData(this.state.dailyWorkout); 
+      }
+      this.state.displaySet = true;
+
         this.setState({data, loading: false}, ()=>{
 
           this.props.client.query({
@@ -117,6 +127,9 @@ class WorkoutScreen extends React.Component {
   updateWorkoutDisplay (workoutType) {
     this.setState((prevState) => {
       prevState[workoutType] = !prevState[workoutType];
+      if (prevState.loading) {
+        prevState.loading = !prevState.loading;
+      }
       return prevState;
     })
   }
@@ -139,12 +152,7 @@ class WorkoutScreen extends React.Component {
     const { getExercisePlans } = this.state.data;
     // console.log('l123 GOT HERE WITH', getExercisePlans)
     if (getExercisePlans && !this.state.dailyWorkout && !this.state.displaySet) {
-      this.state.regimen = JSON.parse(getExercisePlans.slice().pop().regimen);
-      this.state.dailyWorkout = this.state.regimen[this.state.selectedDay];
-      if (this.state.dailyWorkout !== "OFF") {
-        this.setupWorkoutData(this.state.dailyWorkout); 
-      }
-      this.state.displaySet = true;
+      
     }
 
     return (
@@ -164,13 +172,13 @@ class WorkoutScreen extends React.Component {
             itemStyle={{textAlign: 'center'}}
             style={{width: 150}}
           >
-            <Picker.Item label="Sunday" value={0} />
-            <Picker.Item label="Monday" value={1} />
-            <Picker.Item label="Tuesday" value={2} />
-            <Picker.Item label="Wednesday" value={3} />
-            <Picker.Item label="Thursday" value={4} />
-            <Picker.Item label="Friday" value={5} />
-            <Picker.Item label="Saturday" value={6} />
+            <Picker.Item label="Sunday" value={'sunday'} />
+            <Picker.Item label="Monday" value={'monday'} />
+            <Picker.Item label="Tuesday" value={'tuesday'} />
+            <Picker.Item label="Wednesday" value={'wednesday'} />
+            <Picker.Item label="Thursday" value={'thursday'} />
+            <Picker.Item label="Friday" value={'friday'} />
+            <Picker.Item label="Saturday" value={'saturday'} />
           </Picker>
 
           {this.state.dailyWorkout !== "OFF" ? Object.keys(this.state.dailyWorkout).map((workoutType, i) => {
