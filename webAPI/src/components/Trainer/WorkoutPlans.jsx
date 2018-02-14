@@ -3,13 +3,14 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import ChangeUser from '../../actions/example.jsx'
-import { Button, Card, Icon, Image, Segment, Divider, Container} from 'semantic-ui-react'
+import { Button, Card, Icon, Image, Segment, Divider, Container, Modal, Header} from 'semantic-ui-react'
 import AddTemplate from '../../actions/addTemplate.jsx'
 import Template from './WorkoutTemplate.jsx'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import Regimen from './RegimenCreation.jsx'
 import { graphql, ApolloProvider, withApollo } from 'react-apollo';
 import { createExercisePlan } from '../../../utilities/mutations.jsx'
+import SendToClient from './SendToClient.jsx'
 // import Styles from '../../www/ReactCSSAnimation.css'
 
 class WorkoutPlans extends React.Component{
@@ -22,7 +23,8 @@ class WorkoutPlans extends React.Component{
         backgroundImage: this.props.backgroundImage,
         plans: this.props.plans,
         popOut: null,
-        show: false
+        show: false,
+        sendIT: false
       }
       this.createTemplate = this.createTemplate.bind(this)
       this.finishedTemplate = this.finishedTemplate.bind(this)
@@ -31,6 +33,7 @@ class WorkoutPlans extends React.Component{
       this.createRegimen = this.createRegimen.bind(this)
       this.finishedRegimen = this.finishedRegimen.bind(this)
       this.cancelTemplate = this.cancelTemplate.bind(this)
+      this.goBack = this.goBack.bind(this)
   }
 
   componentDidMount() {
@@ -72,6 +75,7 @@ class WorkoutPlans extends React.Component{
   }
 
   handleTemplateMenu(e){
+    console.log('please be here', e.target, e.relatedTarget)
     if(e.target.id === 'close'){
       // this.setState({
       //   
@@ -80,7 +84,13 @@ class WorkoutPlans extends React.Component{
           show:false,
         })
       // })
-    } else{
+    } else if(e.target.id === 'SendToClient'){
+      this.setState({
+        sendIT: true,
+        show: false
+      })
+    }
+    else{
       console.log('What did you click?', e.target.id)
     }
   }
@@ -166,6 +176,16 @@ class WorkoutPlans extends React.Component{
     })
   }
 
+  goBack(){
+    console.log('are we going back???')
+    this.setState({
+      popOut: null,
+      creatingTemplate: false,
+      show: false,
+      sendIT: false
+    })
+  }
+
   cancelTemplate(){
     this.setState({
       creatingTemplate:false
@@ -174,6 +194,7 @@ class WorkoutPlans extends React.Component{
 
   render() {
     console.log(this.state)
+
     if(this.state.creatingTemplate){
       return(
         <div>
@@ -188,6 +209,12 @@ class WorkoutPlans extends React.Component{
         <div style={{flexDirection:'Column', height:'100%' }}>
         <img src={this.state.backgroundImage} style={{zIndex: -1, width:'100%', height:'100%', position: 'absolute'}} />
         <Container fluid>
+          <Modal open={this.state.sendIT} style={{height:'100%'}}>
+          <Modal.Header>Select a Client</Modal.Header>
+          <Modal.Content>
+          <SendToClient workout={this.state.plans[this.state.popOut]} goBack={this.goBack}/>
+          </Modal.Content>
+       </Modal>
         {this.state.plans.map((val, key) =>{
           if(key === this.state.popOut){
             var z = 2
@@ -233,6 +260,7 @@ class WorkoutPlans extends React.Component{
     }
   }
 }
+
 
 
 
