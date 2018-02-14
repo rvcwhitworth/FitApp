@@ -81,7 +81,6 @@
     "react-native-floating-action": "^1.8.0",
     "react-native-pathjs-charts": "0.0.33",
     "react-native-svg-charts": "^2.2.1",
-    "react-native-swipe-navigation": "^1.0.0-beta",
     "react-navigation": "^1.0.0-beta.27",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
