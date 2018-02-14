@@ -123,13 +123,11 @@ class Photos extends React.Component {
 		super(props);
 		this.state = {
 			userID: null,
-			photos: [], // [timestamp1, timestamp2, ...]
-			currentPic: [], // tuple: [timestamp, base64]
+			photos: [], // [[URL1, timestamp1], [URL2, timestamp2], ...]
 			index: 0,
 			loading: false,
 			showButtons: false
 		};
-		// this.downloadPic = this.downloadPic.bind(this);
 		this.next = this.next.bind(this);
 		this.prev = this.prev.bind(this);
 		this.setProfPic = this.setProfPic.bind(this);
