@@ -15,15 +15,17 @@ import ClientTeam from './Client/ClientTeam.jsx'
 import TrainerSettings from './Trainer/TrainerSettings.jsx'
 import Chat from './Chat.jsx'
 import Photos from './Client/Photos.jsx';
-import { Grid, Item, Image, Menu, Segment, Icon } from 'semantic-ui-react'
+
+import Main from './main.jsx'
+import { Dropdown, Grid, Item, Image, Menu, Segment, Icon, Button, Header, Modal } from 'semantic-ui-react'
 import {
   HashRouter as Router,
   Route,
   Link
  } from 'react-router-dom';
-import zIndex from '../../../../HackReactor/in-out/node_modules/material-ui/styles/zIndex';
 
-class Header extends React.Component{
+
+class Header1 extends React.Component{
   constructor(props){
       super(props)
       this.state = {
@@ -62,51 +64,7 @@ class Header extends React.Component{
     if(!this.state.type){
       const { activeItem } = this.state
     return(
-      <div>
-        <Segment style={{marginBottom: 0, position:'fixed', top: 0, width: '100%', zIndex: 2}}>
-          <Item.Image size='mini' src='https://fitpics.s3.amazonaws.com/public/GreenBlack.jpg' style={{display: 'inline-block', width: '5%'}}/>
-          {/* <Image src='https://fitpics.s3.amazonaws.com/public/GreenBlack.jpg' size='mini'/> */}
-          
-          <Menu  pointing secondary style={{width:'95%', float:'right'}}>
-          <b style={{marginRight: '2%'}}>Fit Hero</b>
-            <Menu.Item name='About' as={Link} to="/about"/>
-            <Menu.Menu position='right'>
-              <Menu.Item name='Log In' as={Link} to="/"/>
-              <Menu.Item name='Sign Up' as={Link} to='/signUp'/>
-            </Menu.Menu>
-          </Menu>
-        </Segment>
-        <div style={{background: 'url("http://gettheshot.ca/images/hero/Mark-Whitehead-Photography-Get-The-Shot-Studios-4.jpg") center center', backgroundSize: 'cover', height: '75vh'}}>
-          {/* ?<Image src='http://gettheshot.ca/images/hero/Mark-Whitehead-Photography-Get-The-Shot-Studios-4.jpg' centered style={{margin: '-10' ,width: '100%', height: '100%', opacity: 0.7}} /> */}
-        </div>
-        <Grid style={{backgroundColor: "#06D6A0", marginTop:'10'}} columns={4} >
-          <Grid.Row centered>
-            <Grid.Column >
-              <Icon name='comments outline' size='huge'/>
-              <span>Talk Live With Trainers</span>
-            </Grid.Column>
-            <Grid.Column >
-              <Icon name='line chart' size='huge' />
-              <span>Record Track and View Graphed Analysis of Workouts and Diet</span>
-            </Grid.Column >
-              
-          </Grid.Row>
-
-          <Grid.Row centered>
-            <Grid.Column centered>
-              <Icon name='calendar' size='huge' />
-              <span>Structured Workout Regimen</span>
-            </Grid.Column>
-            <Grid.Column centered>
-              <Icon name='user plus' size='huge' />
-              <span>Find Real Professional Trainers</span>
-            </Grid.Column>
-            
-          </Grid.Row>
-        </Grid>
-        <Route exact path='/' component={LogIn}/>
-        <Route exact path='/signUp' component={SignUp}/>
-      </div>
+      <Main/>
     )
   } else if(this.state.type === 'Client'){
     const { activeItem } = this.state
@@ -114,20 +72,21 @@ class Header extends React.Component{
       <div>
 
         <Segment color='#FFFCF9' style={{width: '100%'}}>
-          <Menu  pointing secondary >
-            <Image src='https://fitpics.s3.amazonaws.com/public/GreenBlack.jpg' size='mini'/>
+        <Item.Image size='mini' src='https://fitpics.s3.amazonaws.com/public/GreenBlack.jpg' style={{display: 'inline-block', width: '5%'}}/>
+
+          <Menu  pointing secondary style={{width:'95%', float:'right'}}>
             <Menu.Item name='Profile' as={Link} to="/"/>
             <Menu.Item name='Photos' as={Link} to="/signUp"/>
             <Menu.Item name='Analytics' as={Link} to="/Analytics"/>
             <Menu.Item name='Planner' as={Link} to="/signUp"/>
             <Menu.Item name='Team' as={Link} to="/Team"/>
             <Menu.Item name='Chat' as={Link} to="/SignUp"/>
-            <Menu.Item name='Settings' as={Link} to="/Settings"/>
-            <Menu.Item name='Log Out' as={Link} to="/Settings"/>
-            {/* <Menu.Menu position='right'>
-              <Menu.Item name='Log In' as={Link} to="/"/>
-              <Menu.Item name='Sign Up' as={Link} to='/signUp'/>
-            </Menu.Menu> */}
+            
+            
+            <Menu.Menu position='right'>
+              <Menu.Item name='Settings' as={Link} to="/Settings"/>
+              <Menu.Item name='Log Out' onClick={this.handleClick}/>
+            </Menu.Menu>
           </Menu>
         </Segment>
           <Route exact path='/Team' component={ClientTeam}/>
@@ -181,8 +140,6 @@ class Header extends React.Component{
         <Route exact path='/Settings' component={TrainerSettings}/>
         <Route exact path='/Chat' component={Chat}/>
       </div>
-
-
 
       // <div stlye={{backgroundColor: 'rgba(0,0,0, 0.9)'}}>
       //   <div style={{textAlign:'left', backgroundColor: 'rgba(0,0,0, 0.3)'}}>
@@ -241,4 +198,87 @@ const mapStoreToProps = (store) => {
 
 export default withRouter(connect(
   mapStoreToProps
-)(Header));
+)(Header1));
+
+
+
+
+
+
+
+
+      // <div>
+      //   <Segment style={{marginBottom: 0, position:'fixed', top:0,  width: '100%', zIndex: 2}}>
+      //     <Item.Image size='mini' src='https://fitpics.s3.amazonaws.com/public/GreenBlack.jpg' style={{display: 'inline-block', width: '5%'}}/>
+      //     {/* <Image src='https://fitpics.s3.amazonaws.com/public/GreenBlack.jpg' size='mini'/> */}
+          
+      //     <Menu  pointing secondary style={{width:'95%', float:'right'}}>
+      //       <b style={{marginRight: '2%', display:'inline-block'}}>Fit Hero</b>
+      //       <Menu.Item name='Home' as={Link} to="/"/>
+      //       <Menu.Item name='About' as={Link} to="/about"/>
+      //       <Menu.Item name='Contact' as={Link} to="/contact"/>
+            // <Menu.Menu position='right'>
+            //   {/* <Menu.Item name='Log In' as={Link} to="/"/> */}
+            //   {/* <Menu.Item name='Sign Up' as={Link} to='/signUp'/> */}
+            // </Menu.Menu>
+
+      //       {/* NAV RIGHT */}
+      //       <Menu.Menu position='right'>
+      //         <Dropdown item  text='Sign In / Log In'>
+      //           <Dropdown.Menu fluid style={{width: '20em', wordWrap: 'break-word', backgroundColor:'#211e1f', color:'white', padding: '5%'}}>
+      //           <h2 style={{textAlign: 'center'}}>Join For Free</h2>
+      //           <p style={{ wordWrap: 'break-word', whiteSpace: 'pre-line', padding:'5%'}}>Meet a trainer or build your own workouts, and start tracking your results and more!</p>
+      //           {/* Drop Down Log In Button Modal Window */}
+      //           <Modal style={{height: '50%', width: '50%'}} center trigger={<Dropdown.Item><Button fluid primary>Log In</Button></Dropdown.Item>}>
+      //             <Modal.Header>Login</Modal.Header>
+      //             <Modal.Content >
+      //               {/* <Image wrapped size='medium' src='/assets/images/avatar/large/rachel.png' /> */}
+      //               <Modal.Description>
+      //                 <Header>Trainer</Header>
+      //                 <p>We've found the following gravatar image associated with your e-mail address.</p>
+      //                 <p>Is it okay to use this photo?</p>
+      //                 <Header>Member</Header>
+      //                 <p>We've found the following gravatar image associated with your e-mail address.</p>
+      //                 <p>Is it okay to use this photo?</p>
+      //               </Modal.Description>
+      //             </Modal.Content>
+      //           </Modal>
+
+      //           <Dropdown.Item><Button fluid secondary style={{backgroundColor: 'white', color: 'black'}}>SignUp</Button></Dropdown.Item>
+      //           </Dropdown.Menu>
+      //         </Dropdown>
+      //       </Menu.Menu>
+      //     </Menu>
+      //   </Segment>
+
+      //   <div style={{background: 'url("http://gettheshot.ca/images/hero/Mark-Whitehead-Photography-Get-The-Shot-Studios-4.jpg") center', backgroundSize: 'cover', height: '65vh', marginTop: 0}}>
+      //     {/* ?<Image src='http://gettheshot.ca/images/hero/Mark-Whitehead-Photography-Get-The-Shot-Studios-4.jpg' centered style={{margin: '-10' ,width: '100%', height: '100%', opacity: 0.7}} /> */}
+      //   </div>
+      //   {/* Info Blurb */}
+      //   <Grid style={{backgroundColor: "#06D6A0", margin: 0, marginTop:'10'}} columns={4} >
+      //     <Grid.Row centered>
+      //       <Grid.Column >
+      //         <Icon name='comments outline' size='huge'/>
+      //         <span>Talk Live With Trainers</span>
+      //       </Grid.Column>
+      //       <Grid.Column >
+      //         <Icon name='line chart' size='huge' />
+      //         <span>Record Track and View Graphed Analysis of Workouts and Diet</span>
+      //       </Grid.Column >
+      //     </Grid.Row>
+
+      //     <Grid.Row centered>
+      //       <Grid.Column centered>
+      //         <Icon name='calendar' size='huge' />
+      //         <span>Structured Workout Regimen</span>
+      //       </Grid.Column>
+      //       <Grid.Column centered>
+      //         <Icon name='user plus' size='huge' />
+      //         <span>Find Real Professional Trainers</span>
+      //       </Grid.Column>
+      //     </Grid.Row>
+      //   </Grid>
+
+        // <Route exact path='/' component={LogIn}/>
+      //   <Route exact path='/signUp' component={SignUp}/>
+      // </div>
