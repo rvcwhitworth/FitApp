@@ -9,7 +9,7 @@ import about from './about.jsx';
 import contact from './contact.jsx';
 import { graphql, ApolloProvider, withApollo } from 'react-apollo';
 import Auth from '../actions/authorize.jsx'
-const _ = require('underscore');
+
 import {
   HashRouter as Router,
   Switch,
