@@ -7,9 +7,12 @@ import gql from 'graphql-tag';
 import ProgressCircle from '../utilities/progressCircle'
 import FooterNav from './FooterNav.js'
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import moment from 'moment';
 
 const { width, height } = Dimensions.get('window');
 const today = new Date();
+const days = ['sunday','tuesday','wednesday','thursday','friday','saturday'];
+const unwantedFields = ['name', 'description', 'photo'];
 
 class PlanScreen extends React.Component {
   constructor(props) {
@@ -18,8 +21,8 @@ class PlanScreen extends React.Component {
     this.state = {
       progress: 0,
       loading: true,
-      selectedDay: today.getDay(),
-      selected: today.toISOString().split('T')[0],
+      selectedDay: days[moment().day()],
+      selected: moment().toISOString().split('T')[0],
       data: {},
       items: {}
     }
