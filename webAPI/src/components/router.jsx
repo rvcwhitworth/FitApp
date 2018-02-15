@@ -99,6 +99,7 @@ class Header1 extends React.Component{
         <Route exact path='/Team' component={ClientTeam}/>
         <Route exact path='/Chat' component={Chat}/>
         <Route exact path='/Photos' component={Photos}/>
+
         </div>
       //   <div style={{textAlign:'left', backgroundColor: 'rgba(0,0,0, 0.3)'}}>
       //   <ul>

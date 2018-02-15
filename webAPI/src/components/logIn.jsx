@@ -35,10 +35,12 @@ const q = gql`
         trainer{
           id
           fullName
+          profile_data
         }
         client{
           id
           fullName
+          profile_data
         }
       }
       Exercise_Plan {
@@ -52,6 +54,7 @@ const q = gql`
         client{
           id
           fullName
+          profile_data
         }
       }
       Personal_Record {
@@ -64,6 +67,7 @@ const q = gql`
         user {
           id
           fullName
+          profile_data
         }
       }
       connection_requests
@@ -262,9 +266,6 @@ class LogIn extends React.Component{
   }
 
   render() {
-    
-
-
     console.log('heres the state', this.state, this.props)
     return (
       
