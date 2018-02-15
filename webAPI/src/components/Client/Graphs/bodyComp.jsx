@@ -113,7 +113,7 @@ class Analytics extends React.Component{
 const mapStoreToProps = (store) => {
   console.log('store', store);
   return {
-    id: store.auth.auth,
+    id: store.auth.id,
     user: store.example.user
   };
 };

@@ -18,6 +18,7 @@ class DietAnalytics extends React.Component{
   }
 //WILL NEED TO ADD MORE GRAPHS HERE
   componentDidMount () {
+    console.log('are we updating our Macros')
     this.updateMacro()
   }
 

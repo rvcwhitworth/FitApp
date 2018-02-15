@@ -2,85 +2,91 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import ChangeUser from '../../actions/example.jsx'
-import { Grid, Image, Button, Card, Icon, Container } from 'semantic-ui-react'
+import c3 from 'c3';
+import SelectedClientProfile from './selectedClientProfile.jsx'
 import { graphql, ApolloProvider, withApollo } from 'react-apollo';
-import { searchQuery } from '../../../utilities/queries.jsx'
+import { Grid, Menu, Segment, Button, Container } from 'semantic-ui-react'
+import BodyAnalytics from '../client/Graphs/bodyComp.jsx'
+import DietAnalytics from '../client/Graphs/dietAnalytics.jsx'
 
-
-class selectedClient extends React.Component{
+class SelectedClient extends React.Component{
   constructor(props){
       super(props)
       this.state = {
-        id : this.props.id || null,
-        username : this.props.user || null,
-        selected: this.props.selected,
-        selectedClient:  null
+        id: this.props.id,
+        selected: 'Profile'
       }
-      console.log('what are props', this.props)
+      this.renderSelected = this.renderSelected.bind(this)
+      this.select = this.select.bind(this)
+  }
+//WILL NEED TO ADD MORE GRAPHS HERE
+   select(e, { name }){
+    this.setState({
+      selected : name
+    })
   }
 
-  componentDidMount() {
-    console.log('mounting this hard')
-        this.props.client.query({
-        query: searchQuery,
-        variables: {
-          fullName: this.state.selected
+  renderSelected(){
+    console.log('whats going on?', this.state)
+    if(this.state.selected === 'Profile'){
+        return(
+          <Container style={{width:'80%', display:'inline-block'}}>
+            <SelectedClientProfile />
+          </Container>
+        )
+        }else if(this.state.selected === 'Body Analytics'){
+        return(
+          <Container style={{width:'80%', display:'inline-block'}}>
+          <BodyAnalytics />
+          </Container>
+        )
+        } else if(this.state.selected === 'Diet Analytics'){
+          return(
+          <Container style={{widht:'80%', display: 'inline-block'}}>
+          <DietAnalytics />
+          </Container>)
         }
-      }).then((results) => {
-        console.log('RESULTS FROM SEARCH', results);
-        let temp = []
-        results.data.getUsersByFullName.forEach((person) => {
-          temp.push(person);
-        })
-        this.setState({
-          selectedClient: temp[0]
-        });
-      }).catch((err) => {
-        console.log('graphQL error in teamScreen query: ', err);
-      }).then(() => {
-        console.log('fin')
-      })
+        else if(this.state.selected === 'Workouts'){
+          return(
+            <Container>
+            Workouts
+            </Container>
+            )
+        }
   }
 
   render() {
-    console.log('selected person stata', this.state)
+    console.log('whats zeee state', this.state)
     return(
-      <Container>
-      <Card>
-        <Card.Content>
-          <Card.Header>
-          Test Client
-          </Card.Header>
-          <Card.Meta>
-            <span className='date'>
-              Athlete
-            </span>
-          </Card.Meta>
-          <Card.Description>
-            Your CLient
-          </Card.Description>
-        </Card.Content>
-        <Card.Content extra>
-          <a>
-       <Icon name='user' />
-          </a>
-        </Card.Content>
-      </Card>
-      <Button style={{backgroundColor:'#FFD166', bottom:'0'}}fluid onClick={this.props.cancel} >Cancel</Button>
-      </Container>
-      )
+      <Grid>
+        <Grid.Column width={3}>
+          <Menu fluid vertical tabular>
+      <Menu.Item active={this.state.selected === 'Profile'} onClick={this.select} value='Profile' name="Profile" />
+      <Menu.Item active={this.state.selected === 'Body Analytics'} onClick={this.select} value='BodyAnalytics' name='Body Analytics' />
+      <Menu.Item active={this.state.selected === 'Diet Analytics'} onClick={this.select} value='DietAnalytics' name='Diet Analytics' />
+      <Menu.Item active={this.state.selected === 'Workouts'} onClick={this.select} value='Workouts' name='Workouts' />
+                </Menu>
+        </Grid.Column>
+        <Grid.Column stretched width={12}>
+          <Segment>
+           {this.renderSelected()}
+          </Segment>
+          <Button style={{backgroundColor:'#FFD166', bottom:'0'}}fluid onClick={this.props.cancel} >Back</Button>
+        </Grid.Column>
+      </Grid>
+    )
   }
+
 }
 
 const mapStoreToProps = (store) => {
   console.log('store', store);
   return {
     id: store.auth.id,
-    user: store.auth.fullName,
+    user: store.example.user
   };
 };
 
 export default withRouter(connect(
   mapStoreToProps
-)(withApollo(selectedClient)))
+)(withApollo(SelectedClient)));
