@@ -19,7 +19,8 @@ import {
 import gql from 'graphql-tag';
 import { Dropdown, Grid, Item, Image, Menu, Segment, Form,Icon, Button, Header, Modal } from 'semantic-ui-react'
 
-// const s3 = require('../../utilities/s3_utilities.js');
+const s3 = require('../../utilities/s3_utilities.js');
+const _ = require('underscore');
 const q = gql`
   query loginUser($username: String!, $password: String!){
     loginUser(username: $username, password: $password) {
@@ -284,7 +285,7 @@ class LogIn extends React.Component{
 
               {/* NAV RIGHT */}
               <Menu.Menu position='right'>
-                <Dropdown item  text='Sign In / Log In'>
+                <Dropdown item  text='Log In / Sign Up'>
                   <Dropdown.Menu fluid style={{width: '20em', wordWrap: 'break-word', backgroundColor:'#211e1f', color:'white', padding: '5%'}}>
                   <h2 style={{textAlign: 'center'}}>Join For Free</h2>
                   <p style={{ wordWrap: 'break-word', whiteSpace: 'pre-line', padding:'5%'}}>Meet a trainer or build your own workouts, and start tracking your results and more!</p>
@@ -335,7 +336,7 @@ class LogIn extends React.Component{
                     </Modal.Content>
                   </Modal>
 
-                  <Dropdown.Item><Button fluid secondary style={{backgroundColor: 'white', color: 'black'}}>SignUp</Button></Dropdown.Item>
+                  <Dropdown.Item as={Link} to='/signUp'><Button fluid secondary style={{backgroundColor: 'white', color: 'black'}} >SignUp</Button></Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
               </Menu.Menu>
@@ -346,6 +347,7 @@ class LogIn extends React.Component{
 
           <Route exact path="/about" />
           <Route exact path='/contact' />
+          <Route exact path='/signUp' />
       </div>
        
       // <div className="container" style={{backgroundColor:'rgba(0,0,0,0.2)', textAlign:'center'}}>

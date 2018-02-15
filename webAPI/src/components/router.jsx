@@ -72,14 +72,16 @@ class Header1 extends React.Component{
     return(
       <div>
 
-        <Segment color='#FFFCF9' style={{width: '100%'}}>
+        <Segment color='#FFFCF9' style={{width: '100%', zIndex: 2, display:'inline-block', marginBottom: 0}}>
         <Item.Image size='mini' src='https://fitpics.s3.amazonaws.com/public/GreenBlack.jpg' style={{display: 'inline-block', width: '5%'}}/>
 
           <Menu  pointing secondary style={{width:'95%', float:'right'}}>
+            <b style={{marginRight: '2%', display:'inline-block'}}>Fit Hero</b>
             <Menu.Item name='Profile' as={Link} to="/"/>
-            <Menu.Item name='Photos' as={Link} to="/signUp"/>
+            <Menu.Item name='Photos' as={Link} to="/Photos"/>
             <Menu.Item name='Analytics' as={Link} to="/Analytics"/>
             <Menu.Item name='Schedule' as={Link} to="/Schedule"/>
+            {/* <Menu.Item name='Planner' as={Link} to="/signUp"/> */}
             <Menu.Item name='Team' as={Link} to="/Team"/>
             <Menu.Item name='Chat' as={Link} to="/Chat"/>
             
@@ -90,12 +92,13 @@ class Header1 extends React.Component{
             </Menu.Menu>
           </Menu>
         </Segment>
-          <Route exact path='/Team' component={ClientTeam}/>
-          <Route exact path='/' component={ClientProfile}/>
-          <Route exact path='/Settings' component={ClientProfile}/>
-          <Route exact path='/Schedule' component={Schedule}/>
-          <Route exact path='/Analytics' component={ClientAnalytics}/>
-          <Route exact path='/Chat' component={Chat}/>
+        <Route exact path='/' component={ClientProfile}/>
+        <Route exact path='/Settings' component={ClientProfile}/>
+        <Route exact path='/Schedule' component={Schedule}/>
+        <Route exact path='/Analytics' component={ClientAnalytics}/>
+        <Route exact path='/Team' component={ClientTeam}/>
+        <Route exact path='/Chat' component={Chat}/>
+        <Route exact path='/Photos' component={Photos}/>
         </div>
       //   <div style={{textAlign:'left', backgroundColor: 'rgba(0,0,0, 0.3)'}}>
       //   <ul>
@@ -119,21 +122,21 @@ class Header1 extends React.Component{
     const { activeItem } = this.state
     return(
       <div>
-
-        <Segment color='#FFFCF9' style={{width: '100%'}}>
-          <Menu  pointing secondary >
+        <Segment style={{  width: '100%' , zIndex: 2, display: 'inline-block', marginBottom: 0}}>
+          <Item.Image size='tiny' src='https://fitpics.s3.amazonaws.com/public/GreenBlack.jpg' style={{display: 'inline-block', width:'5%'}}/>
+          <Menu  pointing secondary style={{width:'95%', float:'right'}}>
+            <b style={{marginRight: '2%', display:'inline-block'}}>Fit Hero</b>
             <Menu.Item name='Profile' as={Link} to="/"/>
             <Menu.Item name='News Feed' as={Link} to="/Updates"/>
             <Menu.Item name='Roster' as={Link} to="/Roster"/>
             <Menu.Item name='Workout Plan' as={Link} to="/WorkoutPlans"/>
             <Menu.Item name='Chat' as={Link} to="/Chat"/>
-            <Menu.Item name='Settings' as={Link} to="/Settings"/>
-            <Menu.Item name='Trainer/Client' as={Link} to="/Settings"/>
-            <Menu.Item name='Log Out' as={Link} to="/Settings"/>
-            {/* <Menu.Menu position='right'>
-              <Menu.Item name='Log In' as={Link} to="/"/>
-              <Menu.Item name='Sign Up' as={Link} to='/signUp'/>
-            </Menu.Menu> */}
+           
+            <Menu.Menu position='right'>
+              <Menu.Item name='Settings' as={Link} to="/Settings"/>
+              <Menu.Item name='Trainer/Client' onClick={this.handleClick}/>
+              <Menu.Item name='Log Out' onClick={this.handleClick}/>
+            </Menu.Menu>
           </Menu>
         </Segment>
         <Route exact path='/' component={TrainerProfile}/>
