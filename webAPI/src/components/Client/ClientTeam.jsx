@@ -97,7 +97,6 @@ class ClientTeam extends React.Component{
   }
 
   render() {
-    console.log('this si the state', this.state)
     if(this.state.searchResults.length === 0){
       return(
         <div>
