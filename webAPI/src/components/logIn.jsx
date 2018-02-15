@@ -9,6 +9,7 @@ import about from './about.jsx';
 import contact from './contact.jsx';
 import { graphql, ApolloProvider, withApollo } from 'react-apollo';
 import Auth from '../actions/authorize.jsx'
+const _ = require('underscore');
 import {
   HashRouter as Router,
   Switch,
@@ -18,8 +19,7 @@ import {
 import gql from 'graphql-tag';
 import { Dropdown, Grid, Item, Image, Menu, Segment, Form,Icon, Button, Header, Modal } from 'semantic-ui-react'
 
-const s3 = require('../../utilities/s3_utilities.js');
-const _ = require('underscore');
+// const s3 = require('../../utilities/s3_utilities.js');
 const q = gql`
   query loginUser($username: String!, $password: String!){
     loginUser(username: $username, password: $password) {

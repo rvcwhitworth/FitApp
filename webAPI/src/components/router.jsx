@@ -81,7 +81,7 @@ class Header1 extends React.Component{
             <Menu.Item name='Analytics' as={Link} to="/Analytics"/>
             <Menu.Item name='Schedule' as={Link} to="/Schedule"/>
             <Menu.Item name='Team' as={Link} to="/Team"/>
-            <Menu.Item name='Chat' as={Link} to="/SignUp"/>
+            <Menu.Item name='Chat' as={Link} to="/Chat"/>
             
             
             <Menu.Menu position='right'>
@@ -95,6 +95,7 @@ class Header1 extends React.Component{
           <Route exact path='/Settings' component={ClientProfile}/>
           <Route exact path='/Schedule' component={Schedule}/>
           <Route exact path='/Analytics' component={ClientAnalytics}/>
+          <Route exact path='/Chat' component={Chat}/>
         </div>
       //   <div style={{textAlign:'left', backgroundColor: 'rgba(0,0,0, 0.3)'}}>
       //   <ul>
