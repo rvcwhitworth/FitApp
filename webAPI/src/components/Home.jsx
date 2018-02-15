@@ -95,8 +95,11 @@ const Home = function(props){
                         <Image src='https://media-exp2.licdn.com/media/AAMABADuAAgAAQAAAAAAAA3rAAAAJDkxMWIwMDJhLTRhZjUtNDQ5Yi04MDYwLTM3ZjNhZGUwMTNiMg.bin' centered size='small' avatar/>
                         <div>
                             <h3>Ryan Whitworth</h3>
-                            <p style={{color: '#868e96', fontSize:'14px'}}>Ryan Whitworth is a Software Engineer with Fullstack Development Experience in both Mobile and Web Applications. He has created Functional and regression testing of various web applications, provided proof of concept for newly implemented testing framework.</p>
-                        </div>
+                            <p style={{color: '#868e96', fontSize:'14px'}}>
+                                Ryan Whitworth is a Software Engineer with Fullstack Development Experience in both Mobile and Web Applications.
+                                He is a gift from god and will fix your code before he breaks your heart.
+                            </p>
+                            </div>
                     </Grid.Column>
                 </Grid.Row>
 
