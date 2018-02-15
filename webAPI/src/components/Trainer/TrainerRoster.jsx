@@ -6,8 +6,6 @@ import ChangeUser from '../../actions/example.jsx'
 import { Grid, Image, Button, Modal, Container } from 'semantic-ui-react'
 import SelectedClient from './selectedClient.jsx'
 
-
-
 class Roster extends React.Component{
   constructor(props){
       super(props)
@@ -110,4 +108,3 @@ const mapStoreToProps = (store) => {
 export default withRouter(connect(
   mapStoreToProps
 )(Roster));
-

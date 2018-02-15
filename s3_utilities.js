@@ -32,9 +32,9 @@ module.exports.delete = (user_id, key) => {
 
 module.exports.setProfilePicture = (base64, user_id) => {
 	// upload base64 image to s3 bucket under key 'profilePicture'
-	// Storage.put(user_id + '/profilePicture', base64, {level: 'public'}).then((result) => {
-	// 	console.log('successfully uploaded profile picture!');
-	// }).catch((err) => {
-	// 	console.log('s3 profile picture set error: ', err);
-	// });
+	Storage.put(user_id + '/profilePicture', base64, {level: 'public'}).then((result) => {
+		console.log('successfully uploaded profile picture!');
+	}).catch((err) => {
+		console.log('s3 profile picture set error: ', err);
+	});
 }
