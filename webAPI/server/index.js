@@ -14,7 +14,6 @@ const resolvers = require('../../database/resolvers.js');
 const graphqlHTTP = require('express-graphql');
 const graphql = require('graphql');
 const cors = require('cors')
-const cors = require('../../node_modules/')
 
 const { graphiqlExpress, graphqlExpress } = require('graphql-server-express');
 
