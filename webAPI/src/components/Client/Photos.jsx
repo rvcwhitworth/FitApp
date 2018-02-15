@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import axios from 'axios';
 import Photo from './Photo.jsx';
-import {Grid} from 'semantic-ui-react';
+import {Grid, Card, Image} from 'semantic-ui-react';
+let moment = require('moment');
 
 class Photos extends React.Component{
   constructor(props){
@@ -17,26 +18,61 @@ class Photos extends React.Component{
   }
 
   componentDidMount() {
-    this.setState({photos: this.props.photos}, () => {
+    // sort photos by timestamp:
+    let p = this.props.photos;
+    p = p.sort((a, b) => {
+      return a[1] < b[1];
+    });
+    this.setState({photos: p}, () => {
       console.log('set photos state: ', this.state.photos);
     });
-    // this.props.photos.forEach((key) => {
-    //   console.log('key to download: ', key);
-    //   // axios.get('https://fitpics.s3.amazonaws.com/public/' + key).then(({data}) => {
-    //   //   // 
-    //   //   console.log('base64 for key ' + key + ': ', data);
-    //   // }).catch((err) => {
-    //   //   console.log('s3 error: ', err);
-    //   // })
-    // });
   }
 
   render() {
+    let l = this.state.photos.length;
+    let rowLength = Math.floor(l / 3);
+    // render grid with 3 columns - split this.state.photos into 3 groups
+    console.log('rowLength: ', rowLength);
+    let a = this.state.photos.slice(0, rowLength);
+    let b = this.state.photos.slice(rowLength, rowLength * 2);
+    let c = this.state.photos.slice(rowLength * 2, this.state.photos.length);
+    console.log('number of pics per row: ', a.length, b.length, c.length);
     return (
       <Grid columns={3}>
-        {this.state.photos.map((photo, i) => {
-          return <Photo key={i} url={photo[0]} timestamp={photo[1]} />
-        })}
+          <Grid.Row>
+            {a.map((photo, i) => {
+              return <Grid.Column>
+                <Card>
+                  <Image src={photo[0]} style={{"transform":"rotate(90deg)"}}/>
+                  <Card.Content>
+                    <Card.Header>{moment(parseInt(photo[1])).format('LLLL')}</Card.Header>
+                  </Card.Content>
+                </Card>
+              </Grid.Column>
+            })}
+          </Grid.Row>
+          <Grid.Row>
+            {b.map((photo, i) => {
+              return <Grid.Column>
+                <Card>
+                  <Image src={photo[0]} style={{"transform":"rotate(90deg)"}}/>
+                  <Card.Content>
+                    <Card.Header>{moment(parseInt(photo[1])).format('LLLL')}</Card.Header>
+                  </Card.Content>
+                </Card>
+              </Grid.Column>
+            })}
+          </Grid.Row>
+          <Grid.Row>
+            {c.map((photo, i) => {
+              return <Grid.Column>
+                <Card
+                  image={photo[0]}
+                  header={moment(parseInt(photo[1])).format('LLLL')}
+                />
+              </Grid.Column>
+            })}
+          </Grid.Row>
       </Grid>
     );
       

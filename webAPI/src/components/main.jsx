@@ -12,6 +12,7 @@ const Main = (props) => (
         <Route exact path="/" render={()=><Home />}/>
         <Route exact path="/about" render={()=><About/>}/>
         <Route exact path="/contact" render={()=><Contact/> }/>
+        <Route exact path="*" render={()=><Home/> }/>
       </Switch>
     </div>
   )

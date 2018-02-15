@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import ChangeUser from '../../actions/example.jsx'
 import { Grid, Image, Button } from 'semantic-ui-react'
-const s3 = require('../../utilities/s3_utilities.js');
+const s3 = require('../../../utilities/s3_utilities.js');
 
 class Roster extends React.Component{
   constructor(props){
