@@ -77,7 +77,7 @@ class Header1 extends React.Component{
 
           <Menu  pointing secondary style={{width:'95%', float:'right'}}>
             <Menu.Item name='Profile' as={Link} to="/"/>
-            <Menu.Item name='Photos' as={Link} to="/signUp"/>
+            <Menu.Item name='Photos' as={Link} to="/Photos"/>
             <Menu.Item name='Analytics' as={Link} to="/Analytics"/>
             <Menu.Item name='Schedule' as={Link} to="/Schedule"/>
             <Menu.Item name='Team' as={Link} to="/Team"/>
@@ -95,6 +95,7 @@ class Header1 extends React.Component{
           <Route exact path='/Settings' component={ClientProfile}/>
           <Route exact path='/Schedule' component={Schedule}/>
           <Route exact path='/Analytics' component={ClientAnalytics}/>
+          <Route exact path='/Photos' component={Photos}/>
         </div>
       //   <div style={{textAlign:'left', backgroundColor: 'rgba(0,0,0, 0.3)'}}>
       //   <ul>
