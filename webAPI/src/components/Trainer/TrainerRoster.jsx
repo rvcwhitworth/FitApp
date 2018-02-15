@@ -29,29 +29,29 @@ class Roster extends React.Component{
     var point = Math.ceil(this.state.roster.length/2)
     var firstHalf = this.state.roster.slice(0, point)
     var secondHalf = this.state.roster.slice(point)
+    return(
+      <Grid columns={2} divided>
 
-      return(
-        
-        <Grid columns={2} divided>
-    <Grid.Column style={{textAlign:'center'}}>
-    {firstHalf.map((val, key) => {
-        return (<Grid.Row style={{padding:'20px'}}>
-          <Button fluid primary onClick={this.selectClient} >{val.client.fullName}</Button>
-          </Grid.Row>
-          )
-      })}
-    </Grid.Column>
+        <Grid.Column style={{textAlign:'center'}}>
+          {firstHalf.map((val, key) => {
+            return (
+            <Grid.Row style={{padding:'2%'}}>
+              <Button fluid primary onClick={this.selectClient} >{val.client.fullName}</Button>
+            </Grid.Row>)
+          })}
+        </Grid.Column>
 
-    <Grid.Column style={{textAlign:'center'}}>
-    {secondHalf.map((val, key) => {
-        return (<Grid.Row style={{padding:'20px'}}>
-          <Button fluid primary onClick={this.selectClient} >{val.client.fullName}</Button>
-          </Grid.Row>
-          )
-      })}
-    </Grid.Column>
-  </Grid>
-        )
+        <Grid.Column style={{textAlign:'center'}}>
+          {secondHalf.map((val, key) => {
+            return (
+            <Grid.Row style={{padding:'2%'}}>
+              <Button fluid primary onClick={this.selectClient} >{val.client.fullName}</Button>
+            </Grid.Row>
+            )
+          })}
+        </Grid.Column>
+      </Grid>
+    )
   }
 }
 
