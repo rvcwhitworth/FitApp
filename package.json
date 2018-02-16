@@ -99,6 +99,7 @@
     "underscore": "^1.8.3",
     "utf7": "^1.0.2",
     "webpack": "^3.10.0",
-    "webpack-dev-middleware": "^2.0.4"
+    "webpack-dev-middleware": "^2.0.4",
+    "xmlbuilder": "^9.0.7"
   }
 }

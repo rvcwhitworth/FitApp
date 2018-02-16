@@ -6,8 +6,8 @@ import c3 from 'c3';
 import SelectedClientProfile from './selectedClientProfile.jsx'
 import { graphql, ApolloProvider, withApollo } from 'react-apollo';
 import { Grid, Menu, Segment, Button, Container } from 'semantic-ui-react'
-import BodyAnalytics from '../client/Graphs/bodyComp.jsx'
-import DietAnalytics from '../client/Graphs/dietAnalytics.jsx'
+import BodyAnalytics from '../Client/Graphs/bodyComp.jsx'
+import DietAnalytics from '../Client/Graphs/dietAnalytics.jsx'
 import ProgressPhotos from './ProgressPhotos.jsx';
 
 class SelectedClient extends React.Component{

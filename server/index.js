@@ -13,7 +13,7 @@ const graphQLSchema = require('../database/graphQLSchema.js');
 const resolvers = require('../database/resolvers.js');
 const graphqlHTTP = require('express-graphql');
 const graphql = require('graphql');
-
+const cors = require('cors')
 
 
 // var firebaseDb = admin.initializeApp({
@@ -28,6 +28,11 @@ app.use('/graphql', graphqlHTTP({
 	graphiql: true,
 	context: collections
 }));
+app.use(cors({
+	allowedOrigins: [
+		'*'
+	]
+}))
 
 // function pushMessge(roomId, message){ //ADD THIS MESSAGE TO THIS ROOM
 //     database.ref('/rooms/' + roomId + '/messages').push(message)
