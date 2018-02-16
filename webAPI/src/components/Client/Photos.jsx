@@ -41,7 +41,7 @@ class Photos extends React.Component{
       <Grid columns={3}>
           <Grid.Row>
             {a.map((photo, i) => {
-              return <Grid.Column>
+              return <Grid.Column style={{"borderWidth": "2px", "borderColor": "green"}}>
                 <Card>
                   <Image src={photo[0]} style={{"transform":"rotate(90deg)"}}/>
                   <Card.Content>
