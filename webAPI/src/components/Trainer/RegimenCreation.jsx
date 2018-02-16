@@ -11,7 +11,7 @@ class Regimen extends React.Component{
   constructor(props){
       super(props)
       this.state = {
-        exercisePlans: this.props.exercisePlans,
+        exercisePlans: this.cleanPlans(),
         id : this.props.id || null,
         username : this.props.user || null,
         monday: this.props.monday || [null],
@@ -27,6 +27,17 @@ class Regimen extends React.Component{
       this.handleMoving = this.handleMoving.bind(this)
       this.nameChange = this.nameChange.bind(this)
       this.descriptionChange = this.descriptionChange.bind(this)
+      this.cleanPlans = this.cleanPlans.bind(this)
+  }
+
+    cleanPlans(){
+    var clean = []
+    this.props.exercisePlans.map((val) => {
+      if(val.client.id === val.trainer.id){
+        clean.push(val)
+      }
+    })
+    return clean
   }
 
   handleMoving (el, target, old) {
@@ -133,6 +144,7 @@ class Regimen extends React.Component{
   		<div>
   		<div>
   		<div className='container' >
+      <Button onClick={()=>this.props.cancel()} style={{fontFamily: 'Sans-Serif', float:'right', backgroundColor:'#FFD166'}}><h3 style={{color:'white', float:'right'}}>Cancel</h3></Button>
       <Button primary onClick={()=>this.props.save(this.state)} style={{fontFamily: 'Sans-Serif', float:'right'}}><h3 style={{color:'white', float:'right'}}>Save!</h3></Button>
       <Input onChange={this.nameChange} value={this.state.RegimenName} style={{float:'right'}} focus placeholder='Name this Regimen!' />
       <Input onChange={this.descriptionChange} value={this.state.RegimenDescription} style={{float:'right'}} focus placeholder='Describe this Regimen!' />
