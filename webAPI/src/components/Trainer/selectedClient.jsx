@@ -70,12 +70,12 @@ class SelectedClient extends React.Component{
       <Grid>
         <Grid.Column width={3}>
           <Menu fluid vertical tabular>
-      <Menu.Item active={this.state.selected === 'Profile'} onClick={this.select} value='Profile' name="Profile" />
-      <Menu.Item active={this.state.selected === 'Body Analytics'} onClick={this.select} value='BodyAnalytics' name='Body Analytics' />
-      <Menu.Item active={this.state.selected === 'Diet Analytics'} onClick={this.select} value='DietAnalytics' name='Diet Analytics' />
-      <Menu.Item active={this.state.selected === 'Workouts'} onClick={this.select} value='Workouts' name='Workouts' />
-      <Menu.Item active={this.state.selected === 'progressPhotos'} onClick={this.select} value='Progress Pics' name='progressPhotos' />
-                </Menu>
+            <Menu.Item active={this.state.selected === 'Profile'} onClick={this.select} value='Profile' name="Profile" />
+            <Menu.Item active={this.state.selected === 'Body Analytics'} onClick={this.select} value='BodyAnalytics' name='Body Analytics' />
+            <Menu.Item active={this.state.selected === 'Diet Analytics'} onClick={this.select} value='DietAnalytics' name='Diet Analytics' />
+            <Menu.Item active={this.state.selected === 'Workouts'} onClick={this.select} value='Workouts' name='Workouts' />
+            <Menu.Item active={this.state.selected === 'progressPhotos'} onClick={this.select} value='Progress Pics' name='progressPhotos' />
+          </Menu>
         </Grid.Column>
         <Grid.Column stretched width={12}>
           <Segment style={{backgroundColor: '#26547C'}}>
