@@ -6,11 +6,20 @@ import ChangeUser from '../../actions/example.jsx'
 import SetBackground from '../../actions/backgroundImage.jsx'
 import SetProfile from '../../actions/profileImage.jsx'
 import axios from 'axios'
+import { Dropdown, Grid, Item, Image, Menu, Segment, Form,Icon, Button, Header, Modal } from 'semantic-ui-react'
+
 class TrainerProfile extends React.Component{
   constructor(props){
       super(props)
       this.state = {
-        ...this.props
+        store: this.props.store,
+        brand: this.props.brand
+        // id : this.props.id || null,
+        // username : this.props.user || null,
+        // goals : this.props.goals || null,
+        // backgroundImage: this.props.backgroundImage,
+        // ProfileImage: 'https://my.webinarninja.com/images/avatar-default.png',
+        // editing: false
       }
       this.handleBackground = this.handleBackground.bind(this)
       this.handleProfile = this.handleProfile.bind(this)
@@ -89,27 +98,48 @@ class TrainerProfile extends React.Component{
   }
 
 render() {
-  console.log('gimme dat props', this.props)
-  console.log('gimme dat state', this.state)
-
+  // console.log('gimme dat state', this.state)
       return(
-<div>
-  <div id='test' className='container'>
-  </div>
-  <img src={this.state.backgroundImage} style={{zIndex: -1, width:'100%', height:'100%', position: 'absolute'}} />
-  <div className='container' style={{justifyConetent:'center'}}>
-  <img src={this.state.ProfileImage} style={{maxWidth: 250, maxHeight:250, display: 'block', margin:'0 auto'}} />
-  </div>
-  </div>
+      <Grid columns={2}>
+        <Grid.Column>
+          <Grid.Row>
+            {console.log('Right HERE',this.state.store)}
+            {console.log('Right BRAND',this.state.brand)}
+            <Image src={this.state.brand.profileImg}/>
+            <div> {this.state.store.fullName}</div>
+          </Grid.Row>
+        </Grid.Column>
+        <Grid.Column>
+          <Grid.Row>
+            {console.log('Right HERE',this.state.store)}
+            {console.log('Right BRAND',this.state.brand)}
+            <Image src={this.state.brand.profileImg}/>
+            <div> {this.state.store.fullName}</div>
+          </Grid.Row>
+        </Grid.Column>
+        
+      </Grid>
     )
   }
 }
+{/* <div id='test' className='container'>
+</div>
+<img src={this.state.backgroundImage} style={{zIndex: -1, width:'100%', height:'100%', position: 'absolute'}} />
+<div className='container' style={{justifyConetent:'center'}}>
+  <img src={this.state.ProfileImage} style={{maxWidth: 250, maxHeight:250, display: 'block', margin:'0 auto'}} />
+</div> */}
 
 const mapStoreToProps = (store) => {
   console.log('TrainerProfileStore', store);
-  let temp = store.auth
+  // var stuff = store.auth
   return {
-    ...temp
+     store: store.auth,
+     brand: store.branding
+    // id: store.auth.id,
+    // user: store.auth.fullName,
+    // goals: store.auth.goals,
+    // backgroundImage: store.branding.backgroundImg,
+    // ProfileImage: store.branding.profileImg
   };
 };
 
