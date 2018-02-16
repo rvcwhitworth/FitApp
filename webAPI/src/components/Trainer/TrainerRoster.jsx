@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import ChangeUser from '../../actions/example.jsx'
-import { Grid, Image, Button, Modal, Container } from 'semantic-ui-react'
+import { Grid, Image, Button, Modal, Container, Card, Icon } from 'semantic-ui-react'
 import SelectedClient from './selectedClient.jsx'
 
 const s3 = require('../../../utilities/s3_utilities.js');
@@ -111,20 +111,58 @@ class Roster extends React.Component{
           </Modal.Content>
        </Modal>
         <Grid columns={2} divided>
-    <Grid.Column style={{textAlign:'center'}}>
+    <Grid.Column center={true} style={{textAlign:'center'}}>
     {firstHalf.map((val, key) => {
       console.log('profile url: ', this.grabProfilePic(val.client));
         return (<Grid.Row style={{padding:'20px'}}>
-          <Button fluid primary onClick={() => this.selectClient(val)} >{val[0]}</Button>
+          <Card onClick={this.selectClient}>
+        <Card.Content>
+          <Card.Header>
+          {val[0]}
+          </Card.Header>
+          <Card.Meta>
+            <span className='date'>
+              Athlete
+            </span>
+          </Card.Meta>
+          <Card.Description>
+            Your CLient
+          </Card.Description>
+        </Card.Content>
+        <Card.Content extra>
+          <a>
+       <Icon name='user' />
+          </a>
+        </Card.Content>
+      </Card>
           </Grid.Row>
           )
       })}
     </Grid.Column>
 
-    <Grid.Column style={{textAlign:'center'}}>
+    <Grid.Column center={true} style={{textAlign:'center'}}>
     {secondHalf.map((val, key) => {
         return (<Grid.Row style={{padding:'20px'}}>
-          <Button fluid primary onClick={() => this.selectClient(val)} >{val[0]}</Button>
+          <Card onClick={this.selectClient}>
+        <Card.Content>
+          <Card.Header>
+          {val[0]}
+          </Card.Header>
+          <Card.Meta>
+            <span className='date'>
+              Athlete
+            </span>
+          </Card.Meta>
+          <Card.Description>
+            Your CLient
+          </Card.Description>
+        </Card.Content>
+        <Card.Content extra>
+          <a>
+       <Icon name='user' />
+          </a>
+        </Card.Content>
+      </Card>
           </Grid.Row>
           )
       })}

@@ -52,6 +52,12 @@ class SelectedClient extends React.Component{
             Workouts
             </Container>
             )
+        } else if(this.state.selected === 'Progress Photos'){
+          return(
+            <Container>
+            Progress Photos here @ Ethan
+            </Container>
+            )
         }
   }
 
@@ -65,6 +71,7 @@ class SelectedClient extends React.Component{
       <Menu.Item active={this.state.selected === 'Body Analytics'} onClick={this.select} value='BodyAnalytics' name='Body Analytics' />
       <Menu.Item active={this.state.selected === 'Diet Analytics'} onClick={this.select} value='DietAnalytics' name='Diet Analytics' />
       <Menu.Item active={this.state.selected === 'Workouts'} onClick={this.select} value='Workouts' name='Workouts' />
+      <Menu.Item active={this.state.selected === 'Progress Photos'} onClick={this.select} value='Progress Photos' name='Progress Photos' />
                 </Menu>
         </Grid.Column>
         <Grid.Column stretched width={12}>
