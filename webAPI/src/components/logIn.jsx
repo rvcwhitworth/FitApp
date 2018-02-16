@@ -191,6 +191,8 @@ class LogIn extends React.Component{
       } else {
         var Exercise_Plan = data.loginUser.Exercise_Plan.map((val, key) => {
           temp = Object.assign({}, val)
+          console.log('TEMP IS: ', temp);
+          console.log('the parsed regimen is: ', JSON.parse(val.regimen));
           temp.regimen = JSON.parse(val.regimen)
           return temp
         })
