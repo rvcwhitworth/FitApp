@@ -7,6 +7,7 @@ import { Grid, Image, Button, Modal, Container, Card, Icon } from 'semantic-ui-r
 import SelectedClient from './selectedClient.jsx'
 
 const s3 = require('../../../utilities/s3_utilities.js');
+const _ = require('underscore');
 
 class Roster extends React.Component{
   constructor(props){
@@ -18,11 +19,15 @@ class Roster extends React.Component{
         backgroundImage: this.props.backgroundImage,
         roster: this.cleanRoster(),
         selectedClient: '',
+        selectedClientURL: '',
+        selectedClientProgressPhotos: [],
         viewingClient: false
       }
       this.cleanRoster = this.cleanRoster.bind(this)
       this.selectClient = this.selectClient.bind(this)
       this.cancel = this.cancel.bind(this)
+      this.grabProfilePic = this.grabProfilePic.bind(this);
+      this.grabPhotos = this.grabPhotos.bind(this);
   }
 
     cleanRoster(){
@@ -31,13 +36,13 @@ class Roster extends React.Component{
     this.props.roster.map((val) => {
       if(val.trainer.id !== this.props.id){
         if(check.indexOf(val.trainer.fullName) === -1){
-          arr.push([val.trainer.fullName, val.trainer.id])
+          arr.push([val.trainer.fullName, val.trainer.id, val.trainer.profile_data])
           check.push(val.trainer.fullName)
         }
       }
       if(val.client.id !== this.props.id){
         if(check.indexOf(val.client.fullName) === -1){
-          arr.push([val.client.fullName, val.client.id])
+          arr.push([val.client.fullName, val.client.id, val.client.profile_data])
           check.push(val.client.fullName)
         }
       }      
@@ -46,12 +51,17 @@ class Roster extends React.Component{
   }
 
   selectClient(val){
-    console.log(val)
-    this.setState({
-      viewingClient: true,
-      selectedClient: val[0]
-    })
-  }
+    this.grabPhotos(val[1]).then((list) => {
+      this.setState({
+        viewingClient: true,
+        selectedClient: val[0],
+        selectedClientURL: this.grabProfilePic(JSON.parse(val[2])),
+        selectedClientProgressPhotos: list,
+      }, () => {
+      // console.log('the selected clients list of pics is: ', this.state.selectedClientProgressPhotos);
+      });
+    });
+  } 
 
   cancel(){
     this.setState({
@@ -61,21 +71,21 @@ class Roster extends React.Component{
   }
 
   grabProfilePic(client) {
-    if ( client.profile_data && JSON.parse(client.profile_data).profilePictureURL ) {
-      return JSON.parse(client.profile_data).profilePictureURL;
+    if ( client.profilePictureURL ) {
+      return client.profilePictureURL;
     } else {
-      return undefined;
+      return "";
     }
   }
 
-  grabPhotos(client) {
+  grabPhotos(id) {
     let fixedList = [];
 
-    s3.getPhotosList(client.id).then((list) => {
+    return s3.getPhotosList(id).then((list) => {
       console.log('list: ', list);
       let l = _.pluck(list, 'key');
       console.log('l is: ', l);
-      l.splice(l.indexOf(client.id+'/'), 1);
+      l.splice(l.indexOf(id+'/'), 1);
       console.log('now l is: ', l);
       l.forEach(url => {
         // get rid of the id/ at beginning of string
@@ -94,7 +104,10 @@ class Roster extends React.Component{
       });
     }).then(() => {
       // do something with fixedList to display current client's progress photos
-      // this.setState({})
+      return fixedList;
+    }).catch((err) => {
+      console.log('s3 error: ', err);
+      return [];
     })
   }
 
@@ -107,13 +120,12 @@ class Roster extends React.Component{
         <Modal open={this.state.viewingClient} style={{height:'100%'}}>
           <Modal.Header></Modal.Header>
           <Modal.Content>
-          <SelectedClient selected={this.state.selectedClient} cancel={this.cancel}/>
+          <SelectedClient selected={this.state.selectedClient} cancel={this.cancel} profilePictureURL={this.state.selectedClientURL} progressPics={this.state.selectedClientProgressPhotos} />
           </Modal.Content>
        </Modal>
         <Grid columns={2} divided>
     <Grid.Column center={true} style={{textAlign:'center'}}>
     {firstHalf.map((val, key) => {
-      console.log('profile url: ', this.grabProfilePic(val.client));
         return (<Grid.Row style={{padding:'20px'}}>
           <Card onClick={this.selectClient}>
         <Card.Content>
