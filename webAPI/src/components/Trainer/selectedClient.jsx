@@ -33,7 +33,7 @@ class SelectedClient extends React.Component{
     if(this.state.selected === 'Profile'){
         return(
           <Container style={{display:'inline-block'}}>
-            <SelectedClientProfile />
+            <SelectedClientProfile proPic={this.props.profilePictureURL} />
           </Container>
         )
         }else if(this.state.selected === 'Body Analytics'){
@@ -57,7 +57,7 @@ class SelectedClient extends React.Component{
         } else if ( this.state.selected === 'progressPhotos') {
           return (
             <Container style={{display:'inline-block', maxHeight: "500px", overflow: "scroll", alignContent: "center"}}>
-              <h2 style={{textAlign: "center"}}>{this.props.selected}'s Progress</h2>
+              <h2 style={{textAlign: "center", color:'white'}}>{this.props.selected}'s Progress Photos!</h2>
               <ProgressPhotos pictures={this.props.progressPics} />
             </Container>
           )
@@ -78,7 +78,7 @@ class SelectedClient extends React.Component{
                 </Menu>
         </Grid.Column>
         <Grid.Column stretched width={12}>
-          <Segment>
+          <Segment style={{backgroundColor: '#26547C'}}>
            {this.renderSelected()}
           </Segment>
           <Button style={{backgroundColor:'#FFD166', bottom:'0'}}fluid onClick={this.props.cancel} >Back</Button>

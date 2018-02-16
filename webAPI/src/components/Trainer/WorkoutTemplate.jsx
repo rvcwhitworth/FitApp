@@ -108,7 +108,7 @@ class Template extends React.Component{
         client_id: this.state.id
       }
     }).then((...args) => console.log('hey it worked', ...args))
-
+    obj.regimen = { description : this.state.templateDescription }
     this.props.save(obj)
   }
 

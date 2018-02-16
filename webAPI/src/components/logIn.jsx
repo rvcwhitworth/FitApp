@@ -179,7 +179,6 @@ class LogIn extends React.Component{
       password: this.state.TrainerPassword
     }
   }
-  console.log('whats values', values)
     this.props.client.query({
       query: q,
       variables: {
@@ -190,21 +189,15 @@ class LogIn extends React.Component{
       if (!data.loginUser) {
         alert('Invalid username or password!', 'Please try again.');
       } else {
-        console.log('whats this dumb thing', data.loginUser)
         var Exercise_Plan = data.loginUser.Exercise_Plan.map((val, key) => {
           temp = Object.assign({}, val)
           temp.regimen = JSON.parse(val.regimen)
           return temp
         })
-        console.log('whats this dumb thing', Exercise_Plan)
         // get list of photo keys
-        console.log('id: ', data.loginUser.id);
         s3.getPhotosList(data.loginUser.id).then((list) => {
-          console.log('list: ', list);
           let l = _.pluck(list, 'key');
-          console.log('l is: ', l);
           l.splice(l.indexOf(data.loginUser.id+'/'), 1);
-          console.log('now l is: ', l);
           let fixedList = [];
           l.forEach(url => {
             // get rid of the id/ at beginning of string
