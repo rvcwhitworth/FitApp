@@ -112,7 +112,7 @@ class TeamScreen extends React.Component {
             return (
             <View key={trainer.id} style={styles.spotterItem}>
               {this.state.photos[trainer.id] ? 
-                (<Image source={{ uri: `data:image/jpg;base64,${this.state.photos[trainer.id]}` }} style={styles.circle}/>) :
+                (<Image source={{ uri: JSON.parse(trainer.profile_data).profilePictureURL }} style={styles.circle}/>) :
                 (<Image source={require('../../images/muscle.gif')} style={styles.circle}/>)}
               <View style={{flex : 1, marginLeft: 5}}>
                 <Text>Username: <Text style={{fontWeight: 'bold'}}>{trainer.username}</Text></Text>
@@ -141,7 +141,7 @@ class TeamScreen extends React.Component {
               return (
                 <View key={user.id} style={{alignContent: 'center', justifyContent: 'space-around', alignContent: 'center', flexDirection: 'row', width: width  * (2/3), margin: 10}}>
                   {this.state.photos[user.id] ? 
-                    (<Image source={{ uri: `data:image/jpg;base64,${this.state.photos[user.id]}` }} style={styles.circle}/>) :
+                    (<Image source={{ uri: JSON.parse(user.profile_data).profilePictureURL }} style={styles.circle}/>) :
                     (<Image source={require('../../images/muscle.gif')} style={styles.circle}/>)}
                   <View style={{flex : 1, marginLeft: 5}}>
                     <Text>Username: <Text style={{fontWeight: 'bold'}}>{user.username}</Text></Text>

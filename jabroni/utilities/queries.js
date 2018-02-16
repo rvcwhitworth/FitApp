@@ -62,6 +62,5 @@ module.exports = {
 	spotterQuery,
 	addSpotter,
 	getDietPlans,
-	spotterQuery,
 	searchQuery
 }

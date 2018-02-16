@@ -17,9 +17,14 @@ import Chat from '../utilities/chatIcon'
 import FooterNav from './FooterNav.js'
 import SVG from '../SVG/svg5Left.js'
 import firebase from '../utilities/firebase.js'
+import _ from 'underscore';
+import moment from 'moment';
+import SingleWorkoutInput from './SingleWorkoutInput.js';
 
 const database = firebase.database();
 const { width, height } = Dimensions.get('window');
+const days = ['sunday', 'monday', 'tuesday','wednesday','thursday','friday','saturday'];
+const unwantedFields = ['name', 'description', 'photo'];
 
 class WorkoutScreen extends React.Component {
   constructor(props) {
@@ -27,7 +32,7 @@ class WorkoutScreen extends React.Component {
 
     this.state = {
       color: 'white',
-      selectedDay: new Date().getDay(),
+      selectedDay: days[moment().day()],
       workoutData: {},
       loading: true,
       trainer: ''
@@ -52,7 +57,16 @@ class WorkoutScreen extends React.Component {
       })
       .then(({data}) => {
         // console.log('DATA IN DID MOUNT', data)
-        this.setState({data, loading: false}, ()=>{
+
+        // pull regimen and daily workout from workout plan
+        let regimen = JSON.parse(data.getExercisePlans.slice().pop().regimen).regimen;
+        let dailyWorkout = regimen[this.state.selectedDay];
+
+        if (!dailyWorkout.includes(null)) {
+          this.setupWorkoutData(dailyWorkout); 
+        }
+        console.log('dailyWorkout', dailyWorkout)
+        this.setState({data, regimen, dailyWorkout}, ()=>{
 
           this.props.client.query({
             query: getSpotters,
@@ -61,7 +75,11 @@ class WorkoutScreen extends React.Component {
             }
           })
           .then(({data}) => {
-            this.setState({trainer: data.getSpotters[0].trainer.id})
+            this.setState({
+              trainer: data.getSpotters[0].trainer.id,
+              loading: false,
+              displaySet: true
+            })
             // this.setState({data, loading: false})
           })
 
@@ -82,15 +100,17 @@ class WorkoutScreen extends React.Component {
   }
 
   setupWorkoutData (workout) {
-    // console.log('HERE WITH', workout);
     var workoutData = {};
-    Object.keys(workout).forEach((workoutType) => {
-      workoutData[workoutType] = {
-        weight: '',
-        frequency: ''
-      };
+    console.log('HERE WITH', workout)
+    Object.keys(workout[0].regimen).forEach((workoutType) => {
+      if (!unwantedFields.includes(workoutType)) {
+        workoutData[workoutType] = {
+          weight: {},
+          frequency: {}
+        };
+      }
     });
-    this.setState({workoutData})
+    this.setState({workoutData, displaySet: true})
   }
 
   handleWorkoutSubmission () {
@@ -117,13 +137,17 @@ class WorkoutScreen extends React.Component {
   updateWorkoutDisplay (workoutType) {
     this.setState((prevState) => {
       prevState[workoutType] = !prevState[workoutType];
+      if (prevState.loading) {
+        prevState.loading = !prevState.loading;
+      }
       return prevState;
     })
   }
 
   handleSelectChange (selectedDay) {
+    console.log('SELECTED DAY AND REGIMEN', selectedDay, this.state.regimen);
     this.setState({selectedDay, dailyWorkout: this.state.regimen[selectedDay], workoutData: {}}, 
-    () => { if (this.state.dailyWorkout !== 'OFF') this.setupWorkoutData(this.state.dailyWorkout)});
+    () => { console.log('THIS IS THE NEW DAILYWORKOUT', this.state.dailyWorkout);if (!this.state.dailyWorkout.includes(null)) this.setupWorkoutData(this.state.dailyWorkout)});
   }
 
   render() {
@@ -133,18 +157,8 @@ class WorkoutScreen extends React.Component {
         <View style={{flex: 1}}>
           <SVG />
         </View>
+        <Text>Loading workout data</Text>
       </Animated.View>)
-    }
-
-    const { getExercisePlans } = this.state.data;
-    // console.log('l123 GOT HERE WITH', getExercisePlans)
-    if (getExercisePlans && !this.state.dailyWorkout && !this.state.displaySet) {
-      this.state.regimen = JSON.parse(getExercisePlans.slice().pop().regimen);
-      this.state.dailyWorkout = this.state.regimen[this.state.selectedDay];
-      if (this.state.dailyWorkout !== "OFF") {
-        this.setupWorkoutData(this.state.dailyWorkout); 
-      }
-      this.state.displaySet = true;
     }
 
     return (
@@ -163,37 +177,32 @@ class WorkoutScreen extends React.Component {
             onValueChange={this.handleSelectChange}
             itemStyle={{textAlign: 'center'}}
             style={{width: 150}}
+            key={'dayPicker'}
           >
-            <Picker.Item label="Sunday" value={0} />
-            <Picker.Item label="Monday" value={1} />
-            <Picker.Item label="Tuesday" value={2} />
-            <Picker.Item label="Wednesday" value={3} />
-            <Picker.Item label="Thursday" value={4} />
-            <Picker.Item label="Friday" value={5} />
-            <Picker.Item label="Saturday" value={6} />
+            <Picker.Item label="Sunday" value={'sunday'} />
+            <Picker.Item label="Monday" value={'monday'} />
+            <Picker.Item label="Tuesday" value={'tuesday'} />
+            <Picker.Item label="Wednesday" value={'wednesday'} />
+            <Picker.Item label="Thursday" value={'thursday'} />
+            <Picker.Item label="Friday" value={'friday'} />
+            <Picker.Item label="Saturday" value={'saturday'} />
           </Picker>
 
-          {this.state.dailyWorkout !== "OFF" ? Object.keys(this.state.dailyWorkout).map((workoutType, i) => {
+
+          {!this.state.dailyWorkout.includes(null) && <Text style={{fontSize: 24, textAlign: 'center'}}>{this.state.dailyWorkout[0].regimen.name}</Text>}
+          {!this.state.dailyWorkout.includes(null) ? Object.keys(this.state.dailyWorkout[0].regimen).map((workoutType, i) => {
+            if (unwantedFields.includes(workoutType)) return null;
+            workout= this.state.dailyWorkout[0].regimen[workoutType]
             return (
-              <View style={{flex: 1, marginBottom: 5}} key={i}>
-                <Text style={{fontSize: 20, textAlign: 'center'}}>
-                  {workoutType + ": " + this.state.dailyWorkout[workoutType].frequency}
-                </Text>
-                <View style={{flex: 1, flexDirection: 'row', alignContent: 'center', justifyContent: 'space-between'}}>
-                  <TextInput 
-                    placeholder={'Weight'}
-                    value={this.state.workoutData[workoutType] ? this.state.workoutData[workoutType].weight : ''}
-                    onChangeText={((weight) => this.handleInputChange(weight, workoutType, 'weight'))}
-                    style={{height: 50, width: 100}}
-                  />
-                  <TextInput
-                    placeholder={'Sets X Reps'}
-                    value={this.state.workoutData[workoutType] ? this.state.workoutData[workoutType].frequency : ''}
-                    onChangeText={((frequency) => this.handleInputChange(frequency, workoutType, 'frequency'))}
-                    style={{height: 50, width: 100}}
-                  />
-                </View>
-              </View>
+             <SingleWorkoutInput
+                workoutType={workoutType}
+                workoutName={workoutType === '' ? 'Unnamed' : workoutType}
+                reps={Object.values(_.pick(workout, (value, key) => key.includes('Reps')))}
+                weights={Object.values(_.pick(workout, (value, key) => key.includes('Weight')))}
+                selectedSet={0}
+                handleInputChange={this.handleInputChange}
+                key={workoutType + 'InputView'}
+              />
             );
           }) : 
             <Text 
@@ -203,7 +212,7 @@ class WorkoutScreen extends React.Component {
             </Text>}
           
 
-          {this.state.dailyWorkout !== "OFF" &&  
+          {!this.state.dailyWorkout.includes(null) &&  
             <Button
               title={'Submit Workout'}
               onPress={this.handleWorkoutSubmission}

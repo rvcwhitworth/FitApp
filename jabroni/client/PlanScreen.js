@@ -7,9 +7,13 @@ import gql from 'graphql-tag';
 import ProgressCircle from '../utilities/progressCircle'
 import FooterNav from './FooterNav.js'
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import moment from 'moment';
+import _ from 'underscore';
 
 const { width, height } = Dimensions.get('window');
 const today = new Date();
+const days = ['sunday', 'monday', 'tuesday','wednesday','thursday','friday','saturday'];
+const unwantedFields = ['name', 'description', 'photo'];
 
 class PlanScreen extends React.Component {
   constructor(props) {
@@ -18,8 +22,8 @@ class PlanScreen extends React.Component {
     this.state = {
       progress: 0,
       loading: true,
-      selectedDay: today.getDay(),
-      selected: today.toISOString().split('T')[0],
+      selectedDay: days[moment().day()],
+      selected: moment().toISOString().split('T')[0],
       data: {},
       items: {}
     }
@@ -54,11 +58,13 @@ class PlanScreen extends React.Component {
           id: this.state.user.id
         }
       })
-      .then(({data}) => {     
-        this.setState(prevState => {
-          prevState.data.dietData = JSON.parse(data.getDietPlans[data.getDietPlans.length - 1].diet);
-          return prevState;
-        }, () => Promise.resolve())
+      .then(({data}) => {
+        return new Promise((resolve) => {
+          this.setState(prevState => {
+            prevState.data.dietData = JSON.parse(data.getDietPlans[data.getDietPlans.length - 1].diet);
+            return prevState;
+          }, resolve)
+        })
       })
       .catch((err) => console.err('Error retrieving dietQuery', err)),
       this.props.client.query({
@@ -67,12 +73,16 @@ class PlanScreen extends React.Component {
           id: this.state.user.id
         }
       })
-      .then(({data}) => {     
-        this.setState(prevState => {
-          prevState.data.workoutData = JSON.parse(data.getExercisePlans[data.getExercisePlans.length - 1].regimen);
-          prevState.loading = false;
-          return prevState;
-        }, () => Promise.resolve())
+      .then(({data}) => {        
+        return new Promise((resolve) => {
+          this.setState(prevState => {
+            prevState.data.workoutData = JSON.parse(data.getExercisePlans.slice().pop().regimen).regimen;
+
+            console.log('WORKOUT DATA IS NOW', prevState.data.workoutData);
+            prevState.loading = false;
+            return prevState;
+          }, resolve)
+        })
       }).catch((err) => console.err('Error retrieving workoutQuery', err))
     ]).catch((err) => console.error('Error resolving both promises!', err))
     })
@@ -98,10 +108,9 @@ class PlanScreen extends React.Component {
   }
 
   onDayPress(day) {
-    console.log(day)
     this.setState({
       selected: day.dateString,
-      selectedDay: new Date(day.dateString).getDay()
+      selectedDay: days[moment(day.dateString, 'YYYY-MM-DD').day()]
     });
   }
 
@@ -140,18 +149,18 @@ class PlanScreen extends React.Component {
       <View style={styles.item}>
         <Text>Workout: {JSON.stringify(workout)}</Text>
         <Text>Diet: {JSON.stringify(diet)}</Text>
-    <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>
-    <View style={styles.container}>
-      <Text>
-        Your diet:
-        {/* {data.getDietPlans[data.getDietPlans.length-1].diet} */}
-        Your trainer:
-        {/* {data.getDietPlans[data.getDietPlans.length-1].trainer.fullName} */}
-      </Text>
-      <Button onPress={this.submit} title="submit" />
-      <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
-      </View>
-      </View>
+          <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>
+          <View style={styles.container}>
+            <Text>
+              Your diet:
+              {/* {data.getDietPlans[data.getDietPlans.length-1].diet} */}
+              Your trainer:
+              {/* {data.getDietPlans[data.getDietPlans.length-1].trainer.fullName} */}
+            </Text>
+            <Button onPress={this.submit} title="submit" />
+            <Chat nav={this.props.nav} TopNav={this.props.topNav}/>
+          </View>
+        </View>
       </View>
     );
   }
@@ -171,7 +180,9 @@ class PlanScreen extends React.Component {
       return (<View><Text style={{textAlign: 'center'}}>Loading your data!</Text></View>);
     }
     var selectedWorkout = this.state.data.workoutData[this.state.selectedDay];
-    var selectedDiet = this.state.data.dietData[this.state.selectedDay];
+    var selectedDiet = this.state.data.dietData[moment().day()];
+
+    console.log('SELECTED WORKOUT, SELECTED DIET', selectedWorkout, selectedDiet);
     return (
       <View style={{flexDirection:'column', width:width, height:height, backgroundColor: 'white'}}>
         <View style={{flex: 1}}>
@@ -181,12 +192,15 @@ class PlanScreen extends React.Component {
             hideExtraDays
             markedDates={{[this.state.selected]: {selected: true}}}
           />
-          {console.log('selected!', selectedWorkout, selectedDiet, this.state.selectedDay)}
           <View style={[styles.container, {justifyContent: 'space-around'}]}>
             <Text style={styles.subHeader}>Workout:</Text>
-            {selectedWorkout === "OFF" ? <Text style={{fontSize: 14, textAlign: 'center'}}>Off day!</Text> :
-              Object.keys(selectedWorkout).map((workout, i) => {
-                return <Text style={{fontSize: 14, textAlign: 'center'}} key={workout+i}>{workout + ': ' + selectedWorkout[workout].frequency}</Text>
+
+            {!selectedWorkout.includes(null) && <Text style={{fontSize: 18, textAlign: 'center'}}>{selectedWorkout[0].name}</Text> }
+            {selectedWorkout.includes(null) ? <Text style={{fontSize: 14, textAlign: 'center'}}>Off day!</Text> :
+              Object.keys(selectedWorkout[0].regimen).map((workout, i) => {
+                if (unwantedFields.includes(workout)) return null;
+                let sets = Object.values(_.pick(selectedWorkout[0].regimen[workout], (value, key) => key.includes('Reps'))).length;
+                return <Text style={{fontSize: 14, textAlign: 'center'}} key={workout+i}>{workout + ': ' + sets + ' sets'}</Text>
               })}
             <Text style={styles.subHeader}>Diet:</Text>
               {Object.keys(selectedDiet).map((diet, i) => {
