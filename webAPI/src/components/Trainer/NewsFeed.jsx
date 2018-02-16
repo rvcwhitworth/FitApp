@@ -23,9 +23,14 @@ class NewsFeed extends React.Component{
   }
 
   componentDidMount(){
-    console.log('heeloo')
-    database.ref('UserData/' + 4).on("value", (snapshot)=>{
-      this.setState({update: Object.values(snapshot.val()) })
+    console.log('heeloo', this.state.id)
+    database.ref('UserData/' + this.state.id).on("value", (snapshot)=>{
+      console.log('the snapshot is: ', snapshot);
+      if ( !snapshot.val() ) {
+        console.log('no data to display!');
+      } else {
+        this.setState({update: Object.values(snapshot.val()) })
+      }
       // console.log('UserData',snapshot.val())
       // this.setState({message: [...this.state.message, snapshot.val()]})
     }, 
@@ -123,7 +128,7 @@ class NewsFeed extends React.Component{
 const mapStoreToProps = (store) => {
   console.log('store', store);
   return {
-    id: store.auth.auth,
+    id: store.auth.id,
     user: store.auth.user,
     goals: store.auth.goals,
     backgroundImage: store.branding.backgroundImg

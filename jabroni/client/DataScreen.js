@@ -34,7 +34,7 @@ export default class DataOverviewScreen extends React.Component {
     <View style={styles.container}>
     <SVG />
     <View style={{flex: 5.5, backgroundColor: '#FFFCFA',}}>
-    <View>
+    <View zIndex={-2}>
     <Header
       centerComponent={{ text: 'Your Body Balance', style: { color: '#fff', fontSize: 20 } }}
       backgroundColor={'#26547C'}
@@ -48,7 +48,7 @@ export default class DataOverviewScreen extends React.Component {
             data={testData} />
     </View>
                 </View>
-    <List containerStyle={{flex: 5.7, backgroundColor: '#FFFCFA', marginBottom: -20, zIndex:-1}}>
+    <List containerStyle={{flex: 5.7, backgroundColor: '#FFFCFA', marginBottom: -20, zIndex:0}}>
     {testData[this.state.index]['Foods'].map((val, i) =>{
     	return(
       <Card
