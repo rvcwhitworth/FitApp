@@ -6,7 +6,7 @@ import {
   TextInput,
   Dimensions,
 } from 'react-native';
-import ModalPicker from 'react-native-modal-picker';
+// import ModalPicker from 'react-native-modal-picker';
 
 export default class SingleWorkoutInput extends React.Component {
   constructor (props) {

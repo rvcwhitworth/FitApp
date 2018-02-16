@@ -20,7 +20,7 @@ import firebase from '../utilities/firebase.js'
 import _ from 'underscore';
 import moment from 'moment';
 import SingleWorkoutInput from './SingleWorkoutInput.js';
-import ModalPicker from 'react-native-modal-picker';
+// import ModalPicker from 'react-native-modal-picker';
 
 const database = firebase.database();
 const { width, height } = Dimensions.get('window');
