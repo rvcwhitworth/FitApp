@@ -18,10 +18,12 @@ import FooterNav from './FooterNav.js'
 import SVG from '../SVG/svg5Left.js'
 import firebase from '../utilities/firebase.js'
 import _ from 'underscore';
+import moment from 'moment';
+import SingleWorkoutInput from './SingleWorkoutInput.js';
 
 const database = firebase.database();
 const { width, height } = Dimensions.get('window');
-const days = ['sunday','tuesday','wednesday','thursday','friday','saturday'];
+const days = ['sunday', 'monday', 'tuesday','wednesday','thursday','friday','saturday'];
 const unwantedFields = ['name', 'description', 'photo'];
 
 class WorkoutScreen extends React.Component {
@@ -30,7 +32,7 @@ class WorkoutScreen extends React.Component {
 
     this.state = {
       color: 'white',
-      selectedDay: days[new Date().getDay()],
+      selectedDay: days[moment().day()],
       workoutData: {},
       loading: true,
       trainer: ''
@@ -190,42 +192,17 @@ class WorkoutScreen extends React.Component {
           {!this.state.dailyWorkout.includes(null) && <Text style={{fontSize: 24, textAlign: 'center'}}>{this.state.dailyWorkout[0].regimen.name}</Text>}
           {!this.state.dailyWorkout.includes(null) ? Object.keys(this.state.dailyWorkout[0].regimen).map((workoutType, i) => {
             if (unwantedFields.includes(workoutType)) return null;
-
-            let workoutName = workoutType === '' ? 'Unnamed' : workoutType;
-            let workout = this.state.dailyWorkout[0].regimen[workoutType];
-            let reps = Object.values(_.pick(workout, (value, key) => key.includes('Reps')));
-            let weights = Object.values(_.pick(workout, (value, key) => key.includes('Weight')));
-            let selectedSet = 0;
-            const changeSelected = (newSet) => selectedSet = newSet;
-
+            workout= this.state.dailyWorkout[0].regimen[workoutType]
             return (
-              <View style={{flex: 1, marginBottom: 5}} key={workoutName + 'View'}>
-                <Text style={{fontSize: 20, textAlign: 'center'}}>
-                  {workoutName}
-                </Text>
-                <View style={{flex: 1, flexDirection: 'row', alignContent: 'flex-start', justifyContent: 'space-between'}}>
-                  <Picker
-                    selectedValue={selectedSet}
-                    onValueChange={changeSelected}
-                    key={workoutName + 'Picker'}
-                    style={{width: 60}}
-                  >
-                    {reps.map((rep, i) => <Picker.Item label={'Set ' + (i + 1)} value={i} key={workoutName + i}/>)}
-                  </Picker>
-                  <TextInput 
-                    placeholder={'Target Weight: ' + weights[selectedSet]}
-                    value={this.state.workoutData[workoutType] ? this.state.workoutData[workoutType].weight[selectedSet] : ''}
-                    onChangeText={((weight) => this.handleInputChange(weight, workoutType, 'weight'))}
-                    style={{height: 50, width: 80}}
-                  />
-                  <TextInput
-                    placeholder={'Target Reps: ' + reps[selectedSet]}
-                    value={this.state.workoutData[workoutType] ? this.state.workoutData[workoutType].frequency[selectedSet] : ''}
-                    onChangeText={((frequency) => this.handleInputChange(frequency, workoutType, 'frequency'))}
-                    style={{height: 50, width: 100}}
-                  />
-                </View>
-              </View>
+             <SingleWorkoutInput
+                workoutType={workoutType}
+                workoutName={workoutType === '' ? 'Unnamed' : workoutType}
+                reps={Object.values(_.pick(workout, (value, key) => key.includes('Reps')))}
+                weights={Object.values(_.pick(workout, (value, key) => key.includes('Weight')))}
+                selectedSet={0}
+                handleInputChange={this.handleInputChange}
+                key={workoutType + 'InputView'}
+              />
             );
           }) : 
             <Text 
