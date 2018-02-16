@@ -35,6 +35,7 @@ class WorkoutPlans extends React.Component{
       this.cancelTemplate = this.cancelTemplate.bind(this)
       this.goBack = this.goBack.bind(this)
       this.cleanPlans = this.cleanPlans.bind(this)
+      this.cancelRegimen = this.cancelRegimen.bind(this)
   }
 
   componentDidMount() {
@@ -144,6 +145,12 @@ class WorkoutPlans extends React.Component{
     })
   }
 
+  cancelRegimen(){
+    this.setState({
+      creatingRegimen: false
+    })
+  }
+
   finishedRegimen(obj){
     console.log('what is this regimen', obj)
     this.setState({
@@ -214,7 +221,7 @@ class WorkoutPlans extends React.Component{
         </div>)
     } else if(this.state.creatingRegimen){
       return(
-      <Regimen save={this.finishedRegimen} />)
+      <Regimen save={this.finishedRegimen} cancel={this.cancelRegimen} />)
     }else{
       return(
         <div style={{flexDirection:'Column', height:'100%' }}>
@@ -241,7 +248,7 @@ class WorkoutPlans extends React.Component{
               </Card.Header>
               <Card.Meta>
               <span className='workout'>
-                 {val.type || 'Workout'}
+                 {val.regimen.type || 'Workout'}
               </span>
               </Card.Meta>
               <Card.Description>
