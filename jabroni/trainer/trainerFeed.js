@@ -33,7 +33,7 @@ class TrainerFeed extends React.Component {
     AsyncStorage.getItem('@FitApp:UserInfo')
     .then((userInfoString) => {
       this.setState({trainer: JSON.parse(userInfoString)}, ()=>{
-        database.ref('UserData/' + this.state.trainer.id).on("child_added", (snapshot)=>{
+        database.ref('UserData/' + 4).on("child_added", (snapshot)=>{
           this.state.feed.push(snapshot.val())
           // console.log('STATE FEED',this.state.feed)
         });
@@ -72,7 +72,7 @@ class TrainerFeed extends React.Component {
               return (
                 <Card key={i}
                   avatar={{url: "https://img00.deviantart.net/f161/i/2005/120/e/1/_superman_kal_el__by_quintessentialmorose.jpg"}}
-                  title={ele.user}>
+                  title={'Ethan'}>
                   {
                     <View key={i} style={styles.user}>
                       <Image
@@ -93,7 +93,7 @@ class TrainerFeed extends React.Component {
             }else{
               var keys = Object.keys(ele.workout)
               return(
-                <Card title={ele.user}>
+                <Card title={'Ethan'}>
                   {
                     keys.map((key, idx)=>{
                       return( 
