@@ -21,7 +21,7 @@ class WorkoutPlans extends React.Component{
         username : this.props.user || null,
         creatingTemplate: false,
         backgroundImage: this.props.backgroundImage,
-        plans: this.props.plans,
+        plans: this.cleanPlans(),
         popOut: null,
         show: false,
         sendIT: false
@@ -34,10 +34,21 @@ class WorkoutPlans extends React.Component{
       this.finishedRegimen = this.finishedRegimen.bind(this)
       this.cancelTemplate = this.cancelTemplate.bind(this)
       this.goBack = this.goBack.bind(this)
+      this.cleanPlans = this.cleanPlans.bind(this)
   }
 
   componentDidMount() {
     //here is where we will query??? or should we pull from redux that hopefully loaded everything
+  }
+
+  cleanPlans(){
+    var clean = []
+    this.props.plans.map((val) => {
+      if(val.client.id === val.trainer.id){
+        clean.push(val)
+      }
+    })
+    return clean
   }
 
   createTemplate(e){

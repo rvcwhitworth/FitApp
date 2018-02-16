@@ -51,6 +51,8 @@ class Roster extends React.Component{
   }
 
   selectClient(val){
+    val = val.val
+    console.log(';what is this val???', val)
     this.grabPhotos(val[1]).then((list) => {
       this.setState({
         viewingClient: true,
@@ -71,6 +73,7 @@ class Roster extends React.Component{
   }
 
   grabProfilePic(client) {
+    console.log(client)
     if ( client.profilePictureURL ) {
       return client.profilePictureURL;
     } else {
@@ -127,7 +130,7 @@ class Roster extends React.Component{
     <Grid.Column center={true} style={{textAlign:'center'}}>
     {firstHalf.map((val, key) => {
         return (<Grid.Row style={{padding:'20px'}}>
-          <Card onClick={this.selectClient}>
+          <Card onClick={() =>this.selectClient({val})}>
         <Card.Content>
           <Card.Header>
           {val[0]}
@@ -155,7 +158,7 @@ class Roster extends React.Component{
     <Grid.Column center={true} style={{textAlign:'center'}}>
     {secondHalf.map((val, key) => {
         return (<Grid.Row style={{padding:'20px'}}>
-          <Card onClick={this.selectClient}>
+          <Card onClick={() =>this.selectClient({val})}>
         <Card.Content>
           <Card.Header>
           {val[0]}

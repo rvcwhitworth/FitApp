@@ -103,10 +103,16 @@ render() {
         </Container>
 
         {this.state.roster.map((val, key)=>{
+          if(this.state.selectedUsers.toString().indexOf(val.toString()) > -1){
+            var border = 'solid 5px #06D6A0'
+          } else{
+            var border = 'null'
+          }
           return (
             <Container style={{width: "12rem", height:'15rem', padding:'5px', float:'left', cursor:'pointer'}}>
               <Card
               onClick={() => {this.selectUser(key)}}
+              style={{border: border}}
               >
               {/*<Image src={val.regimen.photo} alt="Card image cap" />*/}
               <Card.Content>

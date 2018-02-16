@@ -50,7 +50,7 @@ class selectedClient extends React.Component{
       <Card>
         <Card.Content>
           <Card.Header>
-          Test Client
+          Ethan
           </Card.Header>
           <Card.Meta>
             <span className='date'>
@@ -67,6 +67,7 @@ class selectedClient extends React.Component{
           </a>
         </Card.Content>
       </Card>
+      <Image circular src={this.props.proPic} size='medium' avatar={true} style={{transform:'rotate(90deg)', float: 'right', right:'-80px', top:'-80px'}} />
       </Container>
       )
   }
