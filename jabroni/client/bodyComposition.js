@@ -3,6 +3,7 @@ import { View, Text, TextInput, StyleSheet, Dimensions } from 'react-native'
 import Chat from '../utilities/chatIcon.js'
 import Graph from './bodyCompGraph.js'
 import FooterNav from './FooterNav.js'
+import { Header, Icon } from 'react-native-elements'
 const { width, height } = Dimensions.get('window');
 import SVG from '../SVG/svg5Bottom.js'
 
@@ -21,8 +22,11 @@ class BodyComposition extends React.Component {
       <View style={styles.container}>
         <SVG />
         <View style={styles.graphContainer}>
+        <Header
+          centerComponent={{ text: 'Your Body Composition', style: { color: '#fff', fontSize: 20 } }}
+          backgroundColor={'#26547C'}
+        />
           <Graph style={styles.graph} />
-          <Chat style={styles.chat} nav={this.props.nav} TopNav={this.props.topNav}/>
         </View>
         <FooterNav nav={this.props.nav} index={2}/>
       </View>
@@ -33,17 +37,21 @@ class BodyComposition extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: '#FFFCFA',
     flexDirection: 'column',
     justifyContent: 'center',
     width:width, 
-    height:height
+    height:height,
+    zIndex: 1
   },
   graphContainer: {
-    flex: 3,
+    flex: 5,
     flexDirection: 'column',
     height: "50%",
     marginBottom: "20%" 
+  },
+  title: {
+    textAlign: 'center'
   },
   chat: {
     marginTop: '20%',

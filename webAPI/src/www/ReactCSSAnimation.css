@@ -5,7 +5,7 @@
 .example-enter.example-enter-active {
   opacity: 1;
   background-color: 'black';
-  transform: scale(2,2) translate(100px, 0%);
+  transform: scale(1.5,1.5) translate(100px, 0%);
   transition-property: transform, opacity;
   transition-duration: 1000ms;
   transition-timing-function: cubic-bezier(0.175, 0.665, 0.320, 1), linear;
@@ -13,7 +13,7 @@
 
 .example-exit {
 	opacity: 1;
-	transform: scale(2,2) translate(100px, 0%);
+	transform: scale(1.5,1.5) translate(100px, 0%);
 }
 .example-exit.example-exit-active {
 	opacity: 0;

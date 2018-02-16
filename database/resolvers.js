@@ -1,7 +1,10 @@
 module.exports = {
 	Query: {
 		loginUser: (parent, { username, password }, db) => {
-			return db.loginUser(username, password);
+			return db.loginUser(username, password).catch((e) =>{
+				console.log('error in login', e);
+				return db.loginUser(username, password)
+			})
 		},
 		getExercisePlans: (parent, { id, type }, db) => {
 			return db.getExercisePlans(id, type);
