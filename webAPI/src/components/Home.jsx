@@ -117,7 +117,7 @@ const Home = function(props){
                         <Image src='https://avatars1.githubusercontent.com/u/30841820?s=400&u=8f1599e9dfdaa4c8e2f71c4afa6540b1e0425283&v=4' centered size='small' avatar/>
                         <div>
                             <h3>Christopher Peter</h3>
-                            <p style={{color: '#868e96', fontSize:'14px'}}>Chris is a Pro and being a Pro and has a lot of Pro experience. He can Console.log to save all your apps and lives.</p>
+                            <p style={{color: '#868e96', fontSize:'14px'}}>Chris is a Pro at being a Pro and has a lot of Pro experience. He can Console.log to save all your apps and lives.</p>
                         </div>
                         
                     </Grid.Column>

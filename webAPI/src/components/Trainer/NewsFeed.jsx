@@ -17,7 +17,7 @@ class NewsFeed extends React.Component{
         id : this.props.id || null,
         username : this.props.user || null,
         goals : this.props.goals || null,
-        backgroundImage: this.props.backgroundImage,
+        // backgroundImage: this.props.backgroundImage,
         update: []
       }
   }
@@ -43,8 +43,9 @@ class NewsFeed extends React.Component{
 
   render() {
     return(
-      <Grid centered columns={1} style={{padding: '3%', height: '100vh', overFlowY: 'auto'}}>
-        <Grid.Column style={{ height: '100vh', overFlowY: 'auto'}} >
+      <div style={{padding: '3%', overFlowY: 'auto', backgroundColor:'white'}} >
+      <Grid centered columns={1} style={{padding: '3%'}}>
+        <Grid.Column style={{ overFlowY: 'auto'}} >
         {this.state.update.map((update)=>{
           console.log('UPDATE', update)
           if(update.diet){
@@ -63,7 +64,7 @@ class NewsFeed extends React.Component{
                 <Feed.Date style={{color: 'rgba(0,0,0,.4)'}}content={update.date}/> 
               </Card.Content>
 
-              <Card.Content>
+              <Card.Content style={{backgroundColor: '#E8E8E8'}}>
                 
                 <Feed>
                   <Feed.Event>
@@ -81,6 +82,7 @@ class NewsFeed extends React.Component{
                 </Feed>
               </Card.Content>
             </Card>
+            
           )
 
           } else{
@@ -94,7 +96,7 @@ class NewsFeed extends React.Component{
                   <Feed.Date style={{color: 'rgba(0,0,0,.4)'}}content={update.date}/> 
                 </Card.Content>
               
-                <Card.Content>
+                <Card.Content style={{backgroundColor: '#E8E8E8'}}>
                 {keys.map((key, i)=>{
                   return(
                     <div >
@@ -121,6 +123,7 @@ class NewsFeed extends React.Component{
         )}
         </Grid.Column>        
       </Grid>
+      </div>
     )
   }
 }
@@ -131,7 +134,7 @@ const mapStoreToProps = (store) => {
     id: store.auth.id,
     user: store.auth.user,
     goals: store.auth.goals,
-    backgroundImage: store.branding.backgroundImg
+    // backgroundImage: store.branding.backgroundImg
   };
 };
 
