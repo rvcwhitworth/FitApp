@@ -108,7 +108,7 @@ const Home = function(props){
                         <Image src='https://media.licdn.com/media/AAMABADuAAgAAQAAAAAAAA-8AAAAJDliNGE2NDlhLWYzYzItNDcyZS1hODQ1LTUxZDU1YWQ5MzAxNg.bin' centered size='small' avatar/>
                         <div>
                             <h3>Ethan Lipkind</h3>
-                            <p style={{color: '#868e96', fontSize:'14px'}}>Ethan has constructed APIs using GraphQL to improve runtime of queries and provide easy access to backend via a single endpoint, He has designed custom components using React Native with Flexbox for layout and AWS S3 buckets for storage. He is a backend wiz using SQL, KNEX, and Bookshelf.js to manage relational user data. 
+                            <p style={{color: '#868e96', fontSize:'14px'}}>Ethan is a FullStack Engineer and has constructed APIs using GraphQL to improve runtime of queries and provide easy access to backend via a single endpoint, He has designed custom components using React Native with Flexbox for layout and AWS S3 buckets for storage. He is a backend wiz using SQL, KNEX, and Bookshelf.js to manage relational user data. 
                             He worked with React Native, Javascript, SQL, GraphQL, Node, Express, AWS. </p>
                             
                         </div>                        
@@ -117,15 +117,23 @@ const Home = function(props){
                         <Image src='https://avatars1.githubusercontent.com/u/30841820?s=400&u=8f1599e9dfdaa4c8e2f71c4afa6540b1e0425283&v=4' centered size='small' avatar/>
                         <div>
                             <h3>Christopher Peter</h3>
+                            <p style={{color: '#868e96', fontSize:'14px'}}>Chris is a Pro and being a Pro and has a lot of Pro experience. He can Console.log to save all your apps and lives.</p>
                         </div>
                         
                     </Grid.Column>
                 </Grid.Row>
+                <Grid.Row centered style={{backgroundColor: '#9d9d9d', height: '20vh', textAlign: 'center'}}>
+
+                        <Grid.Column style={{textAlign: 'center'}}>
+                            <div>
+                                <p style={{fontSize:'14px'}}>Fit Hero ™ - All Content © ® 10,000 B.C Application By Team Aenean in Cooperation with Team Aenean</p>
+                                <a ><Icon name='github' size='small'/>https://github.com/Turba-Aenean/FitApp</a>
+                            </div>
+                            
+                        </Grid.Column>
+                
+                </Grid.Row>
             </Grid>
-            <Grid.Row style={{backgroundColor: '#9d9d9d', height: '20vh'}}>
-               <p> SpoTT - All Content \u00A9 &trade &copy 10,000 B.C Application By Team Aenean in Cooperation with Team Aenean</p>
-               \u00A9
-            </Grid.Row>
                 
                 
 

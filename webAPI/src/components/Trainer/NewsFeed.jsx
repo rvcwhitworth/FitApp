@@ -24,7 +24,7 @@ class NewsFeed extends React.Component{
 
   componentDidMount(){
     console.log('heeloo', this.state.id)
-    database.ref('UserData/' + this.state.id).on("value", (snapshot)=>{
+    database.ref('UserData/' + 4).on("value", (snapshot)=>{
       console.log('the snapshot is: ', snapshot);
       if ( !snapshot.val() ) {
         console.log('no data to display!');
@@ -58,7 +58,7 @@ class NewsFeed extends React.Component{
             <Card centered={true} style={{width: '75%'}}>
               <Card.Content>
                 <Card.Header>
-                  {update.user + ' - Diet' }
+                  {'Ethan' + ' - Diet' }
                 </Card.Header>
                 <Feed.Date style={{color: 'rgba(0,0,0,.4)'}}content={update.date}/> 
               </Card.Content>
@@ -89,7 +89,7 @@ class NewsFeed extends React.Component{
               <Card centered style={{width: '75%'}}>
                 <Card.Content>
                   <Card.Header>
-                  {update.user + ' - WorkOut' }
+                  {'Ethan' + ' - WorkOut' }
                   </Card.Header>
                   <Feed.Date style={{color: 'rgba(0,0,0,.4)'}}content={update.date}/> 
                 </Card.Content>
