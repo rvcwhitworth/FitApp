@@ -116,7 +116,7 @@ class DailyInputs extends React.Component {
           onChangeText={(text) => this.handleInputs(text, 'BodyFatPer')}
           value={this.state.BodyFatPer} />
 
-          <Button style={{marginTop: 10}}title="Save your measurments" onPress={this.submitData}/>
+          <Button style={{marginTop: 10}}title="Save your measurements" onPress={this.submitData}/>
 
           <View> 
           <Text style={{margin: 10, height: 50, paddingLeft: 5, paddingTop: 20}}>Body Fat Percentage Calculator</Text>
@@ -132,18 +132,18 @@ class DailyInputs extends React.Component {
           value={this.state.height} />
 
           <TextInput style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-          placeholder='Enter Waist Measurment Here (Inches)'
+          placeholder='Enter Waist Measurement Here (Inches)'
           onChangeText={(text) => this.handleInputs(text, 'waist')}
           value={this.state.waist} />
           </View>
 
           <TextInput style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-          placeholder='Enter Hip Measurment Here (Inches)'
+          placeholder='Enter Hip Measurement Here (Inches)'
           onChangeText={(text) => this.handleInputs(text, 'hip')}
           value={this.state.hip} />
 
           <TextInput style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-          placeholder='Enter Neck Measurment Here (Inches)'
+          placeholder='Enter Neck Measurement Here (Inches)'
           onChangeText={(text) => this.handleInputs(text, 'neck')}
           value={this.state.neck} />
 

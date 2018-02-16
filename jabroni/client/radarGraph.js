@@ -36,9 +36,9 @@ class RadarChartBasic extends Component {
       height: 290,
       margin: {
         top: 2,
-        left: 0,
+        left: 2,
         right: 20,
-        bottom: 20
+        bottom: 24
       },
       r: 150,
       max: 100,
