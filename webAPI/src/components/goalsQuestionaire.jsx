@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import axios from 'axios'
-import Question from './question.jsx'
+import Question from './Question.jsx'
 import submitGoals from '../actions/goals.jsx'
 import c3 from 'c3';
 

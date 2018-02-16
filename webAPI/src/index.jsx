@@ -21,8 +21,8 @@ import Header from './components/router.jsx'
 console.log('store import', Store)
 
 const history = syncHistoryWithStore(createBrowserHistory(), Store)
-// const HOST_URI = 'http://ec2-18-219-7-36.us-east-2.compute.amazonaws.com:4000/graphql';
-const HOST_URI = 'http://localhost:8080/graphql';
+const HOST_URI = 'http://ec2-18-219-7-36.us-east-2.compute.amazonaws.com:8080/graphql';
+//const HOST_URI = 'http://localhost:8080/graphql';
 //basically a switch or an if/else
 const client = new ApolloClient({
 	link: new HttpLink({ uri: HOST_URI}),

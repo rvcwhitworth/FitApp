@@ -20,6 +20,7 @@ import firebase from '../utilities/firebase.js'
 import _ from 'underscore';
 import moment from 'moment';
 import SingleWorkoutInput from './SingleWorkoutInput.js';
+import ModalPicker from 'react-native-modal-picker';
 
 const database = firebase.database();
 const { width, height } = Dimensions.get('window');
@@ -56,8 +57,7 @@ class WorkoutScreen extends React.Component {
         }
       })
       .then(({data}) => {
-        // console.log('DATA IN DID MOUNT', data)
-
+        console.log('DATA IN DID MOUNT', data)
         // pull regimen and daily workout from workout plan
         let regimen = JSON.parse(data.getExercisePlans.slice().pop().regimen).regimen;
         let dailyWorkout = regimen[this.state.selectedDay];
@@ -145,7 +145,6 @@ class WorkoutScreen extends React.Component {
   }
 
   handleSelectChange (selectedDay) {
-    console.log('SELECTED DAY AND REGIMEN', selectedDay, this.state.regimen);
     this.setState({selectedDay, dailyWorkout: this.state.regimen[selectedDay], workoutData: {}}, 
     () => { console.log('THIS IS THE NEW DAILYWORKOUT', this.state.dailyWorkout);if (!this.state.dailyWorkout.includes(null)) this.setupWorkoutData(this.state.dailyWorkout)});
   }
@@ -160,6 +159,17 @@ class WorkoutScreen extends React.Component {
         <Text>Loading workout data</Text>
       </Animated.View>)
     }
+
+    const daysForPicker = [
+      { key: 'sunday', label: 'Sunday' },
+      { key: 'monday', label: 'Monday' },
+      { key: 'tuesday', label: 'Tuesday' },
+      { key: 'wednesday', label: 'Wednesday' },
+      { key: 'thursday', label: 'Thursday' },
+      { key: 'friday', label: 'Friday' },
+      { key: 'saturday', label: 'Saturday' }
+    ];
+
 
     return (
       <Animated.View style={[styles.container, { backgroundColor: 'white', flexDirection:'column', width:width, height:height }]}>
@@ -176,7 +186,7 @@ class WorkoutScreen extends React.Component {
             selectedValue={this.state.selectedDay}
             onValueChange={this.handleSelectChange}
             itemStyle={{textAlign: 'center'}}
-            style={{width: 150}}
+            style={{width: 150, height: 50}}
             key={'dayPicker'}
           >
             <Picker.Item label="Sunday" value={'sunday'} />
@@ -188,11 +198,18 @@ class WorkoutScreen extends React.Component {
             <Picker.Item label="Saturday" value={'saturday'} />
           </Picker>
 
+          {/* <ModalPicker 
+            data={daysForPicker}
+            initValue={this.state.selectedDay}
+            onChange={this.handleSelectChange}
+            style={{height:50, width: 150}}
+          /> */}
+
 
           {!this.state.dailyWorkout.includes(null) && <Text style={{fontSize: 24, textAlign: 'center'}}>{this.state.dailyWorkout[0].regimen.name}</Text>}
           {!this.state.dailyWorkout.includes(null) ? Object.keys(this.state.dailyWorkout[0].regimen).map((workoutType, i) => {
             if (unwantedFields.includes(workoutType)) return null;
-            workout= this.state.dailyWorkout[0].regimen[workoutType]
+            workout = this.state.dailyWorkout[0].regimen[workoutType]
             return (
              <SingleWorkoutInput
                 workoutType={workoutType}

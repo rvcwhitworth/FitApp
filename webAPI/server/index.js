@@ -20,7 +20,11 @@ const { graphiqlExpress, graphqlExpress } = require('graphql-server-express');
 // const compiler = webpack(webpackConfig);
  
 app.use(express.static(__dirname + '/www'));
-app.use(cors())
+app.use(cors({
+	allowedOrigins: [
+		'*'
+	]
+}))
 
 
 app.use('/graphql', cors(), graphqlHTTP({
