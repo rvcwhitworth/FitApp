@@ -199,7 +199,9 @@ class LogIn extends React.Component{
         // get list of photo keys
         s3.getPhotosList(data.loginUser.id).then((list) => {
           let l = _.pluck(list, 'key');
-          l.splice(l.indexOf(data.loginUser.id+'/'), 1);
+          if (l.includes(data.loginUser.id+'/')) {
+            l.splice(l.indexOf(data.loginUser.id+'/'), 1);
+          }
           let fixedList = [];
           l.forEach(url => {
             // get rid of the id/ at beginning of string
