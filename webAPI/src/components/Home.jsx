@@ -123,7 +123,8 @@ const Home = function(props){
                 </Grid.Row>
             </Grid>
             <Grid.Row style={{backgroundColor: '#9d9d9d', height: '20vh'}}>
-                   asdfasd
+               <p> SpoTT - All Content \u00A9 &trade &copy 10,000 B.C Application By Team Aenean in Cooperation with Team Aenean</p>
+               \u00A9
             </Grid.Row>
                 
                 
