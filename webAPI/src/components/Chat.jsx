@@ -236,17 +236,17 @@ class Chat extends React.Component{
                         {this.state.message.map(
                             (message, i)=>{
                                 // console.log('message', message);
-                                if(message.user === 'test'){
+                                if(message.user === this.state.username){
                                     return (
                                         <Grid.Row >
-                                            <Message compact key={i} content={`${message.user} : ${message.message}`} style={{margin: 3, left: '5%', backgroundColor: '#FFD166', borderRadius: '17%', padding: '10', maxWidth:'20%'}}/> 
+                                            <Message compact key={i} content={`${message.user} : ${message.message}`} style={{margin: 3, right: '-75%', backgroundColor: '#06D6A0', borderRadius: '17%', padding: '10', maxWidth:'20%'}}/> 
                                                     
                                         </Grid.Row> 
                                     )
                                 }else{
                                     return (
                                         <Grid.Row >
-                                            <Message compact key={i} content={`${message.user} : ${message.message}`} style={{margin: 3, right: '-75%', backgroundColor: '#06D6A0', borderRadius: '17%', padding: '10', maxWidth:'20%', wordWrap: 'break-word'}}/>
+                                            <Message compact key={i} content={`${message.user} : ${message.message}`} style={{margin: 3, left:'5%', backgroundColor: '#FFD166', borderRadius: '17%', padding: '10', maxWidth:'20%', wordWrap: 'break-word'}}/>
                                         </Grid.Row>                        
                                     )
                                 }
@@ -277,7 +277,7 @@ const mapStoreToProps = (store) => {
   console.log('CHATstore', store);
   return {
     id: store.auth.id,
-    user: store.auth.user,
+    user: store.auth.fullName,
     goals: store.auth.goals,
     connection_requests: store.auth.connection_requests
   };

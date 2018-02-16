@@ -23,7 +23,7 @@ import * as d3Array from 'd3-array';
 import AnimShape from './animshape';
 const Theme = {
   colors: [
-    "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
+    "#FFD166", "#EF476F", "#06D6A0", "#d62728", "#9467bd",
     "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"
   ]
 }
@@ -124,15 +124,17 @@ class Pie extends React.Component {
             }
            </Group>
         </Surface>
-        <View style={{position: 'absolute', top:margin, left: 2*margin + this.props.pieWidth, backgroundColor: 'transparent'}}>
+        <View style={{position: 'absolute', top:margin, left: 2*margin + this.props.pieWidth, backgroundColor: '#FFFCFA'}}>
           {
             this.props.data.map( (item, index) =>
             {
               var fontWeight = this.state.highlightedIndex == index ? 'bold' : 'normal';
+              var colors = ["#FFD166", "#EF476F", "#06D6A0"]
+              var sty = {backgroundColor: colors[index]}
               return (
-                <TouchableWithoutFeedback key={index} onPress={() => this._onPieItemSelected(index)}>
-                  <View style={{padding:5}}>
-                    <Button title={this._label(item) +' : '+ this._value(item) + '%'} onPress={() => this._onPieItemSelected(index)}/>
+                <TouchableWithoutFeedback key={index} onPress={() => this._onPieItemSelected(index)} stlye={{backgroundColor: "#FFD166" }}> 
+                  <View style={{padding:5, backgroundColor: colors[index]}}>
+                    <Text stlye={{backgroundColor:"#FFD166"}} >{this._label(item) +' : '+ this._value(item) + '%'} </Text>
                   </View>
                 </TouchableWithoutFeedback>
               );
@@ -147,7 +149,7 @@ class Pie extends React.Component {
 const styles = {
   container: {
     margin: 20,
-    backgroundColor: 'transparent'
+    backgroundColor: '#FFFCFA'
   },
   label: {
     fontSize: 15,

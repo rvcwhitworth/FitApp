@@ -3,20 +3,32 @@ import { View, Text, StyleSheet, AsyncStorage } from 'react-native';
 import { withApollo } from 'react-apollo';
 import { SmoothLine } from 'react-native-pathjs-charts'
 
-import getDailyRecord from '../utilities/queries.js';
+import { getDailyRecords } from '../utilities/queries.js';
+// import gql from 'graphql-tag';
+
+
+// const getDailyRecords = gql`
+//   query getDailyRecords($id: Int!, $timestamp: String) {
+//     getDailyRecords(id: $id, timestamp: $timestamp) {
+//       id
+//       data
+//       created_at
+//     }
+//   }
+// `
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignSelf: 'center',
-    backgroundColor: '#f7f7f7',
+    backgroundColor: '#FFFCFA',
   },
 });
 
   let options = {
     width: 280,
     height: 280,
-    color: '#2980B9',
+    color: '#06D6A0',
     margin: {
       top: 20,
       left: 45,
@@ -38,7 +50,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Arial',
         fontSize: 14,
         fontWeight: true,
-        fill: '#34495E'
+        fill: '#26547C'
       }
     },
     axisY: {
@@ -52,7 +64,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Arial',
         fontSize: 14,
         fontWeight: true,
-        fill: '#34495E'
+        fill: '#26547C'
       }
     }
   }
@@ -78,7 +90,7 @@ class SmoothLineChartRegions extends Component {
       } else {
         let id = JSON.parse(val).id;
         this.props.client.query({
-          query: getDailyInput,
+          query: getDailyRecords,
           variables: {
             id: id
           }

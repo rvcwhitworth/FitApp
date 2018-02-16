@@ -10,12 +10,7 @@ class TrainerProfile extends React.Component{
   constructor(props){
       super(props)
       this.state = {
-        id : this.props.id || null,
-        username : this.props.user || null,
-        goals : this.props.goals || null,
-        backgroundImage: this.props.backgroundImage,
-        ProfileImage: 'https://media.giphy.com/media/lf9PrYyjFOQta/giphy.gif',
-        editing: false
+        ...this.props
       }
       this.handleBackground = this.handleBackground.bind(this)
       this.handleProfile = this.handleProfile.bind(this)
@@ -94,7 +89,9 @@ class TrainerProfile extends React.Component{
   }
 
 render() {
+  console.log('gimme dat props', this.props)
   console.log('gimme dat state', this.state)
+
       return(
 <div>
   <div id='test' className='container'>
@@ -110,12 +107,9 @@ render() {
 
 const mapStoreToProps = (store) => {
   console.log('TrainerProfileStore', store);
+  let temp = store.auth
   return {
-    id: store.auth.id,
-    user: store.auth.username,
-    goals: store.auth.goals,
-    backgroundImage: store.branding.backgroundImg,
-    ProfileImage: store.branding.profileImg
+    ...temp
   };
 };
 
